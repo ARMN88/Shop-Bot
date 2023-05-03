@@ -101,20 +101,20 @@ details {
   padding-bottom: 1vh;
 }
 
-.channel {
+.data {
   display: flex;
   align-items: center;
 }
 
-.channel p, .channel h3 {
+.data p, .data h3 {
   width: 100%;
 }
 
-.channel p {
+.data p {
   color: #bdbfc2;
   font-weight: bold;
 }
 
-.channel input {
+.data input {
   font-size: 1em;
 }
