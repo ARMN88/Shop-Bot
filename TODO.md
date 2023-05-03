@@ -1,19 +1,18 @@
-- [ ] **Design**
-  - [ ] Categories & Channels
-      - [ ] `Transactions` Category
-      - [ ] `welcome` Channel
-      - [ ] `gift-bases` Channel
-      - [ ] `bases` Channel
-      - [ ] `lt2-cash` Channel
-      - [ ] `wood` Channel
-  - [ ] Roles
-      - [ ] `Verified` Role
-      - [ ] `Admin` Role
-  - [ ] Add Item
-      - [ ] Type (dropdown)
-      - [ ] Title
-      - [ ] Prices
-      - [ ] Image
+- [x] **Design**
+  - [x] Categories & Channels
+      - [x] `Transactions` Category
+      - [x] `welcome` Channel
+      - [x] `gift-bases` Channel
+      - [x] `bases` Channel
+      - [x] `wood` Channel
+  - [x] Roles
+      - [x] `Verified` Role
+      - [x] `Admin` Role
+  - [x] Add Item
+      - [x] Type (dropdown)
+      - [x] Title
+      - [x] Prices
+      - [x] Image
 - [ ] **Client-Server**
   - [ ] Connect with socket.io
   - [ ] Send auth code from client to server
