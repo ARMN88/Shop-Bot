@@ -1,0 +1,160 @@
+{
+  "token": "MTA5NDYwNDE1Nzc0MDEzODUxNg.GizHu0.BYa_hKK4iE2lMAd3LAvc9uE4TCjoWXUUcZTMn4",
+  "clientId": "1094604157740138516",
+  "guilds": {
+    "1094583949222740041": {
+      "channels": {
+        "verify": "1094593073205477486",
+        "bots": "1094591194228592702",
+        "welcome": "1094586342211604521",
+        "rules": "1094586269050343464",
+        "gift-bases": "1094590448728809482",
+        "bases": "1101390036257214557",
+        "lt2-cash": "1101390191886872636",
+        "wood": "1101390406182248488"
+      },
+      "roles": {
+        "Verified": "1094585572548423740"
+      },
+      "shop": {
+        "gift-bases": [
+          {
+            "name": "Organized Gift Base #1",
+            "price": { "robux": 300, "dollars": 3 },
+            "imageURL": "https://cdn.discordapp.com/attachments/1099263421620441109/1099269329029169223/image.png"
+          },
+          {
+            "name": "Organized Gift Base #2",
+            "price": { "robux": 300, "dollars": 3 },
+            "imageURL": "https://cdn.discordapp.com/attachments/1099263421620441109/1099273023195987968/IMG_2294.png"
+          },
+          {
+            "name": "Star Base",
+            "price": { "robux": 300, "dollars": 3 },
+            "imageURL": "https://cdn.discordapp.com/attachments/1099263421620441109/1099273203127423046/IMG_2293.png"
+          },
+          {
+            "name": "Organized Gift Plot #3",
+            "price": { "robux": 250, "dollars": 2.5 },
+            "imageURL": "https://cdn.discordapp.com/attachments/1099263421620441109/1099273430731329536/image-41.png"
+          },
+          {
+            "name": "Organized Gift Base #4",
+            "price": { "robux": 400, "dollars": 4 },
+            "imageURL": "https://cdn.discordapp.com/attachments/1099263421620441109/1099274077794996315/image.png"
+          },
+          {
+            "name": "Pink Wire Gift Plot",
+            "price": { "robux": 350, "dollars": 3.5 },
+            "imageURL": "https://cdn.discordapp.com/attachments/1099263421620441109/1099936501829206147/IMG_2379.png"
+          },
+          {
+            "name": "Snow Mobile Base",
+            "price": { "robux": 350, "dollars": 3.5 },
+            "imageURL": "https://cdn.discordapp.com/attachments/1099263421620441109/1100157998032228362/IMG_2391.png"
+          },
+          {
+            "name": "Pumpkin Pink Truckload Plot",
+            "price": { "robux": 350, "dollars": 3.5 },
+            "imageURL": "https://cdn.discordapp.com/attachments/1099263421620441109/1100179674916728852/Screenshot_77.png"
+          }
+        ],
+        "bases": [
+          {
+            "name": "Wood R US Replica (Gifts Included)",
+            "price": { "robux": 350, "dollars": 3.5 },
+            "imageURL": "https://cdn.discordapp.com/attachments/1099251805801680946/1099276135998693456/IMG_2345.png"
+          },
+          {
+            "name": "White Fancy Base",
+            "price": { "robux": 400, "dollars": 4 },
+            "imageURL": "https://cdn.discordapp.com/attachments/1099251805801680946/1099276779627216956/09A9B06B-4D7D-4058-B62A-E716AEC983AE.jpg"
+          },
+          {
+            "name": "Tree House",
+            "price": { "robux": 300, "dollars": 3 },
+            "imageURL": "https://cdn.discordapp.com/attachments/1099251805801680946/1099276827454877816/IMG_2291.png"
+          },
+          {
+            "name": "Wood Temple",
+            "price": { "robux": 400, "dollars": 4 },
+            "imageURL": "https://cdn.discordapp.com/attachments/1099251805801680946/1099277108263538689/image.png"
+          },
+          {
+            "name": "Roblox Mansion (Gifts Included)",
+            "price": { "robux": 350, "dollars": 3.5 },
+            "imageURL": "https://cdn.discordapp.com/attachments/1099251805801680946/1099278484091707442/image.png"
+          },
+          {
+            "name": "Brown Castle",
+            "price": { "robux": 300, "dollars": 3 },
+            "imageURL": "https://cdn.discordapp.com/attachments/1099251805801680946/1099434956469583962/image.png"
+          },
+          {
+            "name": "Gas Station (Candy Included)",
+            "price": { "robux": 300, "dollars": 3 },
+            "imageURL": "https://cdn.discordapp.com/attachments/1099251805801680946/1099612693767397606/image.png"
+          },
+          {
+            "name": "Axe Shop (Items Inside)",
+            "price": { "robux": 300, "dollars": 3 },
+            "imageURL": "https://cdn.discordapp.com/attachments/1099251805801680946/1099931988800061491/42B174FD-B789-49E4-AC15-06BEA0CBF544.jpg"
+          },
+          {
+            "name": "711",
+            "price": { "robux": 250, "dollars": 2.5 },
+            "imageURL": "https://cdn.discordapp.com/attachments/1099251805801680946/1099933038382694460/IMG_2374.png"
+          },
+          {
+            "name": "Tera Temple",
+            "price": { "robux": 350, "dollars": 3.5 },
+            "imageURL": "https://cdn.discordapp.com/attachments/1099251805801680946/1099933506949361704/IMG_2376.png"
+          },
+          {
+            "name": "Castle #1",
+            "price": { "robux": 300, "dollars": 3 },
+            "imageURL": "https://cdn.discordapp.com/attachments/1099251805801680946/1099933820242903162/IMG_2375.png"
+          },
+          {
+            "name": "Castle #2",
+            "price": { "robux": 300, "dollars": 3.5 },
+            "imageURL": "https://cdn.discordapp.com/attachments/1099251805801680946/1099934014640509019/IMG_2373.png"
+          },
+          {
+            "name": "Bee House",
+            "price": { "robux": 300, "dollars": 3 },
+            "imageURL": "https://cdn.discordapp.com/attachments/1099251805801680946/1099934618507034687/IMG_2380.png"
+          },
+          {
+            "name": "House With Playground",
+            "price": { "robux": 350, "dollars": 3.5 },
+            "imageURL": "https://cdn.discordapp.com/attachments/1099251805801680946/1099935627329425518/IMG_2381.png"
+          },
+          {
+            "name": "Skeleton And Spider",
+            "price": { "robux": 300, "dollars": 3 },
+            "imageURL": "https://cdn.discordapp.com/attachments/1099251805801680946/1099935798087929938/IMG_2383.png"
+          },
+          {
+            "name": "Spook And Sinister Castle #3",
+            "price": { "robux": 350, "dollars": 3.5 },
+            "imageURL": "https://cdn.discordapp.com/attachments/1099251805801680946/1099936220164919336/IMG_2382.png"
+          },
+          {
+            "name": "Indo Shop (Gifts Included)",
+            "price": { "robux": 300, "dollars": 3 },
+            "imageURL": "https://cdn.discordapp.com/attachments/1099251805801680946/1100046406552670269/IMG_2377.png"
+          },
+          {
+            "name": "Star Terek Space Shuttle",
+            "price": { "robux": 350, "dollars": 3.5 },
+            "imageURL": "https://cdn.discordapp.com/attachments/1099251805801680946/1100046844500910231/59B7D2BC-F164-46A0-83C8-5ABEF3416B85.jpg"
+          }
+        ]
+      },
+      "users": {
+        
+      }
+    }
+  }
+}

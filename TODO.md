@@ -1,0 +1,42 @@
+- [ ] **Design**
+  - [ ] Categories & Channels
+      - [ ] `Transactions` Category
+      - [ ] `welcome` Channel
+      - [ ] `gift-bases` Channel
+      - [ ] `bases` Channel
+      - [ ] `lt2-cash` Channel
+      - [ ] `wood` Channel
+  - [ ] Roles
+      - [ ] `Verified` Role
+      - [ ] `Admin` Role
+  - [ ] Add Item
+      - [ ] Type (dropdown)
+      - [ ] Title
+      - [ ] Prices
+      - [ ] Image
+- [ ] **Client-Server**
+  - [ ] Connect with socket.io
+  - [ ] Send auth code from client to server
+      - [ ] check if code exists
+      - [ ] send back to client and redirect to \<auth\>
+  - [ ] Send data from client to server on save
+    - [ ] If save is successful, send confirmation back to client
+- [ ] **Bot**
+  - [ ] Dynamic ID's
+  - [ ] `/verification` command
+    - [ ] Only Admins
+  - [ ] Revoke users who have not paid
+  - [ ] Shopping Cart (Premium)
+  - [ ] Track users
+    - [ ] XP/Level (Premium)
+    - [ ] Time since last 5 messages for Anti-Spam
+  - [ ] Send Webhooks for new items
+  - [ ] Custom rank image (Premium)
+  - [ ] change transactions to forums
+  - [ ] Member Count
+  - [ ] Audit Logs
+    - [ ] User Join
+    - [ ] User Verify
+    - [ ] Edited Message
+    - [ ] Deleted Message
+    - [ ] User Leave

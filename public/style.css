@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
+body {
+  margin: auto;
+  overflow: hidden;
+  height: 100vh;
+  font-family: "Open Sans";
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(87,101,242);
+  background: linear-gradient(110deg, rgba(170,178,255,1) 0%, rgba(170,178,255,1) 19.95%, rgba(116,129,255,1) 20.05%, rgba(116,129,255,1) 59.95%, rgba(87,101,242,1) 60.05%, rgba(87,101,242,1) 74.95%, rgba(72,86,232,1) 75.05%, rgba(72,86,232,1) 100%);
+}
+
+.container {
+  margin: auto;
+  overflow: hidden;
+  width: 90%;
+}
+
+section {
+  margin: auto;
+  background: #35393f;
+  border-radius: 5px;
+  padding: 7vh 0;
+}
+
+h1 {
+  text-align: center;
+  font-size: 2.2em;
+}
+
+label {
+  color: #bdbfc2;
+  display: block;
+  margin-top: 4vh;
+  margin-bottom: 1vh;
+  font-weight: bold;
+}
+
+input {
+  background: #202225;
+  color: #e3e3e6;
+  border: none;
+  font-family: "Open Sans";
+  width: 100%;
+  font-size: 1.1em;
+  box-sizing: border-box;
+  border-radius: 5px;
+  padding: 1vh 0.25vw;
+  border: 1px #202225 solid;
+}
+
+button {
+  background: #5765f2;
+  font-family: "Open Sans";
+  border: none;
+  margin-top: 5vh;
+  padding: 1.5vh 0;
+  width: 100%;
+  color: #ffffff;
+  font-size: 1.2em;
+  border-radius: 2.5px;
+}
+
+button:hover {
+  background: #4554f1;
+}
+
+input:focus {
+  outline: none;
+  border: 1px #5765f2 solid;
+}
+
+@media only screen and (max-width: 750px) {
+  section {
+    flex: 1;
+    margin: 0 2vh;
+  }
+}
