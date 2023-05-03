@@ -2,10 +2,9 @@
 
 body {
   margin: auto;
-  overflow: hidden;
-  height: 100vh;
+  min-height: 100vh;
   font-family: "Open Sans";
-  color: #ffffff;
+  color: white;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -15,7 +14,7 @@ body {
 
 .container {
   margin: auto;
-  overflow: hidden;
+  /* overflow: hidden; */
   width: 90%;
 }
 
@@ -76,6 +75,46 @@ input:focus {
 @media only screen and (max-width: 750px) {
   section {
     flex: 1;
-    margin: 0 2vh;
+    margin: 0 3vw;
   }
+}
+
+main {
+  margin: auto;
+  background: #35393f;
+  flex: 1;
+  margin: 5vh 5vw;
+  padding: 5vh 0;
+  border-radius: 5px;
+}
+
+summary {
+  font-size: 1.5em;
+  padding: 2vh 2vw;
+  margin: 0 0;
+  border: 2px #444950 solid;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+details {
+  padding-bottom: 1vh;
+}
+
+.channel {
+  display: flex;
+  align-items: center;
+}
+
+.channel p, .channel h3 {
+  width: 100%;
+}
+
+.channel p {
+  color: #bdbfc2;
+  font-weight: bold;
+}
+
+.channel input {
+  font-size: 1em;
 }
