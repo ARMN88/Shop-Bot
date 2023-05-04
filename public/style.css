@@ -172,3 +172,24 @@ input::file-selector-button {
   font-size: 1em;
   border-radius: 2.5px;
 }
+
+.log {
+  position: fixed;
+  margin: auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 80%;
+}
+
+.info {
+  margin: auto 0;
+  width: 100%;
+  text-align: center;
+  background: #3ba55c;
+  opacity: 90%;
+  border-radius: 5px;
+  margin: 1vh 0;
+  padding: 0.5vh 0;
+  transition: all 0.9s;
+}

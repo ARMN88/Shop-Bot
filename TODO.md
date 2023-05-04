@@ -13,11 +13,12 @@
       - [x] Title
       - [x] Prices
       - [x] Image
+      - [ ] Update Colors
 - [ ] **Client-Server**
-  - [ ] Connect with socket.io
-  - [ ] Send auth code from client to server
-      - [ ] check if code exists
-      - [ ] send back to client and redirect to \<auth\>
+  - [x] Connect with socket.io
+  - [x] Send auth code from client to server
+      - [x] check if code exists
+      - [x] send back to client and redirect to \<auth\>
   - [ ] Send data from client to server on save
     - [ ] If save is successful, send confirmation back to client
 - [ ] **Bot**
@@ -29,7 +30,7 @@
   - [ ] Track users
     - [ ] XP/Level (Premium)
     - [ ] Time since last 5 messages for Anti-Spam
-  - [ ] Send Webhooks for new items
+  - [ ] Send Webhooks for new items (Premium)
   - [ ] Custom rank image (Premium)
   - [ ] change transactions to forums
   - [ ] Member Count
@@ -39,3 +40,6 @@
     - [ ] Edited Message
     - [ ] Deleted Message
     - [ ] User Leave
+- [ ] Update README.md
+  - [ ] Features
+  - [ ] Commands

@@ -3,11 +3,23 @@ const crypto = require("node:crypto");
 const express = require("express");
 const app = express();
 
-app.listen(3030, () => {
+const server = app.listen(3030, () => {
   console.log("Node server running...");
 });
 
 app.use(express.static("public"));
+
+const authCodes = require("./auth.json");
+
+const { Server } = require("socket.io");
+const io = new Server(server);
+
+io.on('connection', socket => {
+  socket.on('auth', authCode => {
+    if(!Object.keys(authCodes).includes(authCode)) return socket.emit('authError');
+    socket.emit('authSuccess');
+  });
+});
 
 const fs = require('node:fs');
 const path = require('node:path');
