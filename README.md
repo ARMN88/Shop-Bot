@@ -25,8 +25,8 @@
     - [ ] If save is successful, send confirmation back to client
 - [ ] **Bot**
   - [x] Dynamic ID's
-  - [ ] `/verification` command
-    - [ ] Only Admins
+  - [x] `/verification` command
+    - [x] Only Admins
   - [ ] Revoke users who have not paid
   - [ ] Shopping Cart (Premium)
   - [ ] Track users
