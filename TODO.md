@@ -1,3 +1,5 @@
+56323614+ARMN88@users.noreply.github.com
+
 - [x] **Design**
   - [x] Categories & Channels
       - [x] `Transactions` Category
@@ -23,7 +25,6 @@
     - [ ] If save is successful, send confirmation back to client
 - [ ] **Bot**
   - [x] Dynamic ID's
-  - [ ] Channel/Role Not Found
   - [ ] `/verification` command
     - [ ] Only Admins
   - [ ] Revoke users who have not paid
