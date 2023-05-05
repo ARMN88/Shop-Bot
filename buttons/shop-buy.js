@@ -1,4 +1,4 @@
-const { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js");
+const { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ChannelType } = require("discord.js");
 const config = require("../config.json");
 const { randomInt } = require('node:crypto');
 
@@ -11,13 +11,8 @@ module.exports = {
     const shopIndex = parseInt(interaction.message.embeds[0].title.split(' ')[0])-1;
     const shopItem = config.guilds[interaction.guildId].shop[shopType][shopIndex];
 
-    const buyChannel = await interaction.guild.channels.create({
-      name: `transaction-${randomInt(1000, 10000)}`
-    });
+    const buyChannel = await interaction.guild.channels.fetch(config.guilds[interaction.guildId].channels.transactions);
     
-    buyChannel.setParent(config.guilds[interaction.guildId].channel.transactions);
-    buyChannel.permissionOverwrites.create(interaction.user, { ViewChannel: true, SendMessages: true });
-
     const buyEmbed = new EmbedBuilder()
       .setAuthor({ name: interaction.user.username, iconURL: interaction.user.displayAvatarURL() })
       .setTitle(shopItem.name)
@@ -26,7 +21,7 @@ module.exports = {
         { name: "Robux", value: `${shopItem.price.robux} :robux:` },
         { name: "Dollars", value: `\$${shopItem.price.dollars.toFixed(2)}` }
       )
-      .setThumbnail(interaction.guild.iconURL())
+      .setThumbnail(interaction.guild.iconURL({ size: 512 }))
       .setImage(shopItem.imageURL)
       .setTimestamp();
 
@@ -37,9 +32,17 @@ module.exports = {
 
     const row = new ActionRowBuilder()
       .addComponents(closeButton);
-      
-    const transactionMessage = await buyChannel.send({ content: `<@${interaction.user.id}>`, embeds: [buyEmbed], components: [row] });
-    transactionMessage.pin();
-    return interaction.deferUpdate();
+
+    const buyThread = await buyChannel.threads.create({
+      name: `Transaction ${randomInt(1000, 10000)}`,
+      message: { content: `<@${interaction.user.id}>`, embeds: [buyEmbed], components: [row] },
+    });
+
+    buyThread.lastMessage.pin();
+    buyThread.members.add(interaction.user);
+
+    const newTransactionEmbed = new EmbedBuilder().setDescription(`Transaction created in <#${buyThread.id}>`).setColor(0x3481cf);
+                    
+    return interaction.reply({embeds: [newTransactionEmbed], ephemeral: true });
   }
 };

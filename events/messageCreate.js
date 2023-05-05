@@ -3,7 +3,7 @@ const config = require('../config.json');
 
 module.exports = {
   name: Events.MessageCreate,
-  async execute(interaction) {
-    if(!info[interaction.guildId]) return;
+  async execute(message) {
+    // console.log(message.content);
   },
 };

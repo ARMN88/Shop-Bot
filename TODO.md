@@ -22,7 +22,7 @@
   - [ ] Send data from client to server on save
     - [ ] If save is successful, send confirmation back to client
 - [ ] **Bot**
-  - [ ] Dynamic ID's
+  - [x] Dynamic ID's
   - [ ] Channel/Role Not Found
   - [ ] `/verification` command
     - [ ] Only Admins
@@ -33,7 +33,7 @@
     - [ ] Time since last 5 messages for Anti-Spam
   - [ ] Send Webhooks for new items (Premium)
   - [ ] Custom rank image (Premium)
-  - [ ] change transactions to forums
+  - [x] change transactions to forums
   - [ ] Member Count
   - [ ] Audit Logs
     - [ ] User Join
