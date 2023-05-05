@@ -15,7 +15,7 @@ module.exports = {
       name: `transaction-${randomInt(1000, 10000)}`
     });
     
-    buyChannel.setParent("1101017403640516619");
+    buyChannel.setParent(config.guilds[interaction.guildId].channel.transactions);
     buyChannel.permissionOverwrites.create(interaction.user, { ViewChannel: true, SendMessages: true });
 
     const buyEmbed = new EmbedBuilder()
@@ -23,10 +23,10 @@ module.exports = {
       .setTitle(shopItem.name)
       .setColor(0x3481cf)
       .addFields(
-        { name: "Robux", value: `${shopItem.price.robux} <:robux:1101191048425898236>` },
+        { name: "Robux", value: `${shopItem.price.robux} :robux:` },
         { name: "Dollars", value: `\$${shopItem.price.dollars.toFixed(2)}` }
       )
-      .setThumbnail("https://cdn.discordapp.com/attachments/898063879614124042/1100548021680341052/Untitled1.png")
+      .setThumbnail(interaction.guild.iconURL())
       .setImage(shopItem.imageURL)
       .setTimestamp();
 

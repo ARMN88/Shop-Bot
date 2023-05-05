@@ -4,7 +4,7 @@ const config = require('../config.json');
 module.exports = {
   name: Events.InteractionCreate,
   async execute(interaction) {
-    if(!config.guilds[interaction.guildId]) return;
+    if(!config.guilds[interaction.guildId]) return interaction.reply({ content: "?", ephemeral: true });
 
     // Commands //
     if (interaction.isChatInputCommand()) {

@@ -23,6 +23,7 @@ module.exports = {
   			.setDescription('All avaliable wood.')),
   
 	async execute(interaction) {
+    if(!config.guilds[interaction.guildId].shop[interaction.options.getSubcommand()].length) return interaction.reply("No items avaliable.");
     let index = 0;
 
     const forwardButton = new ButtonBuilder()
@@ -47,8 +48,8 @@ module.exports = {
     
     const shopEmbed = new EmbedBuilder()
   	.setColor(0x52b788)
-    .setThumbnail("https://cdn.discordapp.com/attachments/898063879614124042/1100548021680341052/Untitled1.png")
-    .setAuthor({ name: interaction.options.getSubcommand(), iconURL: "https://cdn.discordapp.com/attachments/898063879614124042/1100548021680341052/Untitled1.png" })
+    .setThumbnail(interaction.guild.iconURL({size: 512}))
+    .setAuthor({ name: interaction.options.getSubcommand(), iconURL: interaction.guild.iconURL() })
   	.setTitle(`${index+1} - `+ config.guilds[interaction.guildId].shop[interaction.options.getSubcommand()][index].name)
   	.addFields(
   		{ name: 'Robux', value: `${config.guilds[interaction.guildId].shop[interaction.options.getSubcommand()][index].price.robux} <:robux:1101191048425898236>` },

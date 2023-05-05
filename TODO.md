@@ -23,6 +23,7 @@
     - [ ] If save is successful, send confirmation back to client
 - [ ] **Bot**
   - [ ] Dynamic ID's
+  - [ ] Channel/Role Not Found
   - [ ] `/verification` command
     - [ ] Only Admins
   - [ ] Revoke users who have not paid

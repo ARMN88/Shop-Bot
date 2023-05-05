@@ -29,11 +29,11 @@ module.exports = {
     
     const shopEmbed = new EmbedBuilder()
   	.setColor(0x52b788)
-    .setThumbnail("https://cdn.discordapp.com/attachments/898063879614124042/1100548021680341052/Untitled1.png")
-    .setAuthor({ name: interaction.message.embeds[0].author.name, iconURL: "https://cdn.discordapp.com/attachments/898063879614124042/1100548021680341052/Untitled1.png" })
+    .setThumbnail(interaction.guild.iconURL({size: 512}))
+    .setAuthor({ name: interaction.message.embeds[0].author.name, iconURL: interaction.guild.iconURL() })
   	.setTitle(`${index+1} - `+ config.guilds[interaction.guildId].shop[interaction.message.embeds[0].author.name][index].name)
   	.addFields(
-  		{ name: 'Robux', value: `${config.guilds[interaction.guildId].shop[interaction.message.embeds[0].author.name][index].price.robux} <:robux:1101191048425898236>` },
+  		{ name: 'Robux', value: `${config.guilds[interaction.guildId].shop[interaction.message.embeds[0].author.name][index].price.robux} :robux:` },
   		{ name: 'Dollars', value: "$" + config.guilds[interaction.guildId].shop[interaction.message.embeds[0].author.name][index].price.dollars.toFixed(2) }
   	)
   	.setImage(config.guilds[interaction.guildId].shop[interaction.message.embeds[0].author.name][index].imageURL)
