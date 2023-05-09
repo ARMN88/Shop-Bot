@@ -8,8 +8,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(87,101,242);
-  background: linear-gradient(110deg, rgba(170,178,255,1) 0%, rgba(170,178,255,1) 19.95%, rgba(116,129,255,1) 20.05%, rgba(116,129,255,1) 59.95%, rgba(87,101,242,1) 60.05%, rgba(87,101,242,1) 74.95%, rgba(72,86,232,1) 75.05%, rgba(72,86,232,1) 100%);
+  background-color: #9459f3;
+  background: linear-gradient(110deg, #c8a8ff 0%, #c8a8ff 19.95%, #a875ff 20.05%, #a875ff 59.95%, #9459f3 60.05%, #9459f3 74.95%, #8649e9 75.05%, #8649e9 100%);
 }
 
 .container {
@@ -52,7 +52,7 @@ input {
 }
 
 button {
-  background: #5765f2;
+  background: #9459f3;
   font-family: "Open Sans";
   border: none;
   margin-top: 5vh;
@@ -64,12 +64,12 @@ button {
 }
 
 button:hover {
-  background: #4554f1;
+  background: #8846f1;
 }
 
 input:focus {
   outline: none;
-  border: 1px #5765f2 solid;
+  border: 1px #9459f3 solid;
 }
 
 @media only screen and (max-width: 750px) {
@@ -102,7 +102,7 @@ details {
 }
 
 summary:hover {
-  border-color: #5765f2;
+  border-color: #9459f3;
 }
 
 details[open] summary {
@@ -165,7 +165,7 @@ input[type=file] {
 }
 
 input::file-selector-button {
-  background: #5765f2;
+  background: #9459f3;
   font-family: "Open Sans";
   border: none;
   color: #ffffff;
