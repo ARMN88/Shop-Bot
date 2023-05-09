@@ -36,12 +36,11 @@
   - [ ] Custom rank image (Premium)
   - [x] change transactions to forums
   - [ ] Member Count
-  - [ ] Audit Logs
-    - [ ] User Join
-    - [ ] User Verify
-    - [ ] Edited Message
-    - [ ] Deleted Message
-    - [ ] User Leave
+  - [x] Audit Logs
+    - [x] User Verify
+    - [x] Edited Message
+    - [x] Deleted Message
+    - [x] User Leave
 - [ ] Update README.md
   - [ ] Features
   - [ ] Commands

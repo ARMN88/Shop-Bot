@@ -19,6 +19,20 @@ module.exports = {
       components: [],
       attachments: []
     });
+    
+    const auditChannel = await interaction.guild.channels.cache.get(config.guilds[interaction.guildId].channels.logs);
+     const memberJoinEmbed = new EmbedBuilder()
+      .setColor(0xa434eb)
+      .setAuthor({ name: `${interaction.user.tag}`, iconURL: interaction.user.displayAvatarURL() })
+      .setDescription(`<@${interaction.user.id}> was successfully verified!`)
+      .addFields(
+        { name: 'Joined Server', value: `<t:${Math.floor(interaction.member.joinedTimestamp/1000)}:F>` },
+        { name: 'Account Created', value: `<t:${Math.floor(interaction.user.createdTimestamp/1000)}:R>`, },
+        { name: 'Member Count', value: `${interaction.guild.memberCount} Members`, },
+      )
+      .setTimestamp()
+
+    await auditChannel.send({ embeds: [memberJoinEmbed] });
 
     const welcomeEmbed = new EmbedBuilder()
       .setDescription(`Welcome to ${interaction.guild.name}, <@${interaction.user.id}>!`)

@@ -4,7 +4,7 @@ const config = require('../config.json');
 module.exports = {
   name: Events.InteractionCreate,
   async execute(interaction) {
-    if(!config.guilds[interaction.guildId]) return interaction.reply({ content: "?", ephemeral: true });
+    if(!config.guilds[interaction.guildId]) return interaction.reply({ content: "This server has not been paid for or set up. If you are an Administrator, please contact <@589877702543147058>. Otherwise, contact the owner of this server.", ephemeral: true });
 
     // Commands //
     if (interaction.isChatInputCommand()) {
