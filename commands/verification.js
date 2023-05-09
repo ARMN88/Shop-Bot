@@ -4,7 +4,7 @@ const config = require('../config.json');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('verification')
-		.setDescription('View avaliable products!')
+		.setDescription('Send a capcha verification message to this channel.')
     .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
 	async execute(interaction) {
     const verificationEmbed = new EmbedBuilder()
