@@ -1,4 +1,5 @@
-56323614+ARMN88@users.noreply.github.com
+git config user.email "56323614+ARMN88@users.noreply.github.com"
+git config user.name "ARMN88"
 
 - [x] **Design**
   - [x] Categories & Channels
@@ -21,15 +22,15 @@
   - [x] Send auth code from client to server
       - [x] check if code exists
       - [x] send back to client and redirect to \<auth\>
-  - [ ] Get data from config
-      - [ ] Send to client
+  - [x] Get data from config
+      - [x] Send to client
   - [ ] Send data from client to server on save
     - [ ] If save is successful, send confirmation back to client
 - [ ] **Bot**
   - [x] Dynamic ID's
   - [x] `/verification` command
     - [x] Only Admins
-  - [ ] Revoke users who have not paid
+  - [x] Revoke users who have not paid
   - [ ] Shopping Cart (Premium)
   - [ ] Track users
     - [ ] XP/Level (Premium)
