@@ -5,7 +5,8 @@ const config = require("../config.json");
 module.exports = {
   name: Events.MessageUpdate,
   async execute(oldMessage, newMessage) {
-    if(!config.guilds[interaction.guildId]) return interaction.reply({ content: "This server has not been paid for or set up. If you are an Administrator, please contact <@589877702543147058>. Otherwise, contact the owner of this server.", ephemeral: true });
+    if(!config.guilds[newMessage.guildId]) return;
+    if(newMessage.author.bot) return;
     
     const messageEmbed = new EmbedBuilder()
       .setTitle("Edited Message in " + newMessage.channel.name)

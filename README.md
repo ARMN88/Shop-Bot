@@ -15,12 +15,14 @@
       - [x] Title
       - [x] Prices
       - [x] Image
-      - [ ] Update Colors
+      - [x] Update Colors
 - [ ] **Client-Server**
   - [x] Connect with socket.io
   - [x] Send auth code from client to server
       - [x] check if code exists
       - [x] send back to client and redirect to \<auth\>
+  - [ ] Get data from config
+      - [ ] Send to client
   - [ ] Send data from client to server on save
     - [ ] If save is successful, send confirmation back to client
 - [ ] **Bot**

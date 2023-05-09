@@ -4,7 +4,7 @@ const config = require("../config.json");
 module.exports = {
   name: Events.GuildMemberRemove,
   async execute(member) {
-    if(!config.guilds[interaction.guildId]) return interaction.reply({ content: "This server has not been paid for or set up. If you are an Administrator, please contact <@589877702543147058>. Otherwise, contact the owner of this server.", ephemeral: true });
+    if(!config.guilds[member.guild.id]) return;
 
     const auditChannel = await member.guild.channels.fetch(config.guilds[member.guild.id].channels.logs);
     const memberLeaveEmbed = new EmbedBuilder()

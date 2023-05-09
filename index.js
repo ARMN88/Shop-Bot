@@ -25,6 +25,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const config = require("./config.json");
+const { token } = require("./token.json");
 
 const { Client, GatewayIntentBits, Collection } = require('discord.js');
 
@@ -92,6 +93,4 @@ for (const file of eventFiles) {
   }
 }
 
-client.login(config.token);
-
-// console.log(crypto.randomUUID());
+client.login(token);
