@@ -19,6 +19,10 @@ io.on('connection', socket => {
     if(!Object.keys(authCodes).includes(authCode)) return socket.emit('authError');
     socket.emit('authSuccess');
   });
+
+  socket.on('get-data', authCode => {
+    socket.emit('server-data', config.guilds[authCodes[authCode]]);
+  });
 });
 
 const fs = require('node:fs');

@@ -1,4 +1,3 @@
-eruda.init();
 const socket = io();
 
 const button = document.querySelector("button");
