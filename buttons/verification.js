@@ -1,5 +1,5 @@
 const { ActionRowBuilder, AttachmentBuilder, ButtonStyle, ButtonBuilder } = require('discord.js');
-const Canvas = require('@napi-rs/canvas');
+const Canvas = require('canvas');
 const config = require('../config.json');
 
 module.exports = {
@@ -36,7 +36,7 @@ module.exports = {
           .setStyle(ButtonStyle.Primary),
       );
     
-    const attachment = new AttachmentBuilder(await canvas.encode('png'), { name: 'capcha.png', description: randomString });
+    const attachment = new AttachmentBuilder(canvas.createPNGStream(), { name: 'capcha.png', description: randomString });
 	  return await interaction.reply({ files: [attachment], ephemeral: true, components: [readyButton] });
 	},
 };
