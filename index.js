@@ -9,12 +9,18 @@ const server = app.listen(3030, () => {
 
 app.use(express.static("public"));
 
+app.get('/log', (req, res) => {
+  const consoleOut = fs.readFileSync(__dirname + "/nohup.out", "utf-8");
+  res.send(consoleOut.split('\n').join('<br/>'));
+});
+
 const authCodes = require("./auth.json");
 
 const { Server } = require("socket.io");
 const io = new Server(server);
 
 io.on('connection', socket => {
+  console.log(socket.id);
   socket.on('auth', authCode => {
     if(!Object.keys(authCodes).includes(authCode)) return socket.emit('authError');
     socket.emit('authSuccess');
