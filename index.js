@@ -11,8 +11,8 @@ app.use(express.static("public"));
 
 app.get('/log', (req, res) => {
   if(!fs.existsSync(__dirname + "/nohup.out")) return;
-  const consoleOut = fs.readFileSync(__dirname + "/nohup.out", "utf-8");
-  res.send(consoleOut.split('\n').join('<br/>'));
+  const consoleOutput = fs.readFileSync(__dirname + "/nohup.out", "utf-8");
+  res.send(consoleOutput.split('\n').join('<br/>'));
 });
 
 const authCodes = require("./auth.json");
