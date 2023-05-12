@@ -18,7 +18,7 @@ module.exports = {
       .setTitle(shopItem.name)
       .setColor(0x3481cf)
       .addFields(
-        { name: "Robux", value: `${shopItem.price.robux} :robux:` },
+        { name: "Robux", value: `${shopItem.price.robux}` },
         { name: "Dollars", value: `\$${shopItem.price.dollars.toFixed(2)}` }
       )
       .setThumbnail(interaction.guild.iconURL({ size: 512 }))
@@ -41,8 +41,12 @@ module.exports = {
     buyThread.lastMessage.pin();
     buyThread.members.add(interaction.user);
 
+    setTimeout(function() {
+        interaction.message.delete();
+      }, 3000);
+
     const newTransactionEmbed = new EmbedBuilder().setDescription(`Transaction created in <#${buyThread.id}>`).setColor(0x3481cf);
-                    
+    
     return interaction.reply({embeds: [newTransactionEmbed], ephemeral: true });
   }
 };

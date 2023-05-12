@@ -3,6 +3,8 @@ const crypto = require("node:crypto");
 const express = require("express");
 const app = express();
 
+const fs = require('node:fs');
+
 const server = app.listen(3030, () => {
   console.log("Node server running...");
 });
@@ -32,7 +34,6 @@ io.on('connection', socket => {
   });
 });
 
-const fs = require('node:fs');
 const path = require('node:path');
 
 const config = require("./config.json");
