@@ -55,7 +55,7 @@ module.exports = {
   		{ name: 'Robux', value: `${config.guilds[interaction.guildId].shop[interaction.options.getSubcommand()][index].price.robux} <:robux:1101191048425898236>` },
   		{ name: 'Dollars', value: "$" + config.guilds[interaction.guildId].shop[interaction.options.getSubcommand()][index].price.dollars.toFixed(2) }
   	)
-  	.setImage(config.guilds[interaction.guildId].shop[interaction.options.getSubcommand()][index].imageURL)
+  	// .setImage(config.guilds[interaction.guildId].shop[interaction.options.getSubcommand()][index].imageURL)
   	.setFooter({ text: `${interaction.user.username}'s Menu | Page ${index+1}/${config.guilds[interaction.guildId].shop[interaction.options.getSubcommand()].length}` });
 
     interaction.reply({embeds: [shopEmbed], components: [row] });
