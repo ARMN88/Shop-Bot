@@ -6,8 +6,8 @@ const app = express();
 const fs = require('node:fs');
 
 const server = app.listen(8080, () => {
-  if(fs.existsSync(__dirname + "/../nohup.out")) {
-    fs.writeFile(__dirname + "/../nohup.out", '', function (err) { if (err) throw err });
+  if (fs.existsSync(__dirname + "/../nohup.out")) {
+    fs.writeFile(__dirname + "/../nohup.out", '', function(err) { if (err) throw err });
   }
   console.log("Node server running...");
 });
@@ -15,7 +15,7 @@ const server = app.listen(8080, () => {
 app.use(express.static("public"));
 
 app.get('/log', (req, res) => {
-  if(!fs.existsSync(__dirname + "/nohup.out")) return;
+  if (!fs.existsSync(__dirname + "/nohup.out")) return;
   const consoleOutput = fs.readFileSync(__dirname + "/nohup.out", "utf-8");
   res.send(consoleOutput.split('\n').join('<br/>'));
 });
@@ -28,7 +28,7 @@ const io = new Server(server);
 io.on('connection', socket => {
   console.log(socket.id);
   socket.on('auth', authCode => {
-    if(!Object.keys(authCodes).includes(authCode)) return socket.emit('authError');
+    if (!Object.keys(authCodes).includes(authCode)) return socket.emit('authError');
     socket.emit('authSuccess');
   });
 
@@ -49,7 +49,8 @@ const client = new Client({
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.MessageContent,
-    GatewayIntentBits.GuildMembers
+    GatewayIntentBits.GuildMembers,
+    GatewayIntentBits.GuildModeration
   ],
 });
 
