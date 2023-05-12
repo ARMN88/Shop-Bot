@@ -23,7 +23,7 @@ module.exports = {
   			.setDescription('All avaliable wood.')),
   
 	async execute(interaction) {
-    if(!config.guilds[interaction.guildId].shop[interaction.options.getSubcommand()].length) return interaction.reply({ content: "No items avaliable.", ephemeral: true });
+    if(!config.guilds[interaction.guildId].shop[interaction.options.getSubcommand()].length) return await interaction.reply({ content: "No items avaliable.", ephemeral: true });
     let index = 0;
 
     const forwardButton = new ButtonBuilder()
