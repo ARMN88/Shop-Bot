@@ -6,6 +6,9 @@ const app = express();
 const fs = require('node:fs');
 
 const server = app.listen(8080, () => {
+  if(fs.existsSync(__dirname + "/../nohup.out")) {
+    fs.writeFile(__dirname + "/../nohup.out", '', function (err) { if (err) throw err });
+  }
   console.log("Node server running...");
 });
 
