@@ -18,6 +18,7 @@ git config user.name "ARMN88"
       - [x] Image
       - [x] Update Colors
 - [ ] **Client-Server**
+  - [ ] Fix Auth
   - [ ] Send data from client to server on save
     - [ ] If save is successful, send confirmation back to client
   - [x] Connect with socket.io
@@ -30,6 +31,7 @@ git config user.name "ARMN88"
   - [x] Delete Menu on buy
   - [x] AutoMod Spam
   - [ ] Member Count
+  - [ ] Fix Webhooks (one for each channel)
   - [ ] Shopping Cart (Premium)
   - [ ] Track XP/Levels (Premium)
   - [ ] Send Webhooks for new items (Premium)
