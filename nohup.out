@@ -2,72 +2,7 @@ Node server running...
 Ready! Logged in as Shop Bot#0230!
 Node server running...
 Ready! Logged in as Shop Bot#0230!
-Node server running...
-Ready! Logged in as Shop Bot#0230!
-Node server running...
-Ready! Logged in as Shop Bot#0230!
-/home/armn88/Shop-Bot/node_modules/@discordjs/rest/dist/index.js:640
-      throw new DiscordAPIError(data, "code" in data ? data.code : data.error, status, method, url, requestData);
-            ^
-
-DiscordAPIError[50013]: Missing Permissions
-    at handleErrors (/home/armn88/Shop-Bot/node_modules/@discordjs/rest/dist/index.js:640:13)
-    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
-    at async SequentialHandler.runRequest (/home/armn88/Shop-Bot/node_modules/@discordjs/rest/dist/index.js:1021:23)
-    at async SequentialHandler.queueRequest (/home/armn88/Shop-Bot/node_modules/@discordjs/rest/dist/index.js:862:14)
-    at async REST.request (/home/armn88/Shop-Bot/node_modules/@discordjs/rest/dist/index.js:1387:22)
-    at async GuildMemberManager.edit (/home/armn88/Shop-Bot/node_modules/discord.js/src/managers/GuildMemberManager.js:381:15) {
-  requestBody: {
-    files: undefined,
-    json: {
-      roles: [
-        '1094583949222740041',
-        '1094585572548423740',
-        '1094589021532991578',
-        '1105610317670662214',
-        '1105630731029463101'
-      ]
-    }
-  },
-  rawError: { message: 'Missing Permissions', code: 50013 },
-  code: 50013,
-  status: 403,
-  method: 'PATCH',
-  url: 'https://discord.com/api/v10/guilds/1094583949222740041/members/589877702543147058'
-}
-
-Node.js v18.4.0
-Node server running...
-Ready! Logged in as Shop Bot#0230!
-Node server running...
-Ready! Logged in as Shop Bot#0230!
-Node server running...
-Ready! Logged in as Shop Bot#0230!
-node:events:515
-      throw er; // Unhandled 'error' event
-      ^
-
-Error: listen EACCES: permission denied 0.0.0.0:80
-    at Server.setupListenHandle [as _listen2] (node:net:1405:21)
-    at listenInCluster (node:net:1470:12)
-    at Server.listen (node:net:1558:7)
-    at Function.listen (/home/armn88/Shop-Bot/node_modules/express/lib/application.js:635:24)
-    at Object.<anonymous> (/home/armn88/Shop-Bot/index.js:6:20)
-    at Module._compile (node:internal/modules/cjs/loader:1112:14)
-    at Module._extensions..js (node:internal/modules/cjs/loader:1166:10)
-    at Module.load (node:internal/modules/cjs/loader:988:32)
-    at Module._load (node:internal/modules/cjs/loader:834:12)
-    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:77:12)
-Emitted 'error' event on Server instance at:
-    at emitErrorNT (node:net:1449:8)
-    at process.processTicksAndRejections (node:internal/process/task_queues:82:21) {
-  code: 'EACCES',
-  errno: -13,
-  syscall: 'listen',
-  address: '0.0.0.0',
-  port: 80
-}
-
-Node.js v18.4.0
-Node server running...
-Ready! Logged in as Shop Bot#0230!
+U8OpGAaHH_L3hhduAAAB
+hANX52_mrpoq0060AAAD
+CizIXhCy6TVDVZsnAAAF
+HpFtnxywhxHUG9q1AAAH
