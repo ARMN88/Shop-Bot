@@ -5,7 +5,7 @@ const config = require('../config.json');
 module.exports = {
 	customId: "verification",
 	async execute(interaction) {
-    if(interaction.member.roles.cache.has(config.guilds[interaction.guildId].roles.Verified)) return interaction.reply({ content: "Already Verified!", ephemeral: true });
+    if(interaction.member.roles.cache.has(config.guilds[interaction.guildId].roles.verified)) return interaction.reply({ content: "Already Verified!", ephemeral: true });
     
     const canvas = Canvas.createCanvas(500, 200);
 		const ctx = canvas.getContext('2d');
