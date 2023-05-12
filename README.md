@@ -27,6 +27,7 @@ git config user.name "ARMN88"
   - [ ] Send data from client to server on save
     - [ ] If save is successful, send confirmation back to client
 - [ ] **Bot**
+  - [ ] Delete Menu on buy
   - [x] Dynamic ID's
   - [x] `/verification` command
     - [x] Only Admins
