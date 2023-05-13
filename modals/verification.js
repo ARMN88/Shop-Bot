@@ -12,7 +12,7 @@ module.exports = {
       return;
     }
     
-    const verifiedRole = await interaction.guild.roles.fetch(config.guilds[interaction.guildId].roles.Verified);
+    const verifiedRole = await interaction.guild.roles.fetch(config.guilds[interaction.guildId].roles.verified);
     interaction.member.roles.add(verifiedRole);
     interaction.update({
       content: "Successfully Verified!",
