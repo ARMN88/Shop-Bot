@@ -33,7 +33,7 @@ module.exports = {
     .setAuthor({ name: interaction.message.embeds[0].author.name, iconURL: interaction.guild.iconURL() })
   	.setTitle(`${index+1} - `+ config.guilds[interaction.guildId].shop[interaction.message.embeds[0].author.name][index].name)
   	.addFields(
-  		{ name: 'Robux', value: `${config.guilds[interaction.guildId].shop[interaction.message.embeds[0].author.name][index].price.robux} :robux:` },
+  		{ name: 'Robux', value: `${config.guilds[interaction.guildId].shop[interaction.message.embeds[0].author.name][index].price.robux}` },
   		{ name: 'Dollars', value: "$" + config.guilds[interaction.guildId].shop[interaction.message.embeds[0].author.name][index].price.dollars.toFixed(2) }
   	)
   	// .setImage(config.guilds[interaction.guildId].shop[interaction.message.embeds[0].author.name][index].imageURL)

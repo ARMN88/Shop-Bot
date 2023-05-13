@@ -52,7 +52,7 @@ module.exports = {
     .setAuthor({ name: interaction.options.getSubcommand(), iconURL: interaction.guild.iconURL() })
   	.setTitle(`${index+1} - `+ config.guilds[interaction.guildId].shop[interaction.options.getSubcommand()][index].name)
   	.addFields(
-  		{ name: 'Robux', value: `${config.guilds[interaction.guildId].shop[interaction.options.getSubcommand()][index].price.robux} <:robux:1101191048425898236>` },
+  		{ name: 'Robux', value: `${config.guilds[interaction.guildId].shop[interaction.options.getSubcommand()][index].price.robux}` },
   		{ name: 'Dollars', value: "$" + config.guilds[interaction.guildId].shop[interaction.options.getSubcommand()][index].price.dollars.toFixed(2) }
   	)
   	// .setImage(config.guilds[interaction.guildId].shop[interaction.options.getSubcommand()][index].imageURL)
