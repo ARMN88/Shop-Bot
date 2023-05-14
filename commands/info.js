@@ -12,7 +12,7 @@ module.exports = {
             .setThumbnail(interaction.guild.iconURL({ size: 512 }))
             .addFields(
                 { name: "Member Count", value: `${interaction.guild.memberCount}` },
-                { name: "Created At", value: `<t:${Math.round(interaction.guild.createdTimestamp/1000)}:R>` },
+                { name: "Created On", value: `<t:${Math.round(interaction.guild.createdTimestamp/1000)}:D>` },
                 { name: "Server Owner", value: `<@${interaction.guild.ownerId}>` }
             );
 
