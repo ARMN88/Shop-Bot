@@ -30,7 +30,7 @@ git config user.name "ARMN88"
 - [ ] **Bot**
   - [x] Delete Menu on buy
   - [x] AutoMod Spam
-  - [ ] Member Count
+  - [x] Member Count
   - [ ] Fix Webhooks (one for each channel)
   - [ ] Shopping Cart (Premium)
   - [ ] Track XP/Levels (Premium)

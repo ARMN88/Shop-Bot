@@ -22,7 +22,6 @@ module.exports = {
         { name: "Dollars", value: `\$${shopItem.price.dollars.toFixed(2)}` }
       )
       .setThumbnail(interaction.guild.iconURL({ size: 512 }))
-      .setImage(shopItem.imageURL)
       .setTimestamp();
 
     const closeButton = new ButtonBuilder()
