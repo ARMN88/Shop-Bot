@@ -13,7 +13,7 @@ module.exports = {
       .setColor(0xFC3232)
       .setURL(message.channel.url)
       .setAuthor({ name: message.author.tag, iconURL: message.author.avatarURL() })
-      .setDescription(message.content)
+      .setDescription(message.content || "None")
       .setTimestamp();
 
     const channel = message.guild.channels.cache.get(config.guilds[message.guildId].channels.logs);
