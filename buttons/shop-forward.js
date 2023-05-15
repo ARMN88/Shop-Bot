@@ -27,9 +27,12 @@ module.exports = {
     const row = new ActionRowBuilder()
       .addComponents(backButton, buyButton, forwardButton);
     
-    const shopEmbed = new EmbedBuilder().from(interaction.message.embeds[0])
+    const shopEmbed = new EmbedBuilder()
+  	.setColor(0x52b788)
+    .setThumbnail(interaction.guild.iconURL({size: 512}))
+    .setAuthor({ name: interaction.message.embeds[0].author.name, iconURL: interaction.guild.iconURL() })
   	.setTitle(`${index+1} - `+ config.guilds[interaction.guildId].shop[interaction.message.embeds[0].author.name][index].name)
-  	.setFields(
+  	.addFields(
   		{ name: 'Robux', value: `${config.guilds[interaction.guildId].shop[interaction.message.embeds[0].author.name][index].price.robux}` },
   		{ name: 'Dollars', value: "$" + config.guilds[interaction.guildId].shop[interaction.message.embeds[0].author.name][index].price.dollars.toFixed(2) }
   	)

@@ -254,8 +254,218 @@
         "verified": "1094585572548423740"
       },
       "shop": {
-        "gift-bases": [],
-        "bases": [],
+        "gift-bases": [
+          {
+            "name": "Organized Gift Base #1",
+            "price": {
+              "robux": 300,
+              "dollars": 3
+            },
+            "imageURL": ""
+          },
+          {
+            "name": "Organized Gift Base #2",
+            "price": {
+              "robux": 300,
+              "dollars": 3
+            },
+            "imageURL": ""
+          },
+          {
+            "name": "Star Base",
+            "price": {
+              "robux": 300,
+              "dollars": 3
+            },
+            "imageURL": ""
+          },
+          {
+            "name": "Organized Gift Plot #3",
+            "price": {
+              "robux": 250,
+              "dollars": 2.5
+            },
+            "imageURL": ""
+          },
+          {
+            "name": "Organized Gift Base #4",
+            "price": {
+              "robux": 400,
+              "dollars": 4
+            },
+            "imageURL": ""
+          },
+          {
+            "name": "Pink Wire Gift Plot",
+            "price": {
+              "robux": 350,
+              "dollars": 3.5
+            },
+            "imageURL": ""
+          },
+          {
+            "name": "Snow Mobile Base",
+            "price": {
+              "robux": 350,
+              "dollars": 3.5
+            },
+            "imageURL": ""
+          },
+          {
+            "name": "Pumpkin Pink Truckload Plot",
+            "price": {
+              "robux": 350,
+              "dollars": 3.5
+            },
+            "imageURL": ""
+          }
+        ],
+        "bases": [
+          {
+            "name": "Wood R US Replica (Gifts Included)",
+            "price": {
+              "robux": 350,
+              "dollars": 3.5
+            },
+            "imageURL": ""
+          },
+          {
+            "name": "White Fancy Base",
+            "price": {
+              "robux": 400,
+              "dollars": 4
+            },
+            "imageURL": ""
+          },
+          {
+            "name": "Tree House",
+            "price": {
+              "robux": 300,
+              "dollars": 3
+            },
+            "imageURL": ""
+          },
+          {
+            "name": "Wood Temple",
+            "price": {
+              "robux": 400,
+              "dollars": 4
+            },
+            "imageURL": ""
+          },
+          {
+            "name": "Roblox Mansion (Gifts Included)",
+            "price": {
+              "robux": 350,
+              "dollars": 3.5
+            },
+            "imageURL": ""
+          },
+          {
+            "name": "Brown Castle",
+            "price": {
+              "robux": 300,
+              "dollars": 3
+            },
+            "imageURL": ""
+          },
+          {
+            "name": "Gas Station (Candy Included)",
+            "price": {
+              "robux": 300,
+              "dollars": 3
+            },
+            "imageURL": ""
+          },
+          {
+            "name": "Axe Shop (Items Inside)",
+            "price": {
+              "robux": 300,
+              "dollars": 3
+            },
+            "imageURL": ""
+          },
+          {
+            "name": "711",
+            "price": {
+              "robux": 250,
+              "dollars": 2.5
+            },
+            "imageURL": ""
+          },
+          {
+            "name": "Tera Temple",
+            "price": {
+              "robux": 350,
+              "dollars": 3.5
+            },
+            "imageURL": ""
+          },
+          {
+            "name": "Castle #1",
+            "price": {
+              "robux": 300,
+              "dollars": 3
+            },
+            "imageURL": ""
+          },
+          {
+            "name": "Castle #2",
+            "price": {
+              "robux": 300,
+              "dollars": 3.5
+            },
+            "imageURL": ""
+          },
+          {
+            "name": "Bee House",
+            "price": {
+              "robux": 300,
+              "dollars": 3
+            },
+            "imageURL": ""
+          },
+          {
+            "name": "House With Playground",
+            "price": {
+              "robux": 350,
+              "dollars": 3.5
+            },
+            "imageURL": ""
+          },
+          {
+            "name": "Skeleton And Spider",
+            "price": {
+              "robux": 300,
+              "dollars": 3
+            },
+            "imageURL": ""
+          },
+          {
+            "name": "Spook And Sinister Castle #3",
+            "price": {
+              "robux": 350,
+              "dollars": 3.5
+            },
+            "imageURL": ""
+          },
+          {
+            "name": "Indo Shop (Gifts Included)",
+            "price": {
+              "robux": 300,
+              "dollars": 3
+            },
+            "imageURL": ""
+          },
+          {
+            "name": "Star Terek Space Shuttle",
+            "price": {
+              "robux": 350,
+              "dollars": 3.5
+            },
+            "imageURL": ""
+          }
+        ],
         "lt2-cash": [],
         "wood": []
       },
