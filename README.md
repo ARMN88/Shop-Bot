@@ -33,7 +33,6 @@ git config user.name "ARMN88"
   - [ ] Track XP/Levels (Premium)
   - [ ] Send Webhooks for new items (Premium)
   - [ ] Custom rank image (Premium)
-  - [ ] Order Form for buying
   - [ ] Update README.md
     - [ ] Features
     - [ ] Commands

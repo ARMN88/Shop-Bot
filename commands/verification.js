@@ -5,6 +5,7 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('verification')
 		.setDescription('Send a capcha verification message to this channel.')
+    .setDMPermission(false)
     .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
 	async execute(interaction) {
     const verificationEmbed = new EmbedBuilder()

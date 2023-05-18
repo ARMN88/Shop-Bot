@@ -29,6 +29,11 @@ module.exports = {
       .setLabel("Close Transaction")
       .setStyle(ButtonStyle.Danger);
 
+     const infoButton = new ButtonBuilder()
+      .setCustomId('shop-close')
+      .setLabel("Close Transaction")
+      .setStyle(ButtonStyle.Primary);
+
     const row = new ActionRowBuilder()
       .addComponents(closeButton);
 

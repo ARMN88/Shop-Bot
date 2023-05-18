@@ -4,7 +4,8 @@ const config = require('../config.json');
 module.exports = {
     data: new SlashCommandBuilder()
     .setName('info')
-    .setDescription('Get information about this server.'),
+    .setDescription('Get information about this server.')
+    .setDMPermission(false),
     async execute(interaction) {
         const infoEmbed = new EmbedBuilder()
             .setTitle(`${interaction.guild.name} Info`)
