@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, PermissionsBitField } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, PermissionsBitField, Colors } = require('discord.js');
 const config = require('../config.json');
 
 module.exports = {
@@ -19,7 +19,7 @@ module.exports = {
     
     const existsEmbed = new EmbedBuilder()
     .setDescription("Rule already exists.")
-    .setColor(0xff3333);
+    .setColor(Colors.Orange);
 
     switch(interaction.options.getSubcommand()) {
       case 'enable':
@@ -27,7 +27,7 @@ module.exports = {
         
         const creatingEmbed = new EmbedBuilder()
           .setDescription("Creating spam rule...")
-          .setColor(0xf2ff3d);
+          .setColor(Colors.Yellow);
       
           await interaction.reply({ embeds: [creatingEmbed] });
           
@@ -43,18 +43,18 @@ module.exports = {
       
           const createdEmbed = new EmbedBuilder()
           .setDescription("Spam rule created!")
-          .setColor(0x32a83a);
+          .setColor(Colors.Green);
           return interaction.editReply({embeds: [createdEmbed]});
         
         break;
       case 'disable':
         const existingRule = rules.find(rule => rule.name === "Spam");
-        if(!existingRule) return interaction.reply({ embeds: [ new EmbedBuilder().setDescription('Cannot disable, rule does not exist.').setColor(0xf2ff3d) ] });
+        if(!existingRule) return interaction.reply({ embeds: [ new EmbedBuilder().setDescription('Cannot disable, rule does not exist.').setColor(Colors.Red) ] });
         
         interaction.guild.autoModerationRules.delete(existingRule);
         const deletedEmbed = new EmbedBuilder()
           .setDescription("Spam rule deleted!")
-          .setColor(0x32a83a);
+          .setColor(Colors.Green);
           return interaction.reply({embeds: [deletedEmbed]});
         break;
     }

@@ -1,4 +1,4 @@
-const { ButtonBuilder, ButtonStyle, ActionRowBuilder, EmbedBuilder } = require("discord.js")
+const { ButtonBuilder, ButtonStyle, ActionRowBuilder, EmbedBuilder, Colors } = require("discord.js")
 const config = require("../config.json");
 
 module.exports = {
@@ -28,7 +28,7 @@ module.exports = {
       .addComponents(backButton, buyButton, forwardButton);
     
     const shopEmbed = new EmbedBuilder()
-  	.setColor(0x52b788)
+  	.setColor(Colors.Purple)
     .setThumbnail(interaction.guild.iconURL({size: 512}))
     .setAuthor({ name: interaction.message.embeds[0].author.name, iconURL: interaction.guild.iconURL() })
   	.setTitle(`${index+1} - `+ config.guilds[interaction.guildId].shop[interaction.message.embeds[0].author.name][index].name)

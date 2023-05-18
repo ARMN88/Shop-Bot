@@ -1,4 +1,4 @@
-const { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ChannelType } = require("discord.js");
+const { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ChannelType, Colors } = require("discord.js");
 const config = require("../config.json");
 const { randomInt } = require('node:crypto');
 
@@ -16,7 +16,7 @@ module.exports = {
     const buyEmbed = new EmbedBuilder()
       .setAuthor({ name: interaction.user.username, iconURL: interaction.user.displayAvatarURL() })
       .setTitle(shopItem.name)
-      .setColor(0x3481cf)
+      .setColor(Colors.Blue)
       .addFields(
         { name: "Robux", value: `${shopItem.price.robux}` },
         { name: "Dollars", value: `\$${shopItem.price.dollars.toFixed(2)}` }
@@ -44,7 +44,7 @@ module.exports = {
         interaction.message.delete();
       }, 3000);
 
-    const newTransactionEmbed = new EmbedBuilder().setDescription(`Transaction created in <#${buyThread.id}>`).setColor(0x3481cf);
+    const newTransactionEmbed = new EmbedBuilder().setDescription(`Transaction created in <#${buyThread.id}>`).setColor(Colors.Green);
     
     return interaction.reply({embeds: [newTransactionEmbed], ephemeral: true });
   }

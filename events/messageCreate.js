@@ -1,4 +1,4 @@
-const { Events, EmbedBuilder } = require('discord.js');
+const { Events, EmbedBuilder, Colors } = require('discord.js');
 
 const config = require("../config.json");
 
@@ -26,7 +26,7 @@ module.exports = {
             db.run(`UPDATE G${message.guildId} SET spamCounter=0 WHERE userId='${message.author.id}'`);
             try {
               await message.member.timeout(5 * 60 * 1000);
-              const warnEmbed = new EmbedBuilder().setDescription(`${message.member} timed out for spamming.`).setColor(0xff3333);
+              const warnEmbed = new EmbedBuilder().setDescription(`${message.member} timed out for spamming.`).setColor(Colors.Red);
               message.channel.send({ embeds: [warnEmbed] });
             } catch {};
             return;

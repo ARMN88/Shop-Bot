@@ -28,9 +28,6 @@ git config user.name "ARMN88"
   - [x] Get data from config
       - [x] Send to client
 - [ ] **Bot**
-  - [x] Delete Menu on buy
-  - [x] AutoMod Spam
-  - [x] Member Count
   - [ ] Fix Webhooks (one for each channel)
   - [ ] Shopping Cart (Premium)
   - [ ] Track XP/Levels (Premium)
@@ -40,6 +37,9 @@ git config user.name "ARMN88"
   - [ ] Update README.md
     - [ ] Features
     - [ ] Commands
+  - [x] Delete Menu on buy
+  - [x] AutoMod Spam
+  - [x] Member Count
   - [x] Dynamic ID's
   - [x] `/verification` command
     - [x] Only Admins

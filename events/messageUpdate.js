@@ -1,4 +1,4 @@
-const { Events, EmbedBuilder } = require('discord.js');
+const { Events, EmbedBuilder, Colors } = require('discord.js');
 
 const config = require("../config.json");
 
@@ -10,7 +10,7 @@ module.exports = {
     
     const messageEmbed = new EmbedBuilder()
       .setTitle("Edited Message in " + newMessage.channel.name)
-      .setColor(0xffac30)
+      .setColor(Colors.Orange)
       .setURL(newMessage.url)
       .setAuthor({ name: newMessage.author.tag, iconURL: newMessage.author.avatarURL() })
       .addFields(

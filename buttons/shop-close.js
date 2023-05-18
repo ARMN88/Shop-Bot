@@ -1,5 +1,5 @@
 const { setTimeout } = require("node:timers");
-const { EmbedBuilder } = require("discord.js");
+const { EmbedBuilder, Colors } = require("discord.js");
 
 module.exports = {
 	customId: "shop-close",
@@ -9,7 +9,7 @@ module.exports = {
       await interaction.channel.delete();
     }, 1000);
     
-    const closeTransactionEmbed = new EmbedBuilder().setDescription("Thread deleting...").setColor(0xff4040);
+    const closeTransactionEmbed = new EmbedBuilder().setDescription("Thread deleting...").setColor(Colors.Red);
     return interaction.reply({ embeds: [closeTransactionEmbed] });
   }
 }

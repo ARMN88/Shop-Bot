@@ -1,4 +1,4 @@
-const { ButtonBuilder, ButtonStyle, SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, PermissionsBitField } = require('discord.js');
+const { ButtonBuilder, ButtonStyle, SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, PermissionsBitField, Colors } = require('discord.js');
 const config = require('../config.json');
 
 module.exports = {
@@ -9,7 +9,7 @@ module.exports = {
 	async execute(interaction) {
     const verificationEmbed = new EmbedBuilder()
       .setDescription("Please click the button below to verify your account.")
-      .setColor(0x30ff45);
+      .setColor(Colors.Blue);
 
     const verifyButton = new ButtonBuilder()
       .setCustomId('verification')

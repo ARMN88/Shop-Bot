@@ -1,4 +1,4 @@
-const { ButtonBuilder, ButtonStyle, SlashCommandBuilder, EmbedBuilder, ActionRowBuilder } = require('discord.js');
+const { ButtonBuilder, ButtonStyle, SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, Colors } = require('discord.js');
 const config = require('../config.json');
 
 module.exports = {
@@ -8,7 +8,7 @@ module.exports = {
     async execute(interaction) {
         const infoEmbed = new EmbedBuilder()
             .setTitle(`${interaction.guild.name} Info`)
-            .setColor(0x1c73ba)
+            .setColor(Colors.Blue)
             .setThumbnail(interaction.guild.iconURL({ size: 512 }))
             .addFields(
                 { name: "Member Count", value: `${interaction.guild.memberCount}` },
