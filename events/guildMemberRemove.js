@@ -1,4 +1,4 @@
-const { Events, EmbedBuilder } = require("discord.js");
+const { Events, EmbedBuilder, Colors } = require("discord.js");
 const config = require("../config.json");
 
 module.exports = {
@@ -8,7 +8,7 @@ module.exports = {
 
     const auditChannel = await member.guild.channels.fetch(config.guilds[member.guild.id].channels.logs);
     const memberLeaveEmbed = new EmbedBuilder()
-      .setColor(0xff3d3d)
+      .setColor(Colors.Red)
       .setAuthor({ name: `${member.user.tag}`, iconURL: member.user.displayAvatarURL() })
       .setDescription(`${member.user.tag} left the server!`)
       .addFields(
