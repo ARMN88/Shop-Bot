@@ -1,22 +1,38 @@
-const sqlite3 = require('sqlite3').verbose();
+const { Sequelize, DataTypes } = require('sequelize');
 
-const db = new sqlite3.Database('./database/users.db');
-
-const guildId = '1106412040471457903';
-
-// db.run(`CREATE TABLE ${'G'+guildId}(userId text, messageTimestamp bigint, spamCounter tinyint)`, [], (err) => {
-//   if(err) return console.error(err);
-// });
-
-// db.run(`DROP TABLE G${guildId}`);
-
-// db.all(`SELECT * FROM G${guildId}`, [], (err, data) => {
-//   if (err) return console.error(err);
-//   console.table(data);
-// });
-db.all(`SELECT name FROM sqlite_master WHERE type = "table"`, [], (err, data) => {
-  if (err) return console.error(err);
-  console.table(data);
+const sequelize = new Sequelize({
+  dialect: 'sqlite',
+  storage: 'database/users.db',
+  logging: false
 });
 
-db.close();
+async function Init() {
+  try {
+    await sequelize.authenticate();
+    console.log('Connection has been established successfully.');
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
+  }
+
+  const User = sequelize.define('User', {
+    userId: {
+      type: Sequelize.STRING,
+    },
+    messageTimestamp: {
+      type: Sequelize.TIME
+    },
+    spamCount: {
+      type: Sequelize.SMALLINT,
+      defaultValue: 0
+    }
+  }, { timestamps: false });
+
+  await User.sync({ force: true });
+
+  await User.create({ userId: '8281', messageTimestamp: 1684458607 })
+
+  const table = await User.findAll({ raw: true, where: { userId: '8282' } });
+  console.log(table);
+}
+
+Init();
