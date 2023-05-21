@@ -120,7 +120,7 @@ module.exports = {
           });
           
           https.get(interaction.options.getAttachment('image').url,(res) => {
-            const path = `${__dirname}/../images/${interaction.guildId}/${newItem.dataValues.id}.jpeg`; 
+            const path = `${__dirname}/../images/${interaction.guildId}/${newItem.dataValues.id}.${interaction.options.getAttachment('image').contentType.split("/").pop()}`; 
             if (!fs.existsSync(`${__dirname}/../images/${interaction.guildId}/`)){
               fs.mkdirSync(`${__dirname}/../images/${interaction.guildId}/`, { recursive: true });
             }
