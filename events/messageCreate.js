@@ -11,16 +11,16 @@ const database = new Sequelize({
 
 const Users = database.define('Messages', {
   guildId: {
-    type: Sequelize.STRING
+    type: DataTypes.STRING
   },
   userId: {
-    type: Sequelize.STRING,
+    type: DataTypes.STRING,
   },
   messageTimestamp: {
-    type: Sequelize.TIME
+    type: DataTypes.TIME
   },
   spamCount: {
-    type: Sequelize.SMALLINT,
+    type: DataTypes.SMALLINT,
     defaultValue: 0
   }
 }, { timestamps: false });

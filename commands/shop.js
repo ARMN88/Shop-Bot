@@ -1,5 +1,5 @@
 const { ButtonBuilder, ButtonStyle, SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, Colors, PermissionsBitField, ModalBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
-const Sequelize = require('sequelize');
+const { Sequelize, DataTypes } = require('sequelize');
 const fs = require('fs');
 const https = require('https');
 
@@ -13,21 +13,26 @@ const database = new Sequelize({
 
 const Shop = database.define('Shops', {
   guildId: {
-    type: Sequelize.STRING
+    type: DataTypes.STRING
   },
   type: {
-    type: Sequelize.TINYINT
+    type: DataTypes.TINYINT
   },
   name: {
-    type: Sequelize.STRING
+    type: DataTypes.STRING
   },
   priceRobux: {
-    type: Sequelize.SMALLINT
+    type: DataTypes.SMALLINT
   },
   priceDollars: {
-    type: Sequelize.DOUBLE
+    type: DataTypes.DOUBLE
+  },
+  imageType: {
+    type: DataTypes.STRING
   }
 }, { timestamps: false });
+
+Shop.sync({ force: true });
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -116,7 +121,8 @@ module.exports = {
             type: interaction.options.getString('type'),
             name: interaction.options.getString('name'),
             priceDollars: interaction.options.getNumber('price-dollars'),
-            priceRobux: interaction.options.getInteger('price-robux')
+            priceRobux: interaction.options.getInteger('price-robux'),
+            imageType: interaction.options.getAttachment('image').contentType.split("/").pop()
           });
           
           https.get(interaction.options.getAttachment('image').url,(res) => {
