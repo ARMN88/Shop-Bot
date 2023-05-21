@@ -1,5 +1,7 @@
 const { ButtonBuilder, ButtonStyle, SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, Colors, PermissionsBitField, ModalBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
 const Sequelize = require('sequelize');
+const fs = require('fs');
+const https = require('https');
 
 const config = require('../config.json');
 
@@ -9,7 +11,7 @@ const database = new Sequelize({
   logging: false
 });
 
-const Shop = database.define('Shop', {
+const Shop = database.define('Shops', {
   guildId: {
     type: Sequelize.STRING
   },
@@ -24,13 +26,8 @@ const Shop = database.define('Shop', {
   },
   priceDollars: {
     type: Sequelize.DOUBLE
-  },
-  imageURL: {
-    type: Sequelize.STRING
   }
-});
-
-Shop.sync({ force: true });
+}, { timestamps: false });
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -113,14 +110,27 @@ module.exports = {
       const menuEmbed = new EmbedBuilder().setColor(Colors.Purple).setTitle('Shop Editor').setTimestamp();
       switch(interaction.options.getSubcommand()) {
         case 'add':
-          console.log(interaction.options.getAttachment('image'));
-          await Shop.create({ 
+          
+          const newItem = await Shop.create({ 
             guildId: interaction.guildId,
             type: interaction.options.getString('type'),
             name: interaction.options.getString('name'),
             priceDollars: interaction.options.getNumber('price-dollars'),
-            priceRobux: interaction.options.getNumber('price-robux')
+            priceRobux: interaction.options.getInteger('price-robux')
           });
+          
+          https.get(interaction.options.getAttachment('image').url,(res) => {
+            const path = `${__dirname}/../images/${interaction.guildId}/${newItem.dataValues.id}.jpeg`; 
+            if (!fs.existsSync(`${__dirname}/../images/${interaction.guildId}/`)){
+              fs.mkdirSync(`${__dirname}/../images/${interaction.guildId}/`, { recursive: true });
+            }
+            const filePath = fs.createWriteStream(path);
+            res.pipe(filePath);
+            filePath.on('finish',() => {
+              filePath.close();
+            });
+          });
+          
           return await interaction.reply({
             embeds: [
               menuEmbed

@@ -28,7 +28,12 @@ git config user.name "ARMN88"
   - [x] Get data from config
       - [x] Send to client
 - [ ] **Bot**
-  - [ ] Save images to `/images` from `.getAttachment()`
+  - [ ] create `/help` command
+  - [ ] create `/setup` command for adding Id's and creating transaction channel
+  - [ ] check if user is missing channel
+  - [ ] save verified role to database
+  - [ ] Check if verified role already exists
+  - [ ] Save images to `/images/[GUILD ID]` from `.getAttachment()`
   - [ ] Add Shop to DB
   - [ ] Fix Webhooks (one for each channel)
   - [ ] Shopping Cart (Premium)
