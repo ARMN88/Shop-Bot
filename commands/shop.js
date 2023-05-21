@@ -1,5 +1,36 @@
 const { ButtonBuilder, ButtonStyle, SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, Colors, PermissionsBitField, ModalBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
+const Sequelize = require('sequelize');
+
 const config = require('../config.json');
+
+const database = new Sequelize({
+  dialect: 'sqlite',
+  storage: 'database/users.db',
+  logging: false
+});
+
+const Shop = database.define('Shop', {
+  guildId: {
+    type: Sequelize.STRING
+  },
+  type: {
+    type: Sequelize.TINYINT
+  },
+  name: {
+    type: Sequelize.STRING
+  },
+  priceRobux: {
+    type: Sequelize.SMALLINT
+  },
+  priceDollars: {
+    type: Sequelize.DOUBLE
+  },
+  imageURL: {
+    type: Sequelize.STRING
+  }
+});
+
+Shop.sync({ force: true });
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -51,6 +82,8 @@ module.exports = {
                 .setName('price-robux')
                 .setDescription('Set the price in robux of item.')
                 .setRequired(true)
+                .setMaxValue(65535)
+                .setMinValue(1)
               )
             .addNumberOption(option =>
               option
@@ -80,18 +113,26 @@ module.exports = {
       const menuEmbed = new EmbedBuilder().setColor(Colors.Purple).setTitle('Shop Editor').setTimestamp();
       switch(interaction.options.getSubcommand()) {
         case 'add':
-            return await interaction.reply({
-              embeds: [
-                menuEmbed
-                  .setDescription('Successfully added item!')
-                  .addFields(
-                    { name: 'Type', value: interaction.options.getString('type')},
-                    { name: 'Name', value: interaction.options.getString('name')},
-                    { name: 'Price', value: `\$${interaction.options.getNumber('price-dollars').toFixed(2)} OR ${interaction.options.getInteger('price-robux')} RBX`})
-                  .setImage(interaction.options.getAttachment('image').url)
-              ], 
-              ephemeral: true
-            });  
+          console.log(interaction.options.getAttachment('image'));
+          await Shop.create({ 
+            guildId: interaction.guildId,
+            type: interaction.options.getString('type'),
+            name: interaction.options.getString('name'),
+            priceDollars: interaction.options.getNumber('price-dollars'),
+            priceRobux: interaction.options.getNumber('price-robux')
+          });
+          return await interaction.reply({
+            embeds: [
+              menuEmbed
+                .setDescription('Successfully added item!')
+                .addFields(
+                  { name: 'Type', value: interaction.options.getString('type')},
+                  { name: 'Name', value: interaction.options.getString('name')},
+                  { name: 'Price', value: `\$${interaction.options.getNumber('price-dollars').toFixed(2)} OR ${interaction.options.getInteger('price-robux')} RBX`})
+                .setImage(interaction.options.getAttachment('image').url)
+            ], 
+            ephemeral: true
+          });  
           break;
         case 'edit':
           break;
