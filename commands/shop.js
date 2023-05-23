@@ -1,4 +1,4 @@
-const { ButtonBuilder, ButtonStyle, SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, Colors, PermissionsBitField, ModalBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
+const { ButtonBuilder, ButtonStyle, SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, Colors, PermissionsBitField, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } = require('discord.js');
 const { Sequelize, DataTypes } = require('sequelize');
 const fs = require('fs');
 const https = require('https');
@@ -10,6 +10,20 @@ const database = new Sequelize({
   storage: 'database/users.db',
   logging: false
 });
+
+const Info = database.define('Info', {
+  identifier: {
+    type: DataTypes.STRING
+  },
+  name: {
+    type: DataTypes.STRING
+  },
+  type: {
+    type: DataTypes.TINYINT
+  }
+}, { timestamps: false });
+
+const infoTypes = ['channel', 'role', 'webhook'];
 
 const Shop = database.define('Shops', {
   guildId: {
@@ -26,13 +40,15 @@ const Shop = database.define('Shops', {
   },
   priceDollars: {
     type: DataTypes.DOUBLE
-  },
-  imageType: {
-    type: DataTypes.STRING
   }
+  // imageType: {
+  //   type: DataTypes.STRING
+  // }
 }, { timestamps: false });
 
 Shop.sync({ force: true });
+
+const shopTypes = ['gift-bases', 'bases', 'wood'];
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -92,6 +108,7 @@ module.exports = {
                 .setName('price-dollars')
                 .setDescription('Set the price in dollars of item.')
                 .setRequired(true)
+                .setMinValue(0)
               )
             .addAttachmentOption(option =>
               option
@@ -114,19 +131,17 @@ module.exports = {
         
       const menuEmbed = new EmbedBuilder().setColor(Colors.Purple).setTitle('Shop Editor').setTimestamp();
       switch(interaction.options.getSubcommand()) {
-        case 'add':
-          
+        case 'add':          
           const newItem = await Shop.create({ 
             guildId: interaction.guildId,
-            type: interaction.options.getString('type'),
+            type: shopTypes.indexOf(interaction.options.getString('type')),
             name: interaction.options.getString('name'),
             priceDollars: interaction.options.getNumber('price-dollars'),
-            priceRobux: interaction.options.getInteger('price-robux'),
-            imageType: interaction.options.getAttachment('image').contentType.split("/").pop()
+            priceRobux: interaction.options.getInteger('price-robux')
           });
           
           https.get(interaction.options.getAttachment('image').url,(res) => {
-            const path = `${__dirname}/../images/${interaction.guildId}/${newItem.dataValues.id}.${interaction.options.getAttachment('image').contentType.split("/").pop()}`; 
+            const path = `${__dirname}/../images/${interaction.guildId}/${newItem.dataValues.id}.png`; 
             if (!fs.existsSync(`${__dirname}/../images/${interaction.guildId}/`)){
               fs.mkdirSync(`${__dirname}/../images/${interaction.guildId}/`, { recursive: true });
             }
@@ -151,13 +166,15 @@ module.exports = {
           });  
           break;
         case 'edit':
+          
           break;
         case 'delete':
           break;
       }
     }
-    
-    if (!config.guilds[interaction.guildId].shop[interaction.options.getSubcommand()].length) return await interaction.reply({ content: "No items avaliable.", ephemeral: true });
+
+    if(!await Shop.findOne({ where: { guildId: interaction.guildId, type: shopTypes.indexOf(interaction.options.getSubcommand()) } }, { raw: true })) return await interaction.reply({ content: "No items avaliable.", ephemeral: true });
+
     let index = 0;
 
     const forwardButton = new ButtonBuilder()

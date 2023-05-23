@@ -1,5 +1,30 @@
-const { ButtonBuilder, ButtonStyle, SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, PermissionsBitField, Colors } = require('discord.js');
+const { ButtonBuilder, ButtonStyle, SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, PermissionsBitField, Colors, AttachmentBuilder, TextInputStyle, ModalBuilder, TextInputBuilder } = require('discord.js');
+const { Sequelize, DataTypes } = require('sequelize');
+const Canvas = require('canvas');
 const config = require('../config.json');
+
+const database = new Sequelize({
+  dialect: 'sqlite',
+  storage: 'database/users.db',
+  logging: false
+});
+
+const Info = database.define('Info', {
+  guildId: {
+    type: DataTypes.STRING
+  },
+  identifier: {
+    type: DataTypes.STRING
+  },
+  name: {
+    type: DataTypes.STRING
+  },
+  type: {
+    type: DataTypes.TINYINT
+  }
+}, { timestamps: false });
+
+const infoTypes = ['channel', 'role', 'webhook'];
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -11,16 +36,32 @@ module.exports = {
     const creatingEmbed = new EmbedBuilder().setDescription('Creating verification role...').setColor(Colors.Yellow);
     await interaction.reply({ embeds: [creatingEmbed], ephemeral: true });
 
-    try {
+    roleLabel: try {
+      const oldRole = await Info.findOne({ where: { guildId: `${interaction.guildId}`, name: 'Verified', type: infoTypes.indexOf('role') } }, { raw: true });
+      if(oldRole) {
+        if(await interaction.guild.roles.fetch(oldRole.identifier)) {
+          const existsEmbed = new EmbedBuilder().setDescription(`Role already exists, using <@&${oldRole.identifier}>.`).setColor(Colors.Green);
+          await interaction.editReply({ embeds: [existsEmbed], ephemeral: true });
+          break roleLabel;
+        }
+      }
+      
       const verificationRole = await interaction.guild.roles.create({
         name: 'Verified',
         color: Colors.Green
       });
 
+      await Info.create({
+        guildId: `${interaction.guildId}`,
+        identifier: `${verificationRole.id}`,
+        name: 'Verified',
+        type: infoTypes.indexOf('role')
+      });
+
       const createdEmbed = new EmbedBuilder().setDescription(`Successfullly created ${verificationRole}! Be sure to set permissions for both ${interaction.guild.roles.everyone} and ${verificationRole}.`).setColor(Colors.Green);
       await interaction.editReply({ embeds: [createdEmbed], ephemeral: true });
     } catch(e) {
-      console.log(e);
+      console.error(e);
       const failEmbed = new EmbedBuilder().setDescription('Unable to create Verification Role.').setColor(Colors.Red);
       return await interaction.editReply({ embeds: [failEmbed], ephemeral: true });
     }
