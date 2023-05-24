@@ -8,22 +8,11 @@ const config = require('../config.json');
 const database = new Sequelize({
   dialect: 'sqlite',
   storage: 'database/users.db',
-  logging: false
-});
-
-const Info = database.define('Info', {
-  identifier: {
-    type: DataTypes.STRING
-  },
-  name: {
-    type: DataTypes.STRING
-  },
-  type: {
-    type: DataTypes.TINYINT
+  logging: false,
+  query: {
+    raw: true
   }
-}, { timestamps: false });
-
-const infoTypes = ['channel', 'role', 'webhook'];
+});
 
 const Shop = database.define('Shops', {
   guildId: {
@@ -41,12 +30,7 @@ const Shop = database.define('Shops', {
   priceDollars: {
     type: DataTypes.DOUBLE
   }
-  // imageType: {
-  //   type: DataTypes.STRING
-  // }
 }, { timestamps: false });
-
-Shop.sync({ force: true });
 
 const shopTypes = ['gift-bases', 'bases', 'wood'];
 
@@ -173,14 +157,15 @@ module.exports = {
       }
     }
 
-    if(!await Shop.findOne({ where: { guildId: interaction.guildId, type: shopTypes.indexOf(interaction.options.getSubcommand()) } }, { raw: true })) return await interaction.reply({ content: "No items avaliable.", ephemeral: true });
+    const items = await Shop.findAndCountAll({ where: { guildId: interaction.guildId, type: shopTypes.indexOf(interaction.options.getSubcommand()) }}, { raw: true });
+    if(!items.count) return await interaction.reply({ content: "No items avaliable.", ephemeral: true });
 
     let index = 0;
 
     const forwardButton = new ButtonBuilder()
       .setCustomId('shop-forward')
       .setLabel("Next →")
-      .setDisabled(index + 1 >= config.guilds[interaction.guildId].shop[interaction.options.getSubcommand()].length)
+      .setDisabled(index + 1 >= items.count)
       .setStyle(ButtonStyle.Primary);
 
     const backButton = new ButtonBuilder()
@@ -201,13 +186,13 @@ module.exports = {
       .setColor(Colors.Purple)
       .setThumbnail(interaction.guild.iconURL({ size: 512 }))
       .setAuthor({ name: interaction.options.getSubcommand(), iconURL: interaction.guild.iconURL() })
-      .setTitle(`${index + 1} - ` + config.guilds[interaction.guildId].shop[interaction.options.getSubcommand()][index].name)
+      .setTitle(`${index + 1} - ` + items.rows[index].name)
       .addFields(
-        { name: 'Robux', value: `${config.guilds[interaction.guildId].shop[interaction.options.getSubcommand()][index].price.robux}` },
-        { name: 'Dollars', value: "$" + config.guilds[interaction.guildId].shop[interaction.options.getSubcommand()][index].price.dollars.toFixed(2) }
+        { name: 'Robux', value: `${items.rows[index].priceRobux}` },
+        { name: 'Dollars', value: "$" + items.rows[index].priceRobux }
       )
       // .setImage(config.guilds[interaction.guildId].shop[interaction.options.getSubcommand()][index].imageURL)
-      .setFooter({ text: `${interaction.user.username}'s Menu | Page ${index + 1}/${config.guilds[interaction.guildId].shop[interaction.options.getSubcommand()].length}` });
+      .setFooter({ text: `${interaction.user.username}'s Menu | Page ${index + 1}/${items.count}` });
 
     interaction.reply({ embeds: [shopEmbed], components: [row] });
   },

@@ -1,11 +1,42 @@
-const { ActionRowBuilder, AttachmentBuilder, ButtonStyle, ButtonBuilder } = require('discord.js');
+const { ActionRowBuilder, AttachmentBuilder, ButtonStyle, ButtonBuilder, EmbedBuilder, Colors } = require('discord.js');
 const Canvas = require('canvas');
-const config = require('../config.json');
+const { Sequelize, DataTypes } = require('sequelize');
+
+const database = new Sequelize({
+  dialect: 'sqlite',
+  storage: 'database/users.db',
+  logging: false,
+  query: {
+    raw: true
+  }
+});
+
+const Info = database.define('Info', {
+  guildId: {
+    type: DataTypes.STRING
+  },
+  identifier: {
+    type: DataTypes.STRING
+  },
+  name: {
+    type: DataTypes.STRING
+  },
+  type: {
+    type: DataTypes.TINYINT
+  }
+}, { timestamps: false });
+
+const infoTypes = ['channel', 'role', 'webhook'];
 
 module.exports = {
 	customId: "verification",
 	async execute(interaction) {
-    if(interaction.member.roles.cache.has(config.guilds[interaction.guildId].roles.verified)) return interaction.reply({ content: "Already Verified!", ephemeral: true });
+    const verificationRoleId = await Info.findOne({ where: { guildId: interaction.guildId, name: 'verified', type: infoTypes.indexOf('role') }, attributes: ['identifier'] });
+    if(!verificationRoleId) {
+      const errorEmbed = new EmbedBuilder().setDescription(`Verification role is not setup, please contact <@${interaction.guild.ownerId}>.`).setColor(Colors.Red);
+      return await interaction.reply({ embeds: [errorEmbed], ephemeral: true });
+    }
+    if(interaction.member.roles.cache.has(verificationRoleId.identifier)) return interaction.reply({ content: "Already Verified!", ephemeral: true });
     
     const canvas = Canvas.createCanvas(500, 200);
 		const ctx = canvas.getContext('2d');
@@ -27,7 +58,6 @@ module.exports = {
     }
     ctx.fillText(randomString, 250, 110);
 
-    // Add "Ready" button and modal
     const readyButton = new ActionRowBuilder()
       .addComponents(
         new ButtonBuilder()

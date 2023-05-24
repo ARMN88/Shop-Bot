@@ -1,17 +1,44 @@
 const { ButtonBuilder, ButtonStyle, ActionRowBuilder, EmbedBuilder, Colors } = require("discord.js")
+const { Sequelize, DataTypes } = require('sequelize');
 
-const config = require("../config.json");
+const database = new Sequelize({
+  dialect: 'sqlite',
+  storage: 'database/users.db',
+  logging: false,
+  query: {
+    raw: true
+  }
+});
+
+const Shop = database.define('Shops', {
+  guildId: {
+    type: DataTypes.STRING
+  },
+  type: {
+    type: DataTypes.TINYINT
+  },
+  name: {
+    type: DataTypes.STRING
+  },
+  priceRobux: {
+    type: DataTypes.SMALLINT
+  },
+  priceDollars: {
+    type: DataTypes.DOUBLE
+  }
+}, { timestamps: false });
+
+const shopTypes = ['gift-bases', 'bases', 'wood'];
 
 module.exports = {
   customId: "shop-back",
   async execute(interaction) {
     if (interaction.message.interaction.user.id !== interaction.user.id) return await interaction.reply({ content: `This is ${interaction.message.interaction.user.username}'s shop menu, use /shop to browse the shop.`, ephemeral: true });
-    let index = parseInt(interaction.message.embeds[0].title.split(' ')[0]) - 2;
+    const items = await Shop.findAndCountAll({ where: { guildId: interaction.guildId, type: shopTypes.indexOf(interaction.message.embeds[0].author.name) }}, { raw: true });    let index = parseInt(interaction.message.embeds[0].title.split(' ')[0]) - 2;
 
     const forwardButton = new ButtonBuilder()
       .setCustomId('shop-forward')
       .setLabel("Next →")
-      .setDisabled(index + 1 >= config.guilds[interaction.guildId].shop[interaction.message.embeds[0].author.name].length)
       .setStyle(ButtonStyle.Primary);
 
     const backButton = new ButtonBuilder()
@@ -30,14 +57,15 @@ module.exports = {
 
     const shopEmbed = new EmbedBuilder()
       .setColor(Colors.Purple)
+      .setThumbnail(interaction.guild.iconURL({ size: 512 }))
       .setAuthor({ name: interaction.message.embeds[0].author.name, iconURL: interaction.guild.iconURL() })
-      .setTitle(`${index + 1} - ` + config.guilds[interaction.guildId].shop[interaction.message.embeds[0].author.name][index].name)
+      .setTitle(`${index + 1} - ` + items.rows[index].name)
       .addFields(
-        { name: 'Robux', value: `${config.guilds[interaction.guildId].shop[interaction.message.embeds[0].author.name][index].price.robux}` },
-        { name: 'Dollars', value: "$" + config.guilds[interaction.guildId].shop[interaction.message.embeds[0].author.name][index].price.dollars.toFixed(2) }
+        { name: 'Robux', value: `${items.rows[index].priceRobux}` },
+        { name: 'Dollars', value: "$" + items.rows[index].priceRobux }
       )
-      // .setImage(config.guilds[interaction.guildId].shop[interaction.message.embeds[0].author.name][index].imageURL)
-      .setFooter({ text: `${interaction.user.username}'s Menu | Page ${index + 1}/${config.guilds[interaction.guildId].shop[interaction.message.embeds[0].author.name].length}` });
+      // .setImage(config.guilds[interaction.guildId].shop[interaction.options.getSubcommand()][index].imageURL)
+      .setFooter({ text: `${interaction.user.username}'s Menu | Page ${index + 1}/${items.count}` });
 
     return await interaction.update({ embeds: [shopEmbed], components: [row] });
   }

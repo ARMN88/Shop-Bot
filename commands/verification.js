@@ -1,7 +1,6 @@
 const { ButtonBuilder, ButtonStyle, SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, PermissionsBitField, Colors, AttachmentBuilder, TextInputStyle, ModalBuilder, TextInputBuilder } = require('discord.js');
 const { Sequelize, DataTypes } = require('sequelize');
 const Canvas = require('canvas');
-const config = require('../config.json');
 
 const database = new Sequelize({
   dialect: 'sqlite',

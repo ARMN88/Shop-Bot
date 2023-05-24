@@ -1,25 +1,78 @@
 const { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ChannelType, Colors } = require("discord.js");
-const config = require("../config.json");
+const { Sequelize, DataTypes } = require('sequelize');
 const { randomInt } = require('node:crypto');
+
+const database = new Sequelize({
+  dialect: 'sqlite',
+  storage: 'database/users.db',
+  logging: false,
+  query: {
+    raw: true
+  }
+});
+
+const Shop = database.define('Shops', {
+  guildId: {
+    type: DataTypes.STRING
+  },
+  type: {
+    type: DataTypes.TINYINT
+  },
+  name: {
+    type: DataTypes.STRING
+  },
+  priceRobux: {
+    type: DataTypes.SMALLINT
+  },
+  priceDollars: {
+    type: DataTypes.DOUBLE
+  }
+}, { timestamps: false });
+
+const shopTypes = ['gift-bases', 'bases', 'wood'];
+
+const Info = database.define('Info', {
+  guildId: {
+    type: DataTypes.STRING
+  },
+  identifier: {
+    type: DataTypes.STRING
+  },
+  name: {
+    type: DataTypes.STRING
+  },
+  type: {
+    type: DataTypes.TINYINT
+  }
+}, { timestamps: false });
+
+const infoTypes = ['channel', 'role', 'webhook'];
 
 module.exports = {
 	customId: "shop-buy",
 	async execute(interaction) {
     if(interaction.message.interaction.user.id !== interaction.user.id) return await interaction.reply({content: `This is ${interaction.message.interaction.user.username}'s shop menu, use /shop to browse the shop.`, ephemeral: true });
+    const items = await Shop.findAll({ where: { guildId: interaction.guildId, type: shopTypes.indexOf(interaction.message.embeds[0].author.name) }}, { raw: true });    
     
-    const shopType = interaction.message.embeds[0].author.name;
     const shopIndex = parseInt(interaction.message.embeds[0].title.split(' ')[0])-1;
-    const shopItem = config.guilds[interaction.guildId].shop[shopType][shopIndex];
+    const shopItem = items[shopIndex];
 
-    const buyChannel = await interaction.guild.channels.fetch(config.guilds[interaction.guildId].channels.transactions);
+    const buyChannelId = await Info.findOne({ where: { name: 'transactions', guildId: `${interaction.guildId}` }});
+
+   if(!buyChannelId) {
+      const errorEmbed = new EmbedBuilder().setDescription('Transactions have not been setup.').setColor(Colors.Red);
+      return await interaction.reply({ embeds: [errorEmbed], ephemeral: true });
+    }
+
+    const buyChannel = await interaction.guild.channels.fetch(buyChannelId.identifier);
     
     const buyEmbed = new EmbedBuilder()
       .setAuthor({ name: interaction.user.username, iconURL: interaction.user.displayAvatarURL() })
       .setTitle(shopItem.name)
       .setColor(Colors.Blue)
       .addFields(
-        { name: "Robux", value: `${shopItem.price.robux}` },
-        { name: "Dollars", value: `\$${shopItem.price.dollars.toFixed(2)}` }
+        { name: "Robux", value: `${shopItem.priceRobux}` },
+        { name: "Dollars", value: `\$${shopItem.priceDollars.toFixed(2)}` }
       )
       .setThumbnail(interaction.guild.iconURL({ size: 512 }))
       .setTimestamp();
@@ -28,11 +81,6 @@ module.exports = {
       .setCustomId('shop-close')
       .setLabel("Close Transaction")
       .setStyle(ButtonStyle.Danger);
-
-     const infoButton = new ButtonBuilder()
-      .setCustomId('shop-close')
-      .setLabel("Close Transaction")
-      .setStyle(ButtonStyle.Primary);
 
     const row = new ActionRowBuilder()
       .addComponents(closeButton);

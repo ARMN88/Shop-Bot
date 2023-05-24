@@ -1,5 +1,4 @@
 const { Events } = require('discord.js');
-const config = require("../config.json");
 const fs = require('node:fs');
 
 module.exports = {

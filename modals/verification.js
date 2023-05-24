@@ -1,5 +1,31 @@
 const { EmbedBuilder, Colors } = require("discord.js");
-const config = require('../config.json')
+const { Sequelize, DataTypes } = require('sequelize');
+
+const database = new Sequelize({
+  dialect: 'sqlite',
+  storage: 'database/users.db',
+  logging: false,
+  query: {
+    raw: true
+  }
+});
+
+const Info = database.define('Info', {
+  guildId: {
+    type: DataTypes.STRING
+  },
+  identifier: {
+    type: DataTypes.STRING
+  },
+  name: {
+    type: DataTypes.STRING
+  },
+  type: {
+    type: DataTypes.TINYINT
+  }
+}, { timestamps: false });
+
+const infoTypes = ['channel', 'role', 'webhook'];
 
 module.exports = {
   customId: "verification",
@@ -12,18 +38,39 @@ module.exports = {
       return;
     }
 
-    const verifiedRole = await interaction.guild.roles.fetch(config.guilds[interaction.guildId].roles.verified);
-    const auditChannel = await interaction.guild.channels.cache.get(config.guilds[interaction.guildId].channels.logs);
+    const verifiedRoleId = await Info.findOne({ where: { guildId: interaction.guildId, name: 'verified', type: infoTypes.indexOf('role') } });
+    if(!verifiedRoleId) {
+      const errorEmbed = new EmbedBuilder().setDescription(`Verification role is not setup, please contact <@${interaction.guild.ownerId}>.`).setColor(Colors.Red);
+      return await interaction.update({ embeds: [errorEmbed], ephemeral: true, attachments: [], components: [] });
+    }
+    const verifiedRole = await interaction.guild.roles.fetch(verifiedRoleId.identifier);
+
+    let auditChannel;
+    const auditChannelId = await Info.findOne({ where: { guildId: interaction.guildId, name: 'logs', type: infoTypes.indexOf('channel') } });
+    if(auditChannelId) auditChannel = await interaction.guild.channels.cache.get(auditChannelId.identifier);
 
     try {
       await interaction.member.roles.add(verifiedRole);
-      interaction.update({
+      await interaction.update({
         content: "Successfully Verified!",
         components: [],
         attachments: []
       });
+    } catch {
+      await interaction.update({
+        content: `Missing permissions, please contact <@${interaction.guild.ownerId}>.`,
+        components: [],
+        attachments: []
+      });
 
-      const memberJoinEmbed = new EmbedBuilder()
+      const errorEmbed = new EmbedBuilder()
+        .setColor(Colors.Red)
+        .setDescription(`Error verifying ${interaction.user}, please make sure ${interaction.client.user}'s role is higher than ${verifiedRole}.`)
+
+      if(auditChannel) await auditChannel.send({ embeds: [errorEmbed] });
+    };
+
+    const memberJoinEmbed = new EmbedBuilder()
         .setColor(Colors.Purple)
         .setAuthor({ name: `${interaction.user.tag}`, iconURL: interaction.user.displayAvatarURL() })
         .setDescription(`${interaction.user} was successfully verified!`)
@@ -34,27 +81,16 @@ module.exports = {
         )
         .setTimestamp()
 
-      auditChannel.send({ embeds: [memberJoinEmbed] });
+      if(auditChannel) auditChannel.send({ embeds: [memberJoinEmbed] });
 
       const welcomeEmbed = new EmbedBuilder()
         .setDescription(`Welcome to ${interaction.guild.name}, ${interaction.user}!`)
         .setColor(Colors.Green);
-
-      const welcomeChannel = await interaction.guild.channels.fetch(config.guilds[interaction.guildId].channels.welcome);
-
-      return welcomeChannel.send({ embeds: [welcomeEmbed] });
-    } catch {
-      interaction.update({
-        content: `Missing permissions, please contact <@${interaction.guild.ownerId}>.`,
-        components: [],
-        attachments: []
-      });
-
-      const errorEmbed = new EmbedBuilder()
-        .setColor(Colors.Red)
-        .setDescription(`Error verifying ${interaction.user}, please make sure ${interaction.client.user}'s role is higher than ${verifiedRole}.`)
-
-      await auditChannel.send({ embeds: [errorEmbed] });
-    };
+    
+      const welcomeChannelId = await Info.findOne({ where: { guildId: interaction.guildId, name: 'welcome', type: infoTypes.indexOf('channel') }, attributes: ['identifier'] });
+      if(welcomeChannelId) {
+        const welcomeChannel = await interaction.guild.channels.fetch(welcomeChannelId.identifier);
+        await welcomeChannel.send({ embeds: [welcomeEmbed] });
+      }
   },
 };

@@ -28,22 +28,24 @@ git config user.name "ARMN88"
   - [x] Get data from config
       - [x] Send to client
 - [ ] **Bot**
-  - [ ] check if role or channel has been deleted
-  - [ ] create `/help` command
-  - [ ] create `/setup` command for adding Id's and creating transaction channel
+  - [ ] switch EVERYTHING to database
   - [ ] check for missing channel
-  - [x] save verified role to database
-  - [x] Check if verified role already exists
-  - [x] Save images to `/images/[GUILD ID]` from `.getAttachment()`
-  - [x] Add Shop to DB
-  - [ ] Fix Webhooks (one for each channel)
-  - [ ] Shopping Cart (Premium)
-  - [ ] Track XP/Levels (Premium)
+  - [ ] check if role or channel has been deleted from discord
+  - [ ] create `/setup` command for adding Id's and creating transaction channel
+  - [ ] check if guild is signed up
+      - [ ] make `guild.json` which has a list of verified guilds
+  - [ ] create `/help` command
   - [ ] Send Webhooks for new items (Premium)
+  - [ ] Track XP/Levels (Premium)
+  - [ ] Shopping Cart (Premium)
   - [ ] Custom rank image (Premium)
   - [ ] Update README.md
     - [ ] Features
     - [ ] Commands
+  - [x] save verified role to database
+  - [x] Check if verified role already exists
+  - [x] Save images to `/images/[GUILD ID]` from `.getAttachment()`
+  - [x] Add Shop to DB
   - [x] Delete Menu on buy
   - [x] AutoMod Spam
   - [x] Member Count

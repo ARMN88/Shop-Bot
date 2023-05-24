@@ -1,12 +1,39 @@
 const { Events, EmbedBuilder, Colors } = require("discord.js");
-const config = require("../config.json");
+const { Sequelize, DataTypes } = require('sequelize');
 
+const database = new Sequelize({
+  dialect: 'sqlite',
+  storage: 'database/users.db',
+  logging: false,
+  query: {
+    raw: true
+  }
+});
+
+const Info = database.define('Info', {
+  guildId: {
+    type: DataTypes.STRING
+  },
+  identifier: {
+    type: DataTypes.STRING
+  },
+  name: {
+    type: DataTypes.STRING
+  },
+  type: {
+    type: DataTypes.TINYINT
+  }
+}, { timestamps: false });
+
+const infoTypes = ['channel', 'role', 'webhook'];
 module.exports = {
   name: Events.GuildMemberRemove,
   async execute(member) {
-    if(!config.guilds[member.guild.id]) return;
+    // if(!config.guilds[member.guild.id]) return;
 
-    const auditChannel = await member.guild.channels.fetch(config.guilds[member.guild.id].channels.logs);
+    const auditChannelId = await Info.findOne({ where: { guildId: interaction.guildId, name: 'logs', type: infoTypes.indexOf('channel') } });
+    if(!auditChannelId) return;
+    
     const memberLeaveEmbed = new EmbedBuilder()
       .setColor(Colors.Red)
       .setAuthor({ name: `${member.user.tag}`, iconURL: member.user.displayAvatarURL() })
@@ -18,6 +45,7 @@ module.exports = {
       )
       .setTimestamp()
     
+    const auditChannel = await interaction.guild.channels.cache.get(auditChannelId.identifier);
     auditChannel.send({ embeds: [memberLeaveEmbed] });
   }
 };
