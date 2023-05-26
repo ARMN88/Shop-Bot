@@ -49,12 +49,22 @@ module.exports = {
         name: 'Verified',
         color: Colors.Green,
         permissions: [
-          PermissionsBitField.Flags.UseApplicationCommands,
+          PermissionsBitField.Flags.AddReactions,
+          PermissionsBitField.Flags.Connect,
+          PermissionsBitField.Flags.CreateInstantInvite,
+          PermissionsBitField.Flags.EmbedLinks,
+          PermissionsBitField.Flags.ReadMessageHistory,
           PermissionsBitField.Flags.SendMessages,
           PermissionsBitField.Flags.SendMessagesInThreads,
-          PermissionsBitField.Flags.Connect,
+          PermissionsBitField.Flags.SendVoiceMessages,
           PermissionsBitField.Flags.Speak,
-          PermissionsBitField.Flags.UseVAD
+          PermissionsBitField.Flags.Stream,
+          PermissionsBitField.Flags.UseApplicationCommands,
+          PermissionsBitField.Flags.UseEmbeddedActivities,
+          PermissionsBitField.Flags.UseExternalEmojis,
+          PermissionsBitField.Flags.UseExternalStickers,
+          PermissionsBitField.Flags.UseVAD,
+          PermissionsBitField.Flags.ViewChannel
         ]
       });
 
