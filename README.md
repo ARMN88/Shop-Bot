@@ -28,8 +28,8 @@ git config user.name "ARMN88"
   - [x] Get data from config
       - [x] Send to client
 - [ ] **Bot**
-  - [ ] switch EVERYTHING to database
-  - [ ] check for missing channel
+  - [x] switch EVERYTHING to database
+  - [x] check for missing channel in database
   - [ ] check if role or channel has been deleted from discord
   - [ ] create `/setup` command for adding Id's and creating transaction channel
   - [ ] check if guild is signed up

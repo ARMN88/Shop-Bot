@@ -3,8 +3,6 @@ const { Sequelize, DataTypes } = require('sequelize');
 const fs = require('fs');
 const https = require('https');
 
-const config = require('../config.json');
-
 const database = new Sequelize({
   dialect: 'sqlite',
   storage: 'database/users.db',
