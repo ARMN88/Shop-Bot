@@ -64,8 +64,14 @@ module.exports = {
       return await interaction.reply({ embeds: [errorEmbed], ephemeral: true });
     }
 
-    const buyChannel = await interaction.guild.channels.fetch(buyChannelId.identifier);
-    
+    let buyChannel;
+    try {
+      buyChannel = await interaction.guild.channels.fetch(buyChannelId.identifier);
+    } catch {
+      const channelErrorEmbed = new EmbedBuilder().setDescription(`Transactions channel does not exist.`).setColor(Colors.Red);
+      return await interaction.reply({ embeds: [channelErrorEmbed], ephemeral: true });
+    }
+
     const buyEmbed = new EmbedBuilder()
       .setAuthor({ name: interaction.user.username, iconURL: interaction.user.displayAvatarURL() })
       .setTitle(shopItem.name)

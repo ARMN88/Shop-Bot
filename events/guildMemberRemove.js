@@ -44,8 +44,14 @@ module.exports = {
         { name: 'Member Count', value: `${member.guild.memberCount} Members` },
       )
       .setTimestamp()
-    
-    const auditChannel = await interaction.guild.channels.cache.get(auditChannelId.identifier);
+
+    let auditChannel;
+    try {
+      auditChannel = await interaction.guild.channels.cache.get(auditChannelId.identifier);
+    } catch {
+      const channelErrorEmbed = new EmbedBuilder().setDescription(`Log channel does not exist.`).setColor(Colors.Red);
+      return await interaction.reply({ embeds: [channelErrorEmbed], ephemeral: true });
+    }
     auditChannel.send({ embeds: [memberLeaveEmbed] });
   }
 };

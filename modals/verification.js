@@ -43,12 +43,23 @@ module.exports = {
       const errorEmbed = new EmbedBuilder().setDescription(`Verification role is not setup, please contact <@${interaction.guild.ownerId}>.`).setColor(Colors.Red);
       return await interaction.update({ embeds: [errorEmbed], ephemeral: true, attachments: [], components: [] });
     }
-    const verifiedRole = await interaction.guild.roles.fetch(verifiedRoleId.identifier);
+    let verifiedRole;
+    try {
+      verifiedRole = await interaction.guild.roles.fetch(verifiedRoleId.identifier);
+    } catch {
+      const channelErrorEmbed = new EmbedBuilder().setDescription(`Verified role does not exist.`).setColor(Colors.Red);
+      return await interaction.update({ embeds: [channelErrorEmbed], ephemeral: true });
+    }
 
     let auditChannel;
     const auditChannelId = await Info.findOne({ where: { guildId: interaction.guildId, name: 'logs', type: infoTypes.indexOf('channel') } });
-    if(auditChannelId) auditChannel = await interaction.guild.channels.cache.get(auditChannelId.identifier);
-
+    if(auditChannelId) 
+    try {
+      auditChannel = await interaction.guild.channels.cache.get(auditChannelId.identifier);
+    } catch {
+      const channelErrorEmbed = new EmbedBuilder().setDescription(`Log channel does not exist.`).setColor(Colors.Red);
+      return await interaction.update({ embeds: [channelErrorEmbed], ephemeral: true });
+    }
     try {
       await interaction.member.roles.add(verifiedRole);
       await interaction.update({

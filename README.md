@@ -37,6 +37,7 @@ git config user.name "ARMN88"
       - [x] connect to VC
       - [x] speak in VC
       - [x] use voice activity
+  - [x] change to images URL
   - [ ] check if role or channel has been deleted from discord
   - [ ] create `/setup` command for adding Id's and creating transaction channel
   - [ ] check if guild is signed up
