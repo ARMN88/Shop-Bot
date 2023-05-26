@@ -54,7 +54,7 @@ module.exports = {
           PermissionsBitField.Flags.SendMessagesInThreads,
           PermissionsBitField.Flags.Connect,
           PermissionsBitField.Flags.Speak,
-          PermissionsBitField.UseVAD
+          PermissionsBitField.Flags.UseVAD
         ]
       });
 
