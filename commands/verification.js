@@ -47,7 +47,15 @@ module.exports = {
       
       const verificationRole = await interaction.guild.roles.create({
         name: 'Verified',
-        color: Colors.Green
+        color: Colors.Green,
+        permissions: [
+          PermissionsBitField.Flags.UseApplicationCommands,
+          PermissionsBitField.Flags.SendMessages,
+          PermissionsBitField.Flags.SendMessagesInThreads,
+          PermissionsBitField.Flags.Connect,
+          PermissionsBitField.Flags.Speak,
+          PermissionsBitField.UseVAD
+        ]
       });
 
       await Info.create({

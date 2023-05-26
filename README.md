@@ -30,6 +30,13 @@ git config user.name "ARMN88"
 - [ ] **Bot**
   - [x] switch EVERYTHING to database
   - [x] check for missing channel in database
+  - [x] allow below permissions for verified role
+      - [x] application commands
+      - [x] send messages
+      - [x] send messages in threads
+      - [x] connect to VC
+      - [x] speak in VC
+      - [x] use voice activity
   - [ ] check if role or channel has been deleted from discord
   - [ ] create `/setup` command for adding Id's and creating transaction channel
   - [ ] check if guild is signed up
