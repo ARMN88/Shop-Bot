@@ -36,7 +36,7 @@ module.exports = {
     await interaction.reply({ embeds: [creatingEmbed], ephemeral: true });
 
     roleLabel: try {
-      const oldRole = await Info.findOne({ where: { guildId: `${interaction.guildId}`, name: 'Verified', type: infoTypes.indexOf('role') } }, { raw: true });
+      const oldRole = await Info.findOne({ where: { guildId: `${interaction.guildId}`, name: 'verified', type: infoTypes.indexOf('role') } }, { raw: true });
       if(oldRole) {
         if(await interaction.guild.roles.fetch(oldRole.identifier)) {
           const existsEmbed = new EmbedBuilder().setDescription(`Role already exists, using <@&${oldRole.identifier}>.`).setColor(Colors.Green);
@@ -61,7 +61,7 @@ module.exports = {
       await Info.create({
         guildId: `${interaction.guildId}`,
         identifier: `${verificationRole.id}`,
-        name: 'Verified',
+        name: 'verified',
         type: infoTypes.indexOf('role')
       });
 
