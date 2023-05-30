@@ -1,7 +1,6 @@
 {
     "name": "Shop-Bot",
     "script": "index.js",
-    "watch": true,
+    "watch": ["./"],
     "ignore_watch": ["database"],
-    "autorestart": true
 }
