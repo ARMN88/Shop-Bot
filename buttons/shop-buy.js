@@ -26,6 +26,9 @@ const Shop = database.define('Shops', {
   },
   priceDollars: {
     type: DataTypes.DOUBLE
+  },
+  attachment: {
+    type: DataTypes.STRING
   }
 }, { timestamps: false });
 

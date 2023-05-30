@@ -1,7 +1,5 @@
 const { ButtonBuilder, ButtonStyle, SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, Colors, PermissionsBitField, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } = require('discord.js');
 const { Sequelize, DataTypes } = require('sequelize');
-const fs = require('fs');
-const https = require('https');
 
 const database = new Sequelize({
   dialect: 'sqlite',
@@ -27,6 +25,9 @@ const Shop = database.define('Shops', {
   },
   priceDollars: {
     type: DataTypes.DOUBLE
+  },
+  attachment: {
+    type: DataTypes.STRING
   }
 }, { timestamps: false });
 
@@ -119,19 +120,8 @@ module.exports = {
             type: shopTypes.indexOf(interaction.options.getString('type')),
             name: interaction.options.getString('name'),
             priceDollars: interaction.options.getNumber('price-dollars'),
-            priceRobux: interaction.options.getInteger('price-robux')
-          });
-          
-          https.get(interaction.options.getAttachment('image').url,(res) => {
-            const path = `${__dirname}/../images/${interaction.guildId}/${newItem.dataValues.id}.png`; 
-            if (!fs.existsSync(`${__dirname}/../images/${interaction.guildId}/`)){
-              fs.mkdirSync(`${__dirname}/../images/${interaction.guildId}/`, { recursive: true });
-            }
-            const filePath = fs.createWriteStream(path);
-            res.pipe(filePath);
-            filePath.on('finish',() => {
-              filePath.close();
-            });
+            priceRobux: interaction.options.getInteger('price-robux'),
+            attachment: interaction.options.getAttachment('image').attachment
           });
           
           return await interaction.reply({
@@ -142,7 +132,7 @@ module.exports = {
                   { name: 'Type', value: interaction.options.getString('type')},
                   { name: 'Name', value: interaction.options.getString('name')},
                   { name: 'Price', value: `\$${interaction.options.getNumber('price-dollars').toFixed(2)} OR ${interaction.options.getInteger('price-robux')} RBX`})
-                .setImage(interaction.options.getAttachment('image').url)
+                .setImage(interaction.options.getAttachment('image').attachment)
             ], 
             ephemeral: true
           });  
@@ -189,7 +179,7 @@ module.exports = {
         { name: 'Robux', value: `${items.rows[index].priceRobux}` },
         { name: 'Dollars', value: "$" + items.rows[index].priceRobux }
       )
-      // .setImage(config.guilds[interaction.guildId].shop[interaction.options.getSubcommand()][index].imageURL)
+      .setImage(items.rows[index].attachment)
       .setFooter({ text: `${interaction.user.username}'s Menu | Page ${index + 1}/${items.count}` });
 
     interaction.reply({ embeds: [shopEmbed], components: [row] });

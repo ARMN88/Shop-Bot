@@ -28,17 +28,6 @@ git config user.name "ARMN88"
   - [x] Get data from config
       - [x] Send to client
 - [ ] **Bot**
-  - [x] switch EVERYTHING to database
-  - [x] check for missing channel in database
-  - [x] allow below permissions for verified role
-      - [x] application commands
-      - [x] send messages
-      - [x] send messages in threads
-      - [x] connect to VC
-      - [x] speak in VC
-      - [x] use voice activity
-  - [x] change to images URL
-  - [ ] check if role or channel has been deleted from discord
   - [ ] create `/setup` command for adding Id's and creating transaction channel
   - [ ] check if guild is signed up
       - [ ] make `guild.json` which has a list of verified guilds
@@ -50,6 +39,17 @@ git config user.name "ARMN88"
   - [ ] Update README.md
     - [ ] Features
     - [ ] Commands
+  - [x] switch EVERYTHING to database
+  - [x] check for missing channel in database
+  - [x] allow below permissions for verified role
+      - [x] application commands
+      - [x] send messages
+      - [x] send messages in threads
+      - [x] connect to VC
+      - [x] speak in VC
+      - [x] use voice activity
+  - [x] change to images URL
+  - [x] check if role or channel has been deleted from discord
   - [x] save verified role to database
   - [x] Check if verified role already exists
   - [x] Save images to `/images/[GUILD ID]` from `.getAttachment()`

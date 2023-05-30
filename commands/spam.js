@@ -4,7 +4,6 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('spam')
 		.setDescription('Control spam in your server.')
-    .setDMPermission(false)
     .addSubcommand(subcommand =>
   		subcommand
   			.setName('enable')

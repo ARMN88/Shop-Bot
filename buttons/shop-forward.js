@@ -25,6 +25,9 @@ const Shop = database.define('Shops', {
   },
   priceDollars: {
     type: DataTypes.DOUBLE
+  },
+  attachment: {
+    type: DataTypes.STRING
   }
 }, { timestamps: false });
 
@@ -65,7 +68,7 @@ module.exports = {
         { name: 'Robux', value: `${items.rows[index].priceRobux}` },
         { name: 'Dollars', value: "$" + items.rows[index].priceRobux }
       )
-      // .setImage(config.guilds[interaction.guildId].shop[interaction.options.getSubcommand()][index].imageURL)
+      .setImage(items.rows[index].attachment)
       .setFooter({ text: `${interaction.user.username}'s Menu | Page ${index + 1}/${items.count}` });
 
     return await interaction.update({embeds: [shopEmbed], components: [row] });
