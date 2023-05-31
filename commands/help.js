@@ -3,7 +3,7 @@ const { ButtonBuilder, ButtonStyle, SlashCommandBuilder, EmbedBuilder, ActionRow
 module.exports = {
     data: new SlashCommandBuilder()
     .setName('help')
-    .setDescription('A help guide to set up this bot with your server.')
+    .setDescription('A help guide to set up this bot with your server.'),
     async execute(interaction) {
         const helpEmbed = new EmbedBuilder()
             .setTitle(`${interaction.guild.name} Info`)
