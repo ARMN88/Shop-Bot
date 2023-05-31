@@ -29,8 +29,8 @@ git config user.name "ARMN88"
       - [x] Send to client
 - [ ] **Bot**
   - [ ] create `/setup` command for adding Id's and creating transaction channel
-  - [ ] check if guild is signed up
-      - [ ] make `guild.json` which has a list of verified guilds
+  - [x] check if guild is signed up
+      - [x] make `guild.json` which has a list of verified guilds
   - [ ] create `/help` command
   - [ ] Send Webhooks for new items (Premium)
   - [ ] Track XP/Levels (Premium)

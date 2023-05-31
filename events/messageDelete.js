@@ -1,5 +1,6 @@
 const { Events, EmbedBuilder, Colors } = require('discord.js');
 const { Sequelize, DataTypes } = require('sequelize');
+const verifiedGuilds = require('../guilds.json');
 
 const database = new Sequelize({
   dialect: 'sqlite',
@@ -31,7 +32,8 @@ module.exports = {
   name: Events.MessageDelete,
   async execute(message) {
     if(message.author.bot) return;
-    const auditChannelId = await Info.findOne({ where: { guildId: message.guildId, name: 'logs', type: infoTypes.indexOf('channel') } });
+    if(!Object.keys(verifiedGuilds).includes(message.guild.id)) return;
+    const auditChannelId = await Info.findOne({ where: { guildId: message.guild.id, name: 'logs', type: infoTypes.indexOf('channel') } });
     if(!auditChannelId) return;
     
     const messageEmbed = new EmbedBuilder()
@@ -44,10 +46,9 @@ module.exports = {
     
     let auditChannel;
     try {
-      auditChannel = await interaction.guild.channels.cache.get(auditChannelId.identifier);
+      auditChannel = await message.guild.channels.fetch(auditChannelId.identifier);
     } catch {
-      const channelErrorEmbed = new EmbedBuilder().setDescription(`Log channel does not exist.`).setColor(Colors.Red);
-      return await interaction.reply({ embeds: [channelErrorEmbed], ephemeral: true });
+      return;
     }
     auditChannel.send({ embeds: [messageEmbed] });
   },

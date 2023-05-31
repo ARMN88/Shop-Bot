@@ -102,11 +102,7 @@ module.exports = {
         .addSubcommand(subcommand => 
           subcommand
             .setName('edit')
-            .setDescription('Edit an item in the shop.'))
-        .addSubcommand(subcommand => 
-          subcommand
-            .setName('delete')
-            .setDescription('Delete an item from the shop.'))),
+            .setDescription('Delete or edit an item in the shop.'))),
   
   async execute(interaction) {
     if(interaction.options.getSubcommandGroup() === 'menu') {
@@ -138,9 +134,49 @@ module.exports = {
           });  
           break;
         case 'edit':
+          const items = await Shop.findAndCountAll({ where: { guildId: interaction.guildId }});
+          if(!items.count) return await interaction.reply({ content: "No items avaliable.", ephemeral: true });
+      
+          let index = 0;
           
-          break;
-        case 'delete':
+          const forwardButton = new ButtonBuilder()
+            .setCustomId('shop-edit-forward')
+            .setLabel("Next →")
+            .setDisabled(index + 1 >= items.count)
+            .setStyle(ButtonStyle.Primary);
+      
+          const backButton = new ButtonBuilder()
+            .setCustomId('shop-edit-back')
+            .setLabel("← Back")
+            .setDisabled(index <= 0)
+            .setStyle(ButtonStyle.Primary);
+      
+          const editButton = new ButtonBuilder()
+            .setCustomId('shop-edit')
+            .setLabel("Edit")
+            .setStyle(ButtonStyle.Secondary);
+
+          const deleteButton = new ButtonBuilder()
+            .setCustomId('shop-delete')
+            .setLabel("Delete")
+            .setStyle(ButtonStyle.Danger);
+      
+          const row = new ActionRowBuilder()
+            .addComponents(backButton, editButton, deleteButton, forwardButton);
+      
+          const shopEmbed = new EmbedBuilder()
+            .setColor(Colors.Blue)
+            .setThumbnail(interaction.guild.iconURL({ size: 512 }))
+            .setAuthor({ name: shopTypes[items.rows[index].type], iconURL: interaction.guild.iconURL() })
+            .setTitle(`${index + 1} - ` + items.rows[index].name)
+            .addFields(
+              { name: 'Robux', value: `${items.rows[index].priceRobux}` },
+              { name: 'Dollars', value: "$" + items.rows[index].priceRobux }
+            )
+            .setImage(items.rows[index].attachment)
+            .setFooter({ text: `${interaction.user.username}'s Menu | Page ${index + 1}/${items.count}` });
+      
+          return await interaction.reply({ embeds: [shopEmbed], components: [row], ephemeral: true });
           break;
       }
     }

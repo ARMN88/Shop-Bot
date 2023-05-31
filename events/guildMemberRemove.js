@@ -1,5 +1,6 @@
 const { Events, EmbedBuilder, Colors } = require("discord.js");
 const { Sequelize, DataTypes } = require('sequelize');
+const verifiedGuilds = require('../guilds.json');
 
 const database = new Sequelize({
   dialect: 'sqlite',
@@ -26,12 +27,13 @@ const Info = database.define('Info', {
 }, { timestamps: false });
 
 const infoTypes = ['channel', 'role', 'webhook'];
+
 module.exports = {
   name: Events.GuildMemberRemove,
   async execute(member) {
-    // if(!config.guilds[member.guild.id]) return;
+    if(!Object.keys(verifiedGuilds).includes(member.guild.id)) return;
 
-    const auditChannelId = await Info.findOne({ where: { guildId: interaction.guildId, name: 'logs', type: infoTypes.indexOf('channel') } });
+    const auditChannelId = await Info.findOne({ where: { guildId: member.guild.id, name: 'logs', type: infoTypes.indexOf('channel') } });
     if(!auditChannelId) return;
     
     const memberLeaveEmbed = new EmbedBuilder()
@@ -47,10 +49,9 @@ module.exports = {
 
     let auditChannel;
     try {
-      auditChannel = await interaction.guild.channels.cache.get(auditChannelId.identifier);
+      auditChannel = await member.guild.channels.fetch(auditChannelId.identifier);
     } catch {
-      const channelErrorEmbed = new EmbedBuilder().setDescription(`Log channel does not exist.`).setColor(Colors.Red);
-      return await interaction.reply({ embeds: [channelErrorEmbed], ephemeral: true });
+      return;
     }
     auditChannel.send({ embeds: [memberLeaveEmbed] });
   }

@@ -1,5 +1,6 @@
 const { Events, EmbedBuilder, Colors } = require('discord.js');
 const { Sequelize, DataTypes } = require('sequelize');
+const verifiedGuilds = require('../guilds.json');
 
 const database = new Sequelize({
   dialect: 'sqlite',
@@ -25,8 +26,8 @@ const Users = database.define('Messages', {
 
 module.exports = {
   name: Events.MessageCreate,
-  async execute(message) {
-    if (message.author.bot /*|| !config.guilds[message.guildId]*/) return;
+  async execute(message) {    
+    if (message.author.bot || !Object.keys(verifiedGuilds).includes(message.guild.id)) return;
 
     const user = await Users.findOne({ where: { userId: `${message.author.id}`, guildId: `${message.guildId}` }, raw: true });
 
