@@ -71,7 +71,7 @@ module.exports = {
       .setTitle(`${index + 1} - ` + items.rows[index].name)
       .addFields(
         { name: 'Robux', value: `${items.rows[index].priceRobux}` },
-        { name: 'Dollars', value: "$" + items.rows[index].priceRobux }
+        { name: 'Dollars', value: "$" + items.rows[index].priceDollars.toFixed(2) }
       )
       .setImage(items.rows[index].attachment)
       .setFooter({ text: `${interaction.user.username}'s Menu | Page ${index + 1}/${items.count}` });
