@@ -1,5 +1,6 @@
 {
     "name": "Shop-Bot",
     "script": "index.js",
-    "watch": "./"
+    "watch": "./",
+    "ignore_watch": ["database"],
 }
