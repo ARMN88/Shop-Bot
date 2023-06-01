@@ -2,35 +2,7 @@ const crypto = require("node:crypto");
 const fs = require('node:fs');
 const path = require('node:path');
 
-const authCodes = require("./auth.json");
-const config = require("./config.json");
-// const { token } = require("./token.json");
-
 require("dotenv").config();
-
-// const express = require("express");
-// const app = express();
-
-// const server = app.listen(8080, () => {
-//   console.log("Node server running...");
-// });
-
-// app.use(express.static("public"));
-
-// const { Server } = require("socket.io");
-// const io = new Server(server);
-
-// io.on('connection', socket => {
-//   console.log(socket.id);
-//   socket.on('auth', authCode => {
-//     if (!Object.keys(authCodes).includes(authCode)) return socket.emit('authError');
-//     socket.emit('authSuccess');
-//   });
-
-//   socket.on('get-data', authCode => {
-//     socket.emit('server-data', config.guilds[authCodes[authCode]]);
-//   });
-// });
 
 const { Client, GatewayIntentBits, Collection } = require('discord.js');
 
