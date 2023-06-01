@@ -4,7 +4,7 @@ const path = require('node:path');
 
 const authCodes = require("./auth.json");
 const config = require("./config.json");
-const { token } = require("./token.json");
+// const { token } = require("./token.json");
 
 require("dotenv").config();
 
