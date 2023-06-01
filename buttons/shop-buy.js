@@ -55,7 +55,7 @@ module.exports = {
 	customId: "shop-buy",
 	async execute(interaction) {
     if(interaction.message.interaction.user.id !== interaction.user.id) return await interaction.reply({content: `This is ${interaction.message.interaction.user.username}'s shop menu, use /shop to browse the shop.`, ephemeral: true });
-    const items = await Shop.findAll({ where: { guildId: interaction.guildId, type: shopTypes.indexOf(interaction.message.embeds[0].author.name) }}, { raw: true });    
+    const items = await Shop.findAll({ where: { guildId: interaction.guildId, type: shopTypes.indexOf(interaction.message.embeds[0].author.name) }});    
     
     const shopIndex = parseInt(interaction.message.embeds[0].title.split(' ')[0])-1;
     const shopItem = items[shopIndex];
@@ -94,11 +94,24 @@ module.exports = {
     const row = new ActionRowBuilder()
       .addComponents(closeButton);
 
-    const buyThread = await buyChannel.threads.create({
-      name: `Transaction ${randomInt(1000, 10000)}`,
-      message: { content: `<@${interaction.user.id}>`, embeds: [buyEmbed], components: [row] },
-    });
+    let buyThread;
 
+     if(buyChannel.type === ChannelType.GuildForum) {
+      buyThread = await buyChannel.threads.create({
+        name: `Transaction ${randomInt(1000, 10000)}`,
+        message: { content: `<@${interaction.user.id}>`, embeds: [buyEmbed], components: [row] },
+      });
+    } else if(buyChannel.type === ChannelType.GuildText) {
+      buyThread = await buyChannel.threads.create({
+        name: `Transaction ${randomInt(1000, 10000)}`,
+        type: ChannelType.PrivateThread
+      });
+      await buyThread.send({ content: `<@${interaction.user.id}>`, embeds: [buyEmbed], components: [row] });
+    } else {
+      const channelErrorEmbed = new EmbedBuilder().setDescription(`Transactions channel is not a Forum Channel or Text Channel.`).setColor(Colors.Red);
+      return await interaction.reply({ embeds: [channelErrorEmbed], ephemeral: true });
+    }
+    
     buyThread.lastMessage.pin();
     buyThread.members.add(interaction.user);
 

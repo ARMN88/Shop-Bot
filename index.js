@@ -6,6 +6,8 @@ const authCodes = require("./auth.json");
 const config = require("./config.json");
 const { token } = require("./token.json");
 
+require("dotenv").config();
+
 // const express = require("express");
 // const app = express();
 
@@ -97,4 +99,4 @@ for (const file of eventFiles) {
   }
 }
 
-client.login(token);
+client.login(process.env.TOKEN);
