@@ -1,5 +1,7 @@
 {
     "name": "Shop-Bot",
-    "script": "index.js",
-    "watch": "./"
+    "script": "./index.js",
+    "watch": true,
+    "ignore_watch": ["database"],
+    "max_restarts": 5
 }
