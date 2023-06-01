@@ -26,8 +26,6 @@ const Info = database.define('Info', {
   }
 }, { timestamps: false });
 
-Info.sync({ force: true });
-
 const infoTypes = ['channel', 'role', 'webhook'];
 
 // Messages //
