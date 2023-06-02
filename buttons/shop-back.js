@@ -70,6 +70,6 @@ module.exports = {
       .setImage(items.rows[index].attachment)
       .setFooter({ text: `${interaction.user.username}'s Menu | Page ${index + 1}/${items.count}` });
 
-    return await interaction.update({ embeds: [shopEmbed], components: [row] });
+    return await interaction.update({ embeds: [shopEmbed], components: [row], ephemeral: true });
   }
 };
