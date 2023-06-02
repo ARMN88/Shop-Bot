@@ -33,6 +33,23 @@ const Shop = database.define('Shops', {
 
 const shopTypes = ['gift-bases', 'bases', 'wood'];
 
+const Info = database.define('Info', {
+  guildId: {
+    type: DataTypes.STRING
+  },
+  identifier: {
+    type: DataTypes.STRING
+  },
+  name: {
+    type: DataTypes.STRING
+  },
+  type: {
+    type: DataTypes.TINYINT
+  }
+}, { timestamps: false });
+
+const infoTypes = ['channel', 'role', 'webhook'];
+
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('shop')
@@ -54,11 +71,11 @@ module.exports = {
       subcommand
         .setName('wood')
         .setDescription('All avaliable wood.'))
-    .addSubcommandGroup(subcommandGroup => 
+    .addSubcommandGroup(subcommandGroup =>
       subcommandGroup
         .setName('menu')
         .setDescription('Edit, add, or remove an item from the shop.')
-        .addSubcommand(subcommand => 
+        .addSubcommand(subcommand =>
           subcommand
             .setName('add')
             .setDescription('Add an item to the shop.')
@@ -77,7 +94,7 @@ module.exports = {
                 .setName('name')
                 .setDescription('Set the name of item.')
                 .setRequired(true)
-              )
+            )
             .addIntegerOption(option =>
               option
                 .setName('price-robux')
@@ -85,33 +102,33 @@ module.exports = {
                 .setRequired(true)
                 .setMaxValue(65535)
                 .setMinValue(1)
-              )
+            )
             .addNumberOption(option =>
               option
                 .setName('price-dollars')
                 .setDescription('Set the price in dollars of item.')
                 .setRequired(true)
                 .setMinValue(0)
-              )
+            )
             .addAttachmentOption(option =>
               option
                 .setName('image')
                 .setDescription("Set the image of the item.")
                 .setRequired(true)
-              ))
-        .addSubcommand(subcommand => 
+            ))
+        .addSubcommand(subcommand =>
           subcommand
             .setName('edit')
             .setDescription('Delete or edit an item in the shop.'))),
-  
+
   async execute(interaction) {
-    if(interaction.options.getSubcommandGroup() === 'menu') {
-      if(!interaction.memberPermissions.has(PermissionsBitField.Flags.Administrator)) return await interaction.reply({ content: `Unable to edit, you do not have permission.`, ephemeral: true });
-        
+    if (interaction.options.getSubcommandGroup() === 'menu') {
+      if (!interaction.memberPermissions.has(PermissionsBitField.Flags.Administrator)) return await interaction.reply({ content: `Unable to edit, you do not have permission.`, ephemeral: true });
+
       const menuEmbed = new EmbedBuilder().setColor(Colors.Purple).setTitle('Shop Editor').setTimestamp();
-      switch(interaction.options.getSubcommand()) {
-        case 'add':          
-          const newItem = await Shop.create({ 
+      switch (interaction.options.getSubcommand()) {
+        case 'add':
+          const newItem = await Shop.create({
             guildId: interaction.guildId,
             type: shopTypes.indexOf(interaction.options.getString('type')),
             name: interaction.options.getString('name'),
@@ -119,38 +136,62 @@ module.exports = {
             priceRobux: interaction.options.getInteger('price-robux'),
             attachment: interaction.options.getAttachment('image').attachment
           });
-          
-          return await interaction.reply({
+
+          await interaction.reply({
             embeds: [
               menuEmbed
                 .setDescription('Successfully added item!')
                 .addFields(
-                  { name: 'Type', value: interaction.options.getString('type')},
-                  { name: 'Name', value: interaction.options.getString('name')},
-                  { name: 'Price', value: `\$${interaction.options.getNumber('price-dollars').toFixed(2)} OR ${interaction.options.getInteger('price-robux')} RBX`})
+                  { name: 'Type', value: interaction.options.getString('type') },
+                  { name: 'Name', value: interaction.options.getString('name') },
+                  { name: 'Price', value: `\$${interaction.options.getNumber('price-dollars').toFixed(2)} OR ${interaction.options.getInteger('price-robux')} RBX` })
                 .setImage(interaction.options.getAttachment('image').attachment)
-            ], 
+            ],
             ephemeral: true
-          });  
+          });
+
+          const shopChannelId = await Info.findOne({ where: { guildId: interaction.guildId, name: interaction.options.getString('type'), type: infoTypes.indexOf('channel') } });
+          if (!shopChannelId) return;
+
+          let shopChannel;
+          try {
+            shopChannel = await interaction.guild.channels.fetch(shopChannelId.identifier);
+          } catch {
+            return;
+          }
+
+          return await shopChannel.send({
+            embeds: [
+              new EmbedBuilder()
+                .setColor(Colors.Blue)
+                .setThumbnail(interaction.guild.iconURL({ size: 512 }))
+                .setTitle(interaction.options.getString('name'))
+                .addFields(
+                  { name: 'Robux', value: `${interaction.options.getInteger('price-robux')}` },
+                  { name: 'Dollars', value: "$" + interaction.options.getNumber('price-dollars').toFixed(2) }
+                )
+                .setImage(interaction.options.getAttachment('image').attachment)
+            ]
+          });
           break;
         case 'edit':
-          const items = await Shop.findAndCountAll({ where: { guildId: interaction.guildId }});
-          if(!items.count) return await interaction.reply({ content: "No items avaliable.", ephemeral: true });
-      
+          const items = await Shop.findAndCountAll({ where: { guildId: interaction.guildId } });
+          if (!items.count) return await interaction.reply({ content: "No items avaliable.", ephemeral: true });
+
           let index = 0;
-          
+
           const forwardButton = new ButtonBuilder()
             .setCustomId('shop-edit-forward')
             .setLabel("Next →")
             .setDisabled(index + 1 >= items.count)
             .setStyle(ButtonStyle.Primary);
-      
+
           const backButton = new ButtonBuilder()
             .setCustomId('shop-edit-back')
             .setLabel("← Back")
             .setDisabled(index <= 0)
             .setStyle(ButtonStyle.Primary);
-      
+
           const editButton = new ButtonBuilder()
             .setCustomId('shop-edit')
             .setLabel("Edit")
@@ -160,10 +201,10 @@ module.exports = {
             .setCustomId('shop-delete')
             .setLabel("Delete")
             .setStyle(ButtonStyle.Danger);
-      
+
           const row = new ActionRowBuilder()
             .addComponents(backButton, editButton, deleteButton, forwardButton);
-      
+
           const shopEmbed = new EmbedBuilder()
             .setColor(Colors.Blue)
             .setThumbnail(interaction.guild.iconURL({ size: 512 }))
@@ -175,14 +216,14 @@ module.exports = {
             )
             .setImage(items.rows[index].attachment)
             .setFooter({ text: `${interaction.user.username}'s Menu | Page ${index + 1}/${items.count}` });
-      
+
           return await interaction.reply({ embeds: [shopEmbed], components: [row], ephemeral: true });
           break;
       }
     }
 
-    const items = await Shop.findAndCountAll({ where: { guildId: interaction.guildId, type: shopTypes.indexOf(interaction.options.getSubcommand()) }}, { raw: true });
-    if(!items.count) return await interaction.reply({ content: "No items avaliable.", ephemeral: true });
+    const items = await Shop.findAndCountAll({ where: { guildId: interaction.guildId, type: shopTypes.indexOf(interaction.options.getSubcommand()) } }, { raw: true });
+    if (!items.count) return await interaction.reply({ content: "No items avaliable.", ephemeral: true });
 
     let index = 0;
 
