@@ -31,7 +31,7 @@ const infoTypes = ['channel', 'role', 'webhook'];
 module.exports = {
   name: Events.MessageUpdate,
   async execute(oldMessage, newMessage) {
-    if(!Object.keys(verifiedGuilds).includes(newMessage.guild.id)) return;
+    if(!Object.keys(verifiedGuilds).includes(newMessage.guild.id) || oldMessage.content === newMessage.content) return;
     if(newMessage.author.bot) return;
     const auditChannelId = await Info.findOne({ where: { guildId: newMessage.guildId, name: 'logs', type: infoTypes.indexOf('channel') } });
     if(!auditChannelId) return;
