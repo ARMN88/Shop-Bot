@@ -204,7 +204,7 @@ module.exports = {
           )
           .setColor(Colors.Blue);
 
-        await interaction.reply({ embeds: [showEmbed] });
+        await interaction.reply({ embeds: [showEmbed], ephemeral: true });
         break;
     }
   },
