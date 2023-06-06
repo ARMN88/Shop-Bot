@@ -2,7 +2,7 @@ const { ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } = req
 
 module.exports = {
 	customId: "ready",
-	async execute(interaction) {    
+	async execute(interaction) {
     const verificationModal = new ModalBuilder()
       .setCustomId('verification')
       .setTitle('Verification')
