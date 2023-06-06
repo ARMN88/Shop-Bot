@@ -35,6 +35,7 @@ module.exports = {
                     { name: 'Gift Bases', value: 'gift-bases' },
                     { name: 'Bases', value: 'bases' },
                     { name: 'Wood', value: 'wood' },
+                    { name: 'Accounts', value: 'accounts' },
                     { name: 'Transactions', value: 'transactions' },
                     { name: 'Audit Logs', value: 'logs' }
                   ))
@@ -78,6 +79,7 @@ module.exports = {
                     { name: 'Gift Bases', value: 'gift-bases' },
                     { name: 'Bases', value: 'bases' },
                     { name: 'Wood', value: 'wood' },
+                    { name: 'Accounts', value: 'accounts' },
                     { name: 'Transactions', value: 'transactions' },
                     { name: 'Audit Logs', value: 'logs' }
                   )))
