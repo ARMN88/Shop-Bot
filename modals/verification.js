@@ -58,8 +58,6 @@ module.exports = {
     try {
       auditChannel = await interaction.guild.channels.cache.get(auditChannelId.identifier);
     } catch {
-      const channelErrorEmbed = new EmbedBuilder().setDescription(`Log channel does not exist.`).setColor(Colors.Red);
-      return await interaction.followUp({ embeds: [channelErrorEmbed], ephemeral: true });
     }
     try {
       await interaction.member.roles.add(verifiedRole);
@@ -77,17 +75,15 @@ module.exports = {
 
       const errorEmbed = new EmbedBuilder()
         .setColor(Colors.Red)
-        .setDescription(`Error verifying ${interaction.user}, please make sure ${interaction.client.user}'s role is higher than ${verifiedRole}.`)
+        .setDescription(`Error verifying <@${interaction.user.id}>, please make sure <@${interaction.client.user.id}>'s role is higher than ${verifiedRole}.`)
 
       if(auditChannel) await auditChannel.send({ embeds: [errorEmbed] });
     };
 
-    const guildMember = await interaction.member.fetch();
-
     const memberJoinEmbed = new EmbedBuilder()
         .setColor(Colors.Purple)
         .setAuthor({ name: `${interaction.user.tag}`, iconURL: interaction.user.displayAvatarURL() })
-        .setDescription(`${guildMember} was successfully verified!`)
+        .setDescription(`<@${interaction.user.id}> was successfully verified!`)
         .addFields(
           { name: 'Joined Server', value: `<t:${Math.floor(interaction.member.joinedTimestamp / 1000)}:F>` },
           { name: 'Account Created', value: `<t:${Math.floor(interaction.user.createdTimestamp / 1000)}:R>`, },
@@ -96,15 +92,11 @@ module.exports = {
         .setTimestamp()
 
       if(auditChannel) auditChannel.send({ embeds: [memberJoinEmbed] });
-
-      const welcomeEmbed = new EmbedBuilder()
-        .setDescription(`Welcome to ${interaction.guild.name}, ${guildMember}!`)
-        .setColor(Colors.Green);
     
       const welcomeChannelId = await Info.findOne({ where: { guildId: interaction.guildId, name: 'welcome', type: infoTypes.indexOf('channel') }, attributes: ['identifier'] });
       if(welcomeChannelId) {
         const welcomeChannel = await interaction.guild.channels.fetch(welcomeChannelId.identifier);
-        await welcomeChannel.send({ embeds: [welcomeEmbed] });
+        await welcomeChannel.send({ content: `Welcome to **${interaction.guild.name}**, <@${interaction.user.id}>!` });
       }
   },
 };
