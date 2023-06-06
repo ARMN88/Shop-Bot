@@ -81,10 +81,12 @@ module.exports = {
       if(auditChannel) await auditChannel.send({ embeds: [errorEmbed] });
     };
 
+    const guildMember = await interaction.member.fetch();
+
     const memberJoinEmbed = new EmbedBuilder()
         .setColor(Colors.Purple)
         .setAuthor({ name: `${interaction.user.tag}`, iconURL: interaction.user.displayAvatarURL() })
-        .setDescription(`${interaction.user} was successfully verified!`)
+        .setDescription(`${guildMember} was successfully verified!`)
         .addFields(
           { name: 'Joined Server', value: `<t:${Math.floor(interaction.member.joinedTimestamp / 1000)}:F>` },
           { name: 'Account Created', value: `<t:${Math.floor(interaction.user.createdTimestamp / 1000)}:R>`, },
@@ -95,7 +97,7 @@ module.exports = {
       if(auditChannel) auditChannel.send({ embeds: [memberJoinEmbed] });
 
       const welcomeEmbed = new EmbedBuilder()
-        .setDescription(`Welcome to ${interaction.guild.name}, ${interaction.user}!`)
+        .setDescription(`Welcome to ${interaction.guild.name}, ${guildMember}!`)
         .setColor(Colors.Green);
     
       const welcomeChannelId = await Info.findOne({ where: { guildId: interaction.guildId, name: 'welcome', type: infoTypes.indexOf('channel') }, attributes: ['identifier'] });
