@@ -79,7 +79,7 @@ module.exports = {
                 .setRequired(true)
                 .setMinValue(0)
             )
-            
+
             .addAttachmentOption(option =>
               option
                 .setName('image')
@@ -92,8 +92,9 @@ module.exports = {
             .setDescription('Delete or edit an item in the shop.'))),
 
   async execute(interaction) {
+    await interaction.deferReply({ ephemeral: true });
     if (interaction.options.getSubcommandGroup() === 'menu') {
-      if (!interaction.memberPermissions.has(PermissionsBitField.Flags.Administrator)) return await interaction.reply({ content: `Unable to edit, you do not have permission.`, ephemeral: true });
+      if (!interaction.memberPermissions.has(PermissionsBitField.Flags.Administrator)) return await interaction.editReply({ content: `Unable to edit, you do not have permission.`, ephemeral: true });
 
       const menuEmbed = new EmbedBuilder().setColor(Colors.Purple).setTitle('Shop Editor').setTimestamp();
       switch (interaction.options.getSubcommand()) {
@@ -109,21 +110,21 @@ module.exports = {
           });
 
           menuEmbed
-          .setDescription('Successfully added item!')
-          .addFields(
-            { name: 'Type', value: interaction.options.getString('type') },
-            { name: 'Name', value: interaction.options.getString('name') },
-            { name: 'Price', value: `\$${interaction.options.getNumber('price-dollars').toFixed(2)} OR ${interaction.options.getInteger('price-robux')} RBX` })
-          .setImage(interaction.options.getAttachment('image').attachment)
-          
-          if(interaction.options.getInteger('data-size')) {
+            .setDescription('Successfully added item!')
+            .addFields(
+              { name: 'Type', value: interaction.options.getString('type') },
+              { name: 'Name', value: interaction.options.getString('name') },
+              { name: 'Price', value: `\$${interaction.options.getNumber('price-dollars').toFixed(2)} OR ${interaction.options.getInteger('price-robux')} RBX` })
+            .setImage(interaction.options.getAttachment('image').attachment)
+
+          if (interaction.options.getInteger('data-size')) {
             menuEmbed.addFields(
               { name: 'Data Size', value: `${interaction.options.getInteger('data-size')}` }
             )
-            }
-          await interaction.reply({
+          }
+          await interaction.editReply({
             embeds: [
-              menuEmbed   
+              menuEmbed
             ],
             ephemeral: true
           });
@@ -139,20 +140,20 @@ module.exports = {
           }
 
           const shopNewEmbed = new EmbedBuilder()
-          .setColor(Colors.Blue)
-          .setThumbnail(interaction.guild.iconURL({ size: 512 }))
-          .setTitle(interaction.options.getString('name'))
-          .addFields(
-            { name: 'Robux', value: `${interaction.options.getInteger('price-robux')}` },
-            { name: 'Dollars', value: "$" + interaction.options.getNumber('price-dollars').toFixed(2) }
-          )
-          .setImage(interaction.options.getAttachment('image').attachment)
+            .setColor(Colors.Blue)
+            .setThumbnail(interaction.guild.iconURL({ size: 512 }))
+            .setTitle(interaction.options.getString('name'))
+            .addFields(
+              { name: 'Robux', value: `${interaction.options.getInteger('price-robux')}` },
+              { name: 'Dollars', value: "$" + interaction.options.getNumber('price-dollars').toFixed(2) }
+            )
+            .setImage(interaction.options.getAttachment('image').attachment)
 
-          if(interaction.options.getInteger('data-size')) {
+          if (interaction.options.getInteger('data-size')) {
             shopNewEmbed.addFields(
               { name: 'Data Size', value: `${interaction.options.getInteger('data-size')}` }
             )
-            }
+          }
 
           return await shopChannel.send({
             embeds: [
@@ -162,7 +163,7 @@ module.exports = {
           break;
         case 'edit':
           const items = await Shop.findAndCountAll({ where: { guildId: interaction.guildId } });
-          if (!items.count) return await interaction.reply({ content: "No items avaliable.", ephemeral: true });
+          if (!items.count) return await interaction.editReply({ content: "No items avaliable.", ephemeral: true });
 
           let index = 0;
 
@@ -203,19 +204,19 @@ module.exports = {
             .setImage(items.rows[index].attachment)
             .setFooter({ text: `${interaction.user.username}'s Menu | Page ${index + 1}/${items.count}` });
 
-            if(items.rows[index].dataSize) {
-              shopEmbed.addFields(
-                { name: 'Data Size', value: `${items.rows[index].dataSize}` }
-              )
-              }
+          if (items.rows[index].dataSize) {
+            shopEmbed.addFields(
+              { name: 'Data Size', value: `${items.rows[index].dataSize}` }
+            )
+          }
 
-          return await interaction.reply({ embeds: [shopEmbed], components: [row], ephemeral: true });
+          return await interaction.editReply({ embeds: [shopEmbed], components: [row], ephemeral: true });
           break;
       }
     }
 
     const items = await Shop.findAndCountAll({ where: { guildId: interaction.guildId, type: shopTypes.indexOf(interaction.options.getSubcommand()) } }, { raw: true });
-    if (!items.count) return await interaction.reply({ content: "No items avaliable.", ephemeral: true });
+    if (!items.count) return await interaction.editReply({ content: "No items avaliable.", ephemeral: true });
 
     let index = 0;
 
@@ -251,12 +252,12 @@ module.exports = {
       .setImage(items.rows[index].attachment)
       .setFooter({ text: `${interaction.user.username}'s Menu | Page ${index + 1}/${items.count}` });
 
-      if(items.rows[index].dataSize) {
+    if (items.rows[index].dataSize) {
       shopEmbed.addFields(
         { name: 'Data Size', value: `${items.rows[index].dataSize}` }
-        )
-        }
+      )
+    }
 
-    return await interaction.reply({ embeds: [shopEmbed], components: [row], ephemeral: true });
+    return await interaction.editReply({ embeds: [shopEmbed], components: [row], ephemeral: true });
   },
 };

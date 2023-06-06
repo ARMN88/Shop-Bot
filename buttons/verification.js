@@ -17,12 +17,13 @@ const infoTypes = ['channel', 'role', 'webhook'];
 module.exports = {
 	customId: "verification",
 	async execute(interaction) {
+    await interaction.deferReply({ ephemeral: true });
     const verificationRoleId = await Info.findOne({ where: { guildId: interaction.guildId, name: 'verified', type: infoTypes.indexOf('role') }, attributes: ['identifier'] });
     if(!verificationRoleId) {
       const errorEmbed = new EmbedBuilder().setDescription(`Verification role is not setup, please contact <@${interaction.guild.ownerId}>.`).setColor(Colors.Red);
-      return await interaction.reply({ embeds: [errorEmbed], ephemeral: true });
+      return await interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
     }
-    if(interaction.member.roles.cache.has(verificationRoleId.identifier)) return interaction.reply({ content: "Already Verified!", ephemeral: true });
+    if(interaction.member.roles.cache.has(verificationRoleId.identifier)) return interaction.editReply({ content: "Already Verified!", ephemeral: true });
     
     const canvas = Canvas.createCanvas(500, 200);
 		const ctx = canvas.getContext('2d');
@@ -53,6 +54,6 @@ module.exports = {
       );
     
     const attachment = new AttachmentBuilder(canvas.createPNGStream(), { name: 'capcha.png', description: randomString });
-	  return await interaction.reply({ files: [attachment], ephemeral: true, components: [readyButton] });
+	  return await interaction.editReply({ files: [attachment], ephemeral: true, components: [readyButton] });
 	},
 };

@@ -20,7 +20,8 @@ const infoTypes = ['channel', 'role', 'webhook'];
 module.exports = {
   customId: "shop-buy",
   async execute(interaction) {
-    if (interaction.message.interaction.user.id !== interaction.user.id) return await interaction.reply({ content: `This is ${interaction.message.interaction.user.username}'s shop menu, use /shop to browse the shop.`, ephemeral: true });
+    interaction.deferReply({ ephemeral: true });
+    if (interaction.message.interaction.user.id !== interaction.user.id) return await interaction.editReply({ content: `This is ${interaction.message.interaction.user.username}'s shop menu, use /shop to browse the shop.`, ephemeral: true });
     const items = await Shop.findAll({ where: { guildId: interaction.guildId, type: shopTypes.indexOf(interaction.message.embeds[0].author.name) } });
 
     const shopIndex = parseInt(interaction.message.embeds[0].title.split(' ')[0]) - 1;
@@ -30,7 +31,7 @@ module.exports = {
 
     if (!buyChannelId) {
       const errorEmbed = new EmbedBuilder().setDescription('Transactions have not been setup.').setColor(Colors.Red);
-      return await interaction.reply({ embeds: [errorEmbed], ephemeral: true });
+      return await interaction.editReply({ embeds: [errorEmbed], ephemeral: true });
     }
 
     let buyChannel;
@@ -38,7 +39,7 @@ module.exports = {
       buyChannel = await interaction.guild.channels.fetch(buyChannelId.identifier);
     } catch {
       const channelErrorEmbed = new EmbedBuilder().setDescription(`Transactions channel does not exist.`).setColor(Colors.Red);
-      return await interaction.reply({ embeds: [channelErrorEmbed], ephemeral: true });
+      return await interaction.editReply({ embeds: [channelErrorEmbed], ephemeral: true });
     }
 
     const buyEmbed = new EmbedBuilder()
@@ -49,6 +50,7 @@ module.exports = {
         { name: "Robux", value: `${shopItem.priceRobux}` },
         { name: "Dollars", value: `\$${shopItem.priceDollars.toFixed(2)}` }
       )
+      .setImage(shopItem.attachment)
       .setThumbnail(interaction.guild.iconURL({ size: 512 }))
       .setTimestamp();
 
@@ -67,23 +69,24 @@ module.exports = {
       .addComponents(closeButton);
 
     let buyThread;
+    let response;
 
     if (buyChannel.type === ChannelType.GuildCategory) {
       buyThread = await buyChannel.children.create({
         name: `Transaction ${randomInt(1000, 10000)}`,
         type: ChannelType.GuildText
       });
-      await buyThread.send({ content: `<@${interaction.user.id}>`, embeds: [buyEmbed], components: [row] });
+      response = await buyThread.send({ content: `<@${interaction.user.id}>`, embeds: [buyEmbed], components: [row] });
     } else {
       const channelErrorEmbed = new EmbedBuilder().setDescription(`Transactions is not a category.`).setColor(Colors.Red);
-      return await interaction.reply({ embeds: [channelErrorEmbed], ephemeral: true });
+      return await interaction.editReply({ embeds: [channelErrorEmbed], ephemeral: true });
     }
 
-    await buyThread.lastMessage.pin();
-    await buyThread.permissionOverwrites.create(interaction.user, { 'ViewChannel': true,  "SendMessages": true });
+    await response.pin();
+    await buyThread.permissionOverwrites.create(interaction.user, { 'ViewChannel': true, "SendMessages": true });
 
     const newTransactionEmbed = new EmbedBuilder().setDescription(`Transaction created in ${buyThread}`).setColor(Colors.Green);
 
-    return interaction.reply({ embeds: [newTransactionEmbed], ephemeral: true });
+    return interaction.editReply({ embeds: [newTransactionEmbed], ephemeral: true });
   }
 };
