@@ -10,28 +10,8 @@ const database = new Sequelize({
   }
 });
 
-const Shop = database.define('Shops', {
-  guildId: {
-    type: DataTypes.STRING
-  },
-  type: {
-    type: DataTypes.TINYINT
-  },
-  name: {
-    type: DataTypes.STRING
-  },
-  priceRobux: {
-    type: DataTypes.SMALLINT
-  },
-  priceDollars: {
-    type: DataTypes.DOUBLE
-  },
-  attachment: {
-    type: DataTypes.STRING
-  }
-}, { timestamps: false });
-
-const shopTypes = ['gift-bases', 'bases', 'wood'];
+const Shop = require('../models/Shops.js')(database, DataTypes);
+const shopTypes = ['gift-bases', 'bases', 'wood', 'accounts'];
 
 module.exports = {
   customId: "shop-delete",

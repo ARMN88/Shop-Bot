@@ -10,45 +10,13 @@ const database = new Sequelize({
   }
 });
 
-const Shop = database.define('Shops', {
-  guildId: {
-    type: DataTypes.STRING
-  },
-  type: {
-    type: DataTypes.TINYINT
-  },
-  name: {
-    type: DataTypes.STRING
-  },
-  priceRobux: {
-    type: DataTypes.SMALLINT
-  },
-  priceDollars: {
-    type: DataTypes.DOUBLE
-  },
-  attachment: {
-    type: DataTypes.STRING
-  }
-}, { timestamps: false });
-
-const shopTypes = ['gift-bases', 'bases', 'wood'];
-
-const Info = database.define('Info', {
-  guildId: {
-    type: DataTypes.STRING
-  },
-  identifier: {
-    type: DataTypes.STRING
-  },
-  name: {
-    type: DataTypes.STRING
-  },
-  type: {
-    type: DataTypes.TINYINT
-  }
-}, { timestamps: false });
-
+// Info //
+const Info = require('../models/Infos.js')(database, DataTypes);
 const infoTypes = ['channel', 'role', 'webhook'];
+
+// Shops //
+const Shop = require('../models/Shops.js')(database, DataTypes);
+const shopTypes = ['gift-bases', 'bases', 'wood', 'accounts'];
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -110,6 +78,7 @@ module.exports = {
                 .setRequired(true)
                 .setMinValue(0)
             )
+            
             .addAttachmentOption(option =>
               option
                 .setName('image')
@@ -134,18 +103,26 @@ module.exports = {
             name: interaction.options.getString('name'),
             priceDollars: interaction.options.getNumber('price-dollars'),
             priceRobux: interaction.options.getInteger('price-robux'),
-            attachment: interaction.options.getAttachment('image').attachment
+            attachment: interaction.options.getAttachment('image').attachment,
+            dataSize: interaction.options.getInteger('data-size') || 0
           });
 
+          menuEmbed
+          .setDescription('Successfully added item!')
+          .addFields(
+            { name: 'Type', value: interaction.options.getString('type') },
+            { name: 'Name', value: interaction.options.getString('name') },
+            { name: 'Price', value: `\$${interaction.options.getNumber('price-dollars').toFixed(2)} OR ${interaction.options.getInteger('price-robux')} RBX` })
+          .setImage(interaction.options.getAttachment('image').attachment)
+          
+          if(interaction.options.getInteger('data-size')) {
+            menuEmbed.addFields(
+              { name: 'Data Size', value: `${interaction.options.getInteger('data-size')}` }
+            )
+            }
           await interaction.reply({
             embeds: [
-              menuEmbed
-                .setDescription('Successfully added item!')
-                .addFields(
-                  { name: 'Type', value: interaction.options.getString('type') },
-                  { name: 'Name', value: interaction.options.getString('name') },
-                  { name: 'Price', value: `\$${interaction.options.getNumber('price-dollars').toFixed(2)} OR ${interaction.options.getInteger('price-robux')} RBX` })
-                .setImage(interaction.options.getAttachment('image').attachment)
+              menuEmbed   
             ],
             ephemeral: true
           });
@@ -160,17 +137,25 @@ module.exports = {
             return;
           }
 
+          const shopNewEmbed = new EmbedBuilder()
+          .setColor(Colors.Blue)
+          .setThumbnail(interaction.guild.iconURL({ size: 512 }))
+          .setTitle(interaction.options.getString('name'))
+          .addFields(
+            { name: 'Robux', value: `${interaction.options.getInteger('price-robux')}` },
+            { name: 'Dollars', value: "$" + interaction.options.getNumber('price-dollars').toFixed(2) }
+          )
+          .setImage(interaction.options.getAttachment('image').attachment)
+
+          if(interaction.options.getInteger('data-size')) {
+            shopNewEmbed.addFields(
+              { name: 'Data Size', value: `${interaction.options.getInteger('data-size')}` }
+            )
+            }
+
           return await shopChannel.send({
             embeds: [
-              new EmbedBuilder()
-                .setColor(Colors.Blue)
-                .setThumbnail(interaction.guild.iconURL({ size: 512 }))
-                .setTitle(interaction.options.getString('name'))
-                .addFields(
-                  { name: 'Robux', value: `${interaction.options.getInteger('price-robux')}` },
-                  { name: 'Dollars', value: "$" + interaction.options.getNumber('price-dollars').toFixed(2) }
-                )
-                .setImage(interaction.options.getAttachment('image').attachment)
+              shopNewEmbed
             ]
           });
           break;
@@ -217,6 +202,12 @@ module.exports = {
             .setImage(items.rows[index].attachment)
             .setFooter({ text: `${interaction.user.username}'s Menu | Page ${index + 1}/${items.count}` });
 
+            if(items.rows[index].dataSize) {
+              shopEmbed.addFields(
+                { name: 'Data Size', value: `${items.rows[index].dataSize}` }
+              )
+              }
+
           return await interaction.reply({ embeds: [shopEmbed], components: [row], ephemeral: true });
           break;
       }
@@ -258,6 +249,12 @@ module.exports = {
       )
       .setImage(items.rows[index].attachment)
       .setFooter({ text: `${interaction.user.username}'s Menu | Page ${index + 1}/${items.count}` });
+
+      if(items.rows[index].dataSize) {
+      shopEmbed.addFields(
+        { name: 'Data Size', value: `${items.rows[index].dataSize}` }
+        )
+        }
 
     return await interaction.reply({ embeds: [shopEmbed], components: [row], ephemeral: true });
   },

@@ -10,28 +10,8 @@ const database = new Sequelize({
   }
 });
 
-const Shop = database.define('Shops', {
-  guildId: {
-    type: DataTypes.STRING
-  },
-  type: {
-    type: DataTypes.TINYINT
-  },
-  name: {
-    type: DataTypes.STRING
-  },
-  priceRobux: {
-    type: DataTypes.SMALLINT
-  },
-  priceDollars: {
-    type: DataTypes.DOUBLE
-  },
-  attachment: {
-    type: DataTypes.STRING
-  }
-}, { timestamps: false });
-
-const shopTypes = ['gift-bases', 'bases', 'wood'];
+const Shop = require('../models/Shops.js')(database, DataTypes);
+const shopTypes = ['gift-bases', 'bases', 'wood', 'accounts'];
 
 module.exports = {
   customId: "shop-forward",
@@ -70,6 +50,12 @@ module.exports = {
       )
       .setImage(items.rows[index].attachment)
       .setFooter({ text: `${interaction.user.username}'s Menu | Page ${index + 1}/${items.count}` });
+
+      if(items.rows[index].dataSize) {
+        shopEmbed.addFields(
+          { name: 'Data Size', value: `${items.rows[index].dataSize}` }
+        )
+        }
 
     return await interaction.update({ embeds: [shopEmbed], components: [row], ephemeral: true });
   }

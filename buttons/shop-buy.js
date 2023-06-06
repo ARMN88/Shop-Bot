@@ -11,58 +11,24 @@ const database = new Sequelize({
   }
 });
 
-const Shop = database.define('Shops', {
-  guildId: {
-    type: DataTypes.STRING
-  },
-  type: {
-    type: DataTypes.TINYINT
-  },
-  name: {
-    type: DataTypes.STRING
-  },
-  priceRobux: {
-    type: DataTypes.SMALLINT
-  },
-  priceDollars: {
-    type: DataTypes.DOUBLE
-  },
-  attachment: {
-    type: DataTypes.STRING
-  }
-}, { timestamps: false });
+const Shop = require('../models/Shops.js')(database, DataTypes);
+const shopTypes = ['gift-bases', 'bases', 'wood', 'accounts'];
 
-const shopTypes = ['gift-bases', 'bases', 'wood'];
-
-const Info = database.define('Info', {
-  guildId: {
-    type: DataTypes.STRING
-  },
-  identifier: {
-    type: DataTypes.STRING
-  },
-  name: {
-    type: DataTypes.STRING
-  },
-  type: {
-    type: DataTypes.TINYINT
-  }
-}, { timestamps: false });
-
+const Info = require('../models/Infos.js')(database, DataTypes);
 const infoTypes = ['channel', 'role', 'webhook'];
 
 module.exports = {
-	customId: "shop-buy",
-	async execute(interaction) {
-    if(interaction.message.interaction.user.id !== interaction.user.id) return await interaction.reply({content: `This is ${interaction.message.interaction.user.username}'s shop menu, use /shop to browse the shop.`, ephemeral: true });
-    const items = await Shop.findAll({ where: { guildId: interaction.guildId, type: shopTypes.indexOf(interaction.message.embeds[0].author.name) }});    
-    
-    const shopIndex = parseInt(interaction.message.embeds[0].title.split(' ')[0])-1;
+  customId: "shop-buy",
+  async execute(interaction) {
+    if (interaction.message.interaction.user.id !== interaction.user.id) return await interaction.reply({ content: `This is ${interaction.message.interaction.user.username}'s shop menu, use /shop to browse the shop.`, ephemeral: true });
+    const items = await Shop.findAll({ where: { guildId: interaction.guildId, type: shopTypes.indexOf(interaction.message.embeds[0].author.name) } });
+
+    const shopIndex = parseInt(interaction.message.embeds[0].title.split(' ')[0]) - 1;
     const shopItem = items[shopIndex];
 
-    const buyChannelId = await Info.findOne({ where: { name: 'transactions', guildId: `${interaction.guildId}` }});
+    const buyChannelId = await Info.findOne({ where: { name: 'transactions', guildId: `${interaction.guildId}` } });
 
-   if(!buyChannelId) {
+    if (!buyChannelId) {
       const errorEmbed = new EmbedBuilder().setDescription('Transactions have not been setup.').setColor(Colors.Red);
       return await interaction.reply({ embeds: [errorEmbed], ephemeral: true });
     }
@@ -86,6 +52,12 @@ module.exports = {
       .setThumbnail(interaction.guild.iconURL({ size: 512 }))
       .setTimestamp();
 
+    if (shopItem.dataSize) {
+      buyEmbed.addFields(
+        { name: 'Data Size', value: `${shopItem.dataSize}` }
+      )
+    }
+
     const closeButton = new ButtonBuilder()
       .setCustomId('shop-close')
       .setLabel("Close Transaction")
@@ -96,31 +68,22 @@ module.exports = {
 
     let buyThread;
 
-     if(buyChannel.type === ChannelType.GuildForum) {
-      buyThread = await buyChannel.threads.create({
+    if (buyChannel.type === ChannelType.GuildCategory) {
+      buyThread = await buyChannel.children.create({
         name: `Transaction ${randomInt(1000, 10000)}`,
-        message: { content: `<@${interaction.user.id}>`, embeds: [buyEmbed], components: [row] },
-      });
-    } else if(buyChannel.type === ChannelType.GuildText) {
-      buyThread = await buyChannel.threads.create({
-        name: `Transaction ${randomInt(1000, 10000)}`,
-        type: ChannelType.PrivateThread
+        type: ChannelType.GuildText
       });
       await buyThread.send({ content: `<@${interaction.user.id}>`, embeds: [buyEmbed], components: [row] });
     } else {
-      const channelErrorEmbed = new EmbedBuilder().setDescription(`Transactions channel is not a Forum Channel or Text Channel.`).setColor(Colors.Red);
+      const channelErrorEmbed = new EmbedBuilder().setDescription(`Transactions is not a category.`).setColor(Colors.Red);
       return await interaction.reply({ embeds: [channelErrorEmbed], ephemeral: true });
     }
-    
-    buyThread.lastMessage.pin();
-    buyThread.members.add(interaction.user);
 
-    setTimeout(function() {
-        interaction.message.delete();
-      }, 3000);
+    await buyThread.lastMessage.pin();
+    await buyThread.permissionOverwrites.create(interaction.user, { 'ViewChannel': true,  "SendMessages": true });
 
-    const newTransactionEmbed = new EmbedBuilder().setDescription(`Transaction created in <#${buyThread.id}>`).setColor(Colors.Green);
-    
-    return interaction.reply({embeds: [newTransactionEmbed], ephemeral: true });
+    const newTransactionEmbed = new EmbedBuilder().setDescription(`Transaction created in ${buyThread}`).setColor(Colors.Green);
+
+    return interaction.reply({ embeds: [newTransactionEmbed], ephemeral: true });
   }
 };

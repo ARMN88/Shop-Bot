@@ -25,12 +25,19 @@ module.exports = {
       .setStyle(TextInputStyle.Short)
       .setRequired(false);
 
+    const dataSizeInput = new TextInputBuilder()
+      .setCustomId('dataSizeInput')
+      .setLabel("New Data Size")
+      .setStyle(TextInputStyle.Short)
+      .setRequired(false);
+
     const firstActionRow = new ActionRowBuilder().addComponents(nameInput);
     const secondActionRow = new ActionRowBuilder().addComponents(priceRInput);
     const thirdActionRow = new ActionRowBuilder().addComponents(priceDInput);
+    const fourthActionRow = new ActionRowBuilder().addComponents(dataSizeInput);
     
 
-    editModal.addComponents(firstActionRow, secondActionRow, thirdActionRow);
+    editModal.addComponents(firstActionRow, secondActionRow, thirdActionRow, fourthActionRow);
     
     return await interaction.showModal(editModal);
   },

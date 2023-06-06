@@ -8,21 +8,7 @@ const database = new Sequelize({
   logging: false
 });
 
-const Users = database.define('Messages', {
-  guildId: {
-    type: DataTypes.STRING
-  },
-  userId: {
-    type: DataTypes.STRING,
-  },
-  messageTimestamp: {
-    type: DataTypes.TIME
-  },
-  spamCount: {
-    type: DataTypes.SMALLINT,
-    defaultValue: 0
-  }
-}, { timestamps: false });
+const Users = require('../models/Users.js')(database, DataTypes);
 
 module.exports = {
   name: Events.MessageCreate,
@@ -32,10 +18,10 @@ module.exports = {
     const user = await Users.findOne({ where: { userId: `${message.author.id}`, guildId: `${message.guildId}` }, raw: true });
 
     if(!user) {
-      return await Users.create({ guildId: `${message.guildId}`, userId: `${message.author.id}`, messageTimestamp: message.createdTimestamp })
+      return await Users.create({ guildId: `${message.guildId}`, userId: `${message.author.id}`, messageTimestamp: `${message.createdTimestamp}` })
     }
     
-    await Users.update({ messageTimestamp: message.createdTimestamp }, { where: { id: user.id } });
+    await Users.update({ messageTimestamp: `${message.createdTimestamp}` }, { where: { id: user.id } });
 
     if(message.createdTimestamp - user.messageTimestamp < 10000) {
       if(user.spamCount >= 4) {
