@@ -55,7 +55,8 @@ module.exports = {
                 .addChoices(
                   { name: 'Gift Bases', value: 'gift-bases' },
                   { name: 'Bases', value: 'bases' },
-                  { name: 'Wood', value: 'wood' }
+                  { name: 'Wood', value: 'wood' },
+                  { name: 'Accounts', value: 'accounts5' }
                 ))
             .addStringOption(option =>
               option
