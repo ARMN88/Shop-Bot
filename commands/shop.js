@@ -33,8 +33,8 @@ module.exports = {
         .setDescription('All avaliable bases.'))
     .addSubcommand(subcommand =>
       subcommand
-        .setName('lt2-cash')
-        .setDescription('All avaliable LT2 cash.'))
+        .setName('accounts')
+        .setDescription('All avaliable accounts.'))
     .addSubcommand(subcommand =>
       subcommand
         .setName('wood')
