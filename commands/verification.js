@@ -8,21 +8,7 @@ const database = new Sequelize({
   logging: false
 });
 
-const Info = database.define('Info', {
-  guildId: {
-    type: DataTypes.STRING
-  },
-  identifier: {
-    type: DataTypes.STRING
-  },
-  name: {
-    type: DataTypes.STRING
-  },
-  type: {
-    type: DataTypes.TINYINT
-  }
-}, { timestamps: false });
-
+const Info = require('../models/Infos.js')(database, DataTypes);
 const infoTypes = ['channel', 'role', 'webhook'];
 
 module.exports = {

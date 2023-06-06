@@ -10,28 +10,8 @@ const database = new Sequelize({
   }
 });
 
-const Shop = database.define('Shops', {
-  guildId: {
-    type: DataTypes.STRING
-  },
-  type: {
-    type: DataTypes.TINYINT
-  },
-  name: {
-    type: DataTypes.STRING
-  },
-  priceRobux: {
-    type: DataTypes.SMALLINT
-  },
-  priceDollars: {
-    type: DataTypes.DOUBLE
-  },
-  attachment: {
-    type: DataTypes.STRING
-  }
-}, { timestamps: false });
-
-const shopTypes = ['gift-bases', 'bases', 'wood'];
+const Shop = require('../models/Shops.js')(database, DataTypes);
+const shopTypes = ['gift-bases', 'bases', 'wood', 'accounts'];
 
 module.exports = {
   customId: "edit",
@@ -42,6 +22,7 @@ module.exports = {
     const nameInput = interaction.fields.getTextInputValue('nameInput') || items[index].name;
     const priceRInput = parseInt(interaction.fields.getTextInputValue('priceRInput')) || items[index].priceRobux;
     const priceDInput = parseInt(interaction.fields.getTextInputValue('priceDInput')) || items[index].priceDollars;
+    const dataSizeInput = parseInt(interaction.fields.getTextInputValue('dataSizeInput')) || items[index].dataSize;
 
     
     await interaction.update({ embeds: [new EmbedBuilder().setDescription('Updating the shop...').setColor(Colors.Orange)], components: [], ephemeral: true });
@@ -50,7 +31,8 @@ module.exports = {
       await Shop.update({
         name: nameInput,
         priceRobux: priceRInput,
-        priceDollars: priceDInput
+        priceDollars: priceDInput,
+        dataSize: dataSizeInput
       }, { where: { id: items[index].id }});
     } catch {
       return await interaction.editReply({ embeds: [new EmbedBuilder().setDescription('An error occurred, unable to update.').setColor(Colors.Red)], components: [], ephemeral: true });  
