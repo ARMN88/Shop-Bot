@@ -21,10 +21,9 @@ module.exports = {
   customId: "shop-buy",
   async execute(interaction) {
     interaction.deferReply({ ephemeral: true });
-    if (interaction.message.interaction.user.id !== interaction.user.id) return await interaction.editReply({ content: `This is ${interaction.message.interaction.user.username}'s shop menu, use /shop to browse the shop.`, ephemeral: true });
-    const items = await Shop.findAll({ where: { guildId: interaction.guildId, type: shopTypes.indexOf(interaction.message.embeds[0].author.name) } });
+    const items = await Shop.findAll({ where: { guildId: interaction.guildId } });
 
-    const shopIndex = parseInt(interaction.message.embeds[0].title.split(' ')[0]) - 1;
+    const shopIndex = parseInt(interaction.message.embeds[0].title.split(' ')[0]);
     const shopItem = items[shopIndex];
 
     const buyChannelId = await Info.findOne({ where: { name: 'transactions', guildId: `${interaction.guildId}` } });

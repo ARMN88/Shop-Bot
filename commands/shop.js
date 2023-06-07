@@ -114,8 +114,6 @@ module.exports = {
             dataSize: interaction.options.getInteger('data-size') || 0
           });
 
-          console.log(newItem);
-
           menuEmbed
             .setDescription('Successfully added item!')
             .addFields(
@@ -149,7 +147,7 @@ module.exports = {
           const shopNewEmbed = new EmbedBuilder()
             .setColor(Colors.Blue)
             .setThumbnail(interaction.guild.iconURL({ size: 512 }))
-            .setTitle(interaction.options.getString('name'))
+            .setTitle(`${newItem.dataValues.id} - ${interaction.options.getString('name')}`)
             .addFields(
               { name: 'Robux', value: `${interaction.options.getInteger('price-robux')}` },
               { name: 'Dollars', value: "$" + interaction.options.getNumber('price-dollars').toFixed(2) }
@@ -164,7 +162,7 @@ module.exports = {
 
           const externalBuyButton = new ButtonBuilder()
             .setCustomId('external-buy-button')
-            .setLabel('Buy Button')
+            .setLabel('Buy Now')
             .setStyle(ButtonStyle.Success);
 
           const externalRow = new ActionRowBuilder().addComponents(externalBuyButton);
