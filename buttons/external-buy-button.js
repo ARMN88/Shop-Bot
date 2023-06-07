@@ -18,7 +18,7 @@ const Info = require('../models/Infos.js')(database, DataTypes);
 const infoTypes = ['channel', 'role', 'webhook'];
 
 module.exports = {
-  customId: "shop-buy",
+  customId: "external-buy-button",
   async execute(interaction) {
     interaction.deferReply({ ephemeral: true });
     const items = await Shop.findAll({ where: { guildId: interaction.guildId } });
