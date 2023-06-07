@@ -21,10 +21,11 @@ module.exports = {
   customId: "external-buy-button",
   async execute(interaction) {
     interaction.deferReply({ ephemeral: true });
-    const items = await Shop.findAll();
 
     const shopIndex = parseInt(interaction.message.embeds[0].title.split(' ')[0]);
-    const shopItem = items[shopIndex];
+    const shopItem = await Shop.findOne({ where: { id: shopIndex } });
+
+    console.log(shopItem);
 
     const buyChannelId = await Info.findOne({ where: { name: 'transactions', guildId: `${interaction.guildId}` } });
 
