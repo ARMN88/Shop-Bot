@@ -61,13 +61,13 @@ module.exports = {
             .addStringOption(option =>
               option
                 .setName('name')
-                .setDescription('Set the name of item.')
+                .setDescription('Set the name of this item.')
                 .setRequired(true)
             )
             .addIntegerOption(option =>
               option
                 .setName('price-robux')
-                .setDescription('Set the price in robux of item.')
+                .setDescription('Set the price in robux of this item.')
                 .setRequired(true)
                 .setMaxValue(65535)
                 .setMinValue(1)
@@ -75,16 +75,21 @@ module.exports = {
             .addNumberOption(option =>
               option
                 .setName('price-dollars')
-                .setDescription('Set the price in dollars of item.')
+                .setDescription('Set the price in dollars of this item.')
                 .setRequired(true)
                 .setMinValue(0)
             )
-
             .addAttachmentOption(option =>
               option
                 .setName('image')
-                .setDescription("Set the image of the item.")
+                .setDescription("Set the image of this item.")
                 .setRequired(true)
+            )
+            .addIntegerOption(option =>
+              option
+                .setName('data-size')
+                .setDescription('Set the data size of this item.')
+                .setRequired(false)
             ))
         .addSubcommand(subcommand =>
           subcommand
