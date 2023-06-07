@@ -109,6 +109,8 @@ module.exports = {
             dataSize: interaction.options.getInteger('data-size') || 0
           });
 
+          console.log(newItem);
+
           menuEmbed
             .setDescription('Successfully added item!')
             .addFields(
@@ -155,10 +157,18 @@ module.exports = {
             )
           }
 
+          const externalBuyButton = new ButtonBuilder()
+            .setCustomId('external-buy-button')
+            .setLabel('Buy Button')
+            .setStyle(ButtonStyle.Success);
+
+          const externalRow = new ActionRowBuilder().addComponents(externalBuyButton);
+
           return await shopChannel.send({
             embeds: [
               shopNewEmbed
-            ]
+            ],
+            components: [externalRow]
           });
           break;
         case 'edit':
