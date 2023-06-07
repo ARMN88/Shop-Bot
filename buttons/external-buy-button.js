@@ -21,7 +21,7 @@ module.exports = {
   customId: "external-buy-button",
   async execute(interaction) {
     interaction.deferReply({ ephemeral: true });
-    const items = await Shop.findAll({ where: { guildId: interaction.guildId } });
+    const items = await Shop.findAll();
 
     const shopIndex = parseInt(interaction.message.embeds[0].title.split(' ')[0]);
     const shopItem = items[shopIndex];
