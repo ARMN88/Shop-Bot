@@ -1,6 +1,7 @@
 const { Events, EmbedBuilder, Colors } = require('discord.js');
 const { Sequelize, DataTypes } = require('sequelize');
 const verifiedGuilds = require('../guilds.json');
+require('dotenv').config();
 
 const database = new Sequelize({
   dialect: 'sqlite',
@@ -18,6 +19,10 @@ module.exports = {
       !Object.keys(verifiedGuilds).includes(message.guild.id)
     )
       return;
+
+    if (message.mentions.has(process.env.CLIENTID)) {
+      message.react('👋');
+    }
 
     const user = await Users.findOne({
       where: { userId: `${message.author.id}`, guildId: `${message.guildId}` },
