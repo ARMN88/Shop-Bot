@@ -336,7 +336,10 @@ module.exports = {
           ephemeral: true,
         });
       const items = await Shop.findAll({
-        where: { guildId: interaction.guildId },
+        where: {
+          guildId: interaction.guildId,
+          type: shopTypes.indexOf(interaction.options.getSubcommand()),
+        },
       });
 
       const externalBuyButton = new ButtonBuilder()
@@ -364,6 +367,13 @@ module.exports = {
             }
           )
           .setImage(item.attachment);
+
+        if (item.dataSize) {
+          shopEmbed.addFields({
+            name: 'Data Size',
+            value: `${item.dataSize}`,
+          });
+        }
 
         await interaction.channel.send({
           embeds: [shopNewEmbed],
