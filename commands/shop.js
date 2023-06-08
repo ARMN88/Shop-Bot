@@ -369,7 +369,7 @@ module.exports = {
           .setImage(item.attachment);
 
         if (item.dataSize) {
-          shopEmbed.addFields({
+          shopNewEmbed.addFields({
             name: 'Data Size',
             value: `${item.dataSize}`,
           });
