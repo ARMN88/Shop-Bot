@@ -19,19 +19,18 @@ module.exports = {
     const deletingEmbed = new EmbedBuilder()
       .setDescription('Deleting item...')
       .setColor(Colors.Orange);
+    
     await interaction.update({
       embeds: [deletingEmbed],
       ephemeral: true,
       components: [],
     });
 
-    const items = await Shop.findAll({
-      where: { guildId: interaction.guildId },
-    });
-    let index = parseInt(interaction.message.embeds[0].title.split(' ')[0]) - 1;
+    let index = parseInt(interaction.message.embeds[0].title.split(' ')[0]);
+    const item = await Shop.findOne({where: { id: index }});
 
     try {
-      await Shop.destroy({ where: { id: items[index].id }, force: true });
+      await Shop.destroy({ where: { id: item.id }, force: true });
     } catch {
       const errorEmbed = new EmbedBuilder()
         .setDescription('Unable to delete item.')

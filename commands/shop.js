@@ -128,6 +128,12 @@ module.exports = {
           subcommand
             .setName('edit')
             .setDescription('Delete or edit an item in the shop.')
+            .addIntegerOption((option) =>
+              option
+                .setName('index')
+                .setDescription('The number of this item.')
+                .setRequired(true)
+            )
         )
     ),
 
@@ -170,8 +176,8 @@ module.exports = {
                 value: `\$${interaction.options
                   .getNumber('price-dollars')
                   .toFixed(2)} OR ${interaction.options.getInteger(
-                  'price-robux'
-                )} RBX`,
+                    'price-robux'
+                  )} RBX`,
               }
             )
             .setImage(interaction.options.getAttachment('image').attachment);
@@ -249,28 +255,10 @@ module.exports = {
           });
           break;
         case 'edit':
-          const items = await Shop.findAndCountAll({
-            where: { guildId: interaction.guildId },
+          const item = await Shop.findOne({
+            where: { id: interaction.options.getInteger('index') },
           });
-          if (!items.count)
-            return await interaction.editReply({
-              content: 'No items avaliable.',
-              ephemeral: true,
-            });
-
-          let index = 0;
-
-          const forwardButton = new ButtonBuilder()
-            .setCustomId('shop-edit-forward')
-            .setLabel('Next →')
-            .setDisabled(index + 1 >= items.count)
-            .setStyle(ButtonStyle.Primary);
-
-          const backButton = new ButtonBuilder()
-            .setCustomId('shop-edit-back')
-            .setLabel('← Back')
-            .setDisabled(index <= 0)
-            .setStyle(ButtonStyle.Primary);
+          if(!item || item.guildId !== interaction.guildId) return await interaction.editReply({ embeds: [new EmbedBuilder().setDescription('Item does not exist.').setColor(Colors.Red)], ephemeral: true });
 
           const editButton = new ButtonBuilder()
             .setCustomId('shop-edit')
@@ -283,43 +271,36 @@ module.exports = {
             .setStyle(ButtonStyle.Danger);
 
           const row = new ActionRowBuilder().addComponents(
-            backButton,
             editButton,
-            deleteButton,
-            forwardButton
+            deleteButton
           );
 
-          const shopEmbed = new EmbedBuilder()
+          const shopEditEmbed = new EmbedBuilder()
             .setColor(Colors.Blue)
             .setThumbnail(interaction.guild.iconURL({ size: 512 }))
             .setAuthor({
-              name: shopTypes[items.rows[index].type],
+              name: shopTypes[item.type],
               iconURL: interaction.guild.iconURL(),
             })
-            .setTitle(`${index + 1} - ` + items.rows[index].name)
+            .setTitle(`${item.id} - ` +item.name)
             .addFields(
-              { name: 'Robux', value: `${items.rows[index].priceRobux}` },
+              { name: 'Robux', value: `${item.priceRobux}` },
               {
                 name: 'Dollars',
-                value: '$' + items.rows[index].priceDollars.toFixed(2),
+                value: '$' + item.priceDollars.toFixed(2),
               }
             )
-            .setImage(items.rows[index].attachment)
-            .setFooter({
-              text: `${interaction.user.username}'s Menu | Page ${index + 1}/${
-                items.count
-              }`,
-            });
+            .setImage(item.attachment);
 
-          if (items.rows[index].dataSize) {
-            shopEmbed.addFields({
+          if (item.dataSize) {
+            shopEditEmbed.addFields({
               name: 'Data Size',
-              value: `${items.rows[index].dataSize}`,
+              value: `${item.dataSize}`,
             });
           }
 
           return await interaction.editReply({
-            embeds: [shopEmbed],
+            embeds: [shopEditEmbed],
             components: [row],
             ephemeral: true,
           });
@@ -448,9 +429,8 @@ module.exports = {
       )
       .setImage(items.rows[index].attachment)
       .setFooter({
-        text: `${interaction.user.username}'s Menu | Page ${index + 1}/${
-          items.count
-        }`,
+        text: `${interaction.user.username}'s Menu | Page ${index + 1}/${items.count
+          }`,
       });
 
     if (items.rows[index].dataSize) {

@@ -16,22 +16,20 @@ const shopTypes = ['gift-bases', 'bases', 'wood', 'accounts'];
 module.exports = {
   customId: 'edit',
   async execute(interaction) {
-    const items = await Shop.findAll({
-      where: { guildId: interaction.guildId },
-    });
-    let index = parseInt(interaction.message.embeds[0].title.split(' ')[0]) - 1;
+    let index = parseInt(interaction.message.embeds[0].title.split(' ')[0]);
+    const item = await Shop.findOne({where: { id: index }});
 
     const nameInput =
-      interaction.fields.getTextInputValue('nameInput') || items[index].name;
+      interaction.fields.getTextInputValue('nameInput') || item.name;
     const priceRInput =
       parseInt(interaction.fields.getTextInputValue('priceRInput')) ||
-      items[index].priceRobux;
+      item.priceRobux;
     const priceDInput =
       parseInt(interaction.fields.getTextInputValue('priceDInput')) ||
-      items[index].priceDollars;
+      item.priceDollars;
     const dataSizeInput =
       parseInt(interaction.fields.getTextInputValue('dataSizeInput')) ||
-      items[index].dataSize;
+      item.dataSize;
 
     await interaction.update({
       embeds: [
@@ -51,7 +49,7 @@ module.exports = {
           priceDollars: priceDInput,
           dataSize: dataSizeInput,
         },
-        { where: { id: items[index].id } }
+        { where: { id: item.id } }
       );
     } catch {
       return await interaction.editReply({
