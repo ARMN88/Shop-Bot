@@ -326,6 +326,15 @@ module.exports = {
           break;
       }
     } else if (interaction.options.getSubcommandGroup() === 'send') {
+      if (
+        !interaction.memberPermissions.has(
+          PermissionsBitField.Flags.Administrator
+        )
+      )
+        return await interaction.editReply({
+          content: `Unable to edit, you do not have permission.`,
+          ephemeral: true,
+        });
       const items = await Shop.findAll({
         where: { guildId: interaction.guildId },
       });
