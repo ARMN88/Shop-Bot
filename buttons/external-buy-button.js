@@ -34,8 +34,6 @@ module.exports = {
     );
     const shopItem = await Shop.findOne({ where: { id: shopIndex } });
 
-    console.log(shopItem);
-
     const buyChannelId = await Info.findOne({
       where: { name: 'transactions', guildId: `${interaction.guildId}` },
     });

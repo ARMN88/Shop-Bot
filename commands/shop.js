@@ -49,6 +49,29 @@ module.exports = {
     )
     .addSubcommandGroup((subcommandGroup) =>
       subcommandGroup
+        .setName('send')
+        .setDescription('Send all the avaliable items in a group.')
+        .addSubcommand((subcommand) =>
+          subcommand
+            .setName('gift-bases')
+            .setDescription('Send all avaliable gift bases.')
+        )
+        .addSubcommand((subcommand) =>
+          subcommand
+            .setName('bases')
+            .setDescription('Send all avaliable bases.')
+        )
+        .addSubcommand((subcommand) =>
+          subcommand.setName('wood').setDescription('Send all avaliable wood.')
+        )
+        .addSubcommand((subcommand) =>
+          subcommand
+            .setName('accounts')
+            .setDescription('Send all avaliable accounts.')
+        )
+    )
+    .addSubcommandGroup((subcommandGroup) =>
+      subcommandGroup
         .setName('menu')
         .setDescription('Edit, add, or remove an item from the shop.')
         .addSubcommand((subcommand) =>
@@ -302,6 +325,51 @@ module.exports = {
           });
           break;
       }
+    } else if (interaction.options.getSubcommandGroup() === 'send') {
+      const items = await Shop.findAll({
+        where: { guildId: interaction.guildId },
+      });
+
+      const externalBuyButton = new ButtonBuilder()
+        .setCustomId('external-buy-button')
+        .setLabel('Buy Now')
+        .setStyle(ButtonStyle.Success);
+
+      const externalRow = new ActionRowBuilder().addComponents(
+        externalBuyButton
+      );
+
+      items.forEach(async (item) => {
+        const shopNewEmbed = new EmbedBuilder()
+          .setColor(Colors.Blue)
+          .setThumbnail(interaction.guild.iconURL({ size: 512 }))
+          .setTitle(`${item.id} - ${item.name}`)
+          .addFields(
+            {
+              name: 'Robux',
+              value: `${item.priceRobux}`,
+            },
+            {
+              name: 'Dollars',
+              value: '$' + item.priceDollars.toFixed(2),
+            }
+          )
+          .setImage(item.attachment);
+
+        await interaction.channel.send({
+          embeds: [shopNewEmbed],
+          components: [externalRow],
+        });
+      });
+
+      return await interaction.editReply({
+        embeds: [
+          new EmbedBuilder()
+            .setDescription('Successfully send all items!')
+            .setColor(Colors.Green),
+        ],
+        ephemeral: true,
+      });
     }
 
     const items = await Shop.findAndCountAll(
