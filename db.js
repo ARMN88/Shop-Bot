@@ -6,8 +6,8 @@ const database = new Sequelize({
   storage: 'database/users.db',
   logging: false,
   query: {
-    raw: true
-  }
+    raw: true,
+  },
 });
 
 // Info //

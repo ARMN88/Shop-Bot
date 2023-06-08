@@ -1,4 +1,14 @@
-const { ButtonBuilder, ButtonStyle, SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, Colors, PermissionsBitField, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } = require('discord.js');
+const {
+  ButtonBuilder,
+  ButtonStyle,
+  SlashCommandBuilder,
+  EmbedBuilder,
+  ActionRowBuilder,
+  Colors,
+  PermissionsBitField,
+  StringSelectMenuBuilder,
+  StringSelectMenuOptionBuilder,
+} = require('discord.js');
 const { Sequelize, DataTypes } = require('sequelize');
 
 const database = new Sequelize({
@@ -6,8 +16,8 @@ const database = new Sequelize({
   storage: 'database/users.db',
   logging: false,
   query: {
-    raw: true
-  }
+    raw: true,
+  },
 });
 
 // Info //
@@ -23,31 +33,29 @@ module.exports = {
     .setName('shop')
     .setDescription('View avaliable products!')
     .setDMPermission(false)
-    .addSubcommand(subcommand =>
+    .addSubcommand((subcommand) =>
       subcommand
         .setName('gift-bases')
-        .setDescription('All avaliable gift bases.'))
-    .addSubcommand(subcommand =>
-      subcommand
-        .setName('bases')
-        .setDescription('All avaliable bases.'))
-    .addSubcommand(subcommand =>
-      subcommand
-        .setName('accounts')
-        .setDescription('All avaliable accounts.'))
-    .addSubcommand(subcommand =>
-      subcommand
-        .setName('wood')
-        .setDescription('All avaliable wood.'))
-    .addSubcommandGroup(subcommandGroup =>
+        .setDescription('All avaliable gift bases.')
+    )
+    .addSubcommand((subcommand) =>
+      subcommand.setName('bases').setDescription('All avaliable bases.')
+    )
+    .addSubcommand((subcommand) =>
+      subcommand.setName('accounts').setDescription('All avaliable accounts.')
+    )
+    .addSubcommand((subcommand) =>
+      subcommand.setName('wood').setDescription('All avaliable wood.')
+    )
+    .addSubcommandGroup((subcommandGroup) =>
       subcommandGroup
         .setName('menu')
         .setDescription('Edit, add, or remove an item from the shop.')
-        .addSubcommand(subcommand =>
+        .addSubcommand((subcommand) =>
           subcommand
             .setName('add')
             .setDescription('Add an item to the shop.')
-            .addStringOption(option =>
+            .addStringOption((option) =>
               option
                 .setName('type')
                 .setDescription('Set the type of item.')
@@ -57,14 +65,15 @@ module.exports = {
                   { name: 'Bases', value: 'bases' },
                   { name: 'Wood', value: 'wood' },
                   { name: 'Accounts', value: 'accounts' }
-                ))
-            .addStringOption(option =>
+                )
+            )
+            .addStringOption((option) =>
               option
                 .setName('name')
                 .setDescription('Set the name of this item.')
                 .setRequired(true)
             )
-            .addIntegerOption(option =>
+            .addIntegerOption((option) =>
               option
                 .setName('price-robux')
                 .setDescription('Set the price in robux of this item.')
@@ -72,36 +81,50 @@ module.exports = {
                 .setMaxValue(65535)
                 .setMinValue(1)
             )
-            .addNumberOption(option =>
+            .addNumberOption((option) =>
               option
                 .setName('price-dollars')
                 .setDescription('Set the price in dollars of this item.')
                 .setRequired(true)
                 .setMinValue(0)
             )
-            .addAttachmentOption(option =>
+            .addAttachmentOption((option) =>
               option
                 .setName('image')
-                .setDescription("Set the image of this item.")
+                .setDescription('Set the image of this item.')
                 .setRequired(true)
             )
-            .addIntegerOption(option =>
+            .addIntegerOption((option) =>
               option
                 .setName('data-size')
                 .setDescription('Set the data size of this item.')
                 .setRequired(false)
-            ))
-        .addSubcommand(subcommand =>
+            )
+        )
+        .addSubcommand((subcommand) =>
           subcommand
             .setName('edit')
-            .setDescription('Delete or edit an item in the shop.'))),
+            .setDescription('Delete or edit an item in the shop.')
+        )
+    ),
 
   async execute(interaction) {
     await interaction.deferReply({ ephemeral: true });
     if (interaction.options.getSubcommandGroup() === 'menu') {
-      if (!interaction.memberPermissions.has(PermissionsBitField.Flags.Administrator)) return await interaction.editReply({ content: `Unable to edit, you do not have permission.`, ephemeral: true });
+      if (
+        !interaction.memberPermissions.has(
+          PermissionsBitField.Flags.Administrator
+        )
+      )
+        return await interaction.editReply({
+          content: `Unable to edit, you do not have permission.`,
+          ephemeral: true,
+        });
 
-      const menuEmbed = new EmbedBuilder().setColor(Colors.Purple).setTitle('Shop Editor').setTimestamp();
+      const menuEmbed = new EmbedBuilder()
+        .setColor(Colors.Purple)
+        .setTitle('Shop Editor')
+        .setTimestamp();
       switch (interaction.options.getSubcommand()) {
         case 'add':
           const newItem = await Shop.create({
@@ -111,7 +134,7 @@ module.exports = {
             priceDollars: interaction.options.getNumber('price-dollars'),
             priceRobux: interaction.options.getInteger('price-robux'),
             attachment: interaction.options.getAttachment('image').attachment,
-            dataSize: interaction.options.getInteger('data-size') || 0
+            dataSize: interaction.options.getInteger('data-size') || 0,
           });
 
           menuEmbed
@@ -119,27 +142,42 @@ module.exports = {
             .addFields(
               { name: 'Type', value: interaction.options.getString('type') },
               { name: 'Name', value: interaction.options.getString('name') },
-              { name: 'Price', value: `\$${interaction.options.getNumber('price-dollars').toFixed(2)} OR ${interaction.options.getInteger('price-robux')} RBX` })
-            .setImage(interaction.options.getAttachment('image').attachment)
+              {
+                name: 'Price',
+                value: `\$${interaction.options
+                  .getNumber('price-dollars')
+                  .toFixed(2)} OR ${interaction.options.getInteger(
+                  'price-robux'
+                )} RBX`,
+              }
+            )
+            .setImage(interaction.options.getAttachment('image').attachment);
 
           if (interaction.options.getInteger('data-size')) {
-            menuEmbed.addFields(
-              { name: 'Data Size', value: `${interaction.options.getInteger('data-size')}` }
-            )
+            menuEmbed.addFields({
+              name: 'Data Size',
+              value: `${interaction.options.getInteger('data-size')}`,
+            });
           }
           await interaction.editReply({
-            embeds: [
-              menuEmbed
-            ],
-            ephemeral: true
+            embeds: [menuEmbed],
+            ephemeral: true,
           });
 
-          const shopChannelId = await Info.findOne({ where: { guildId: interaction.guildId, name: interaction.options.getString('type'), type: infoTypes.indexOf('channel') } });
+          const shopChannelId = await Info.findOne({
+            where: {
+              guildId: interaction.guildId,
+              name: interaction.options.getString('type'),
+              type: infoTypes.indexOf('channel'),
+            },
+          });
           if (!shopChannelId) return;
 
           let shopChannel;
           try {
-            shopChannel = await interaction.guild.channels.fetch(shopChannelId.identifier);
+            shopChannel = await interaction.guild.channels.fetch(
+              shopChannelId.identifier
+            );
           } catch {
             return;
           }
@@ -147,17 +185,30 @@ module.exports = {
           const shopNewEmbed = new EmbedBuilder()
             .setColor(Colors.Blue)
             .setThumbnail(interaction.guild.iconURL({ size: 512 }))
-            .setTitle(`${newItem.dataValues.id} - ${interaction.options.getString('name')}`)
-            .addFields(
-              { name: 'Robux', value: `${interaction.options.getInteger('price-robux')}` },
-              { name: 'Dollars', value: "$" + interaction.options.getNumber('price-dollars').toFixed(2) }
+            .setTitle(
+              `${newItem.dataValues.id} - ${interaction.options.getString(
+                'name'
+              )}`
             )
-            .setImage(interaction.options.getAttachment('image').attachment)
+            .addFields(
+              {
+                name: 'Robux',
+                value: `${interaction.options.getInteger('price-robux')}`,
+              },
+              {
+                name: 'Dollars',
+                value:
+                  '$' +
+                  interaction.options.getNumber('price-dollars').toFixed(2),
+              }
+            )
+            .setImage(interaction.options.getAttachment('image').attachment);
 
           if (interaction.options.getInteger('data-size')) {
-            shopNewEmbed.addFields(
-              { name: 'Data Size', value: `${interaction.options.getInteger('data-size')}` }
-            )
+            shopNewEmbed.addFields({
+              name: 'Data Size',
+              value: `${interaction.options.getInteger('data-size')}`,
+            });
           }
 
           const externalBuyButton = new ButtonBuilder()
@@ -165,112 +216,167 @@ module.exports = {
             .setLabel('Buy Now')
             .setStyle(ButtonStyle.Success);
 
-          const externalRow = new ActionRowBuilder().addComponents(externalBuyButton);
+          const externalRow = new ActionRowBuilder().addComponents(
+            externalBuyButton
+          );
 
           return await shopChannel.send({
-            embeds: [
-              shopNewEmbed
-            ],
-            components: [externalRow]
+            embeds: [shopNewEmbed],
+            components: [externalRow],
           });
           break;
         case 'edit':
-          const items = await Shop.findAndCountAll({ where: { guildId: interaction.guildId } });
-          if (!items.count) return await interaction.editReply({ content: "No items avaliable.", ephemeral: true });
+          const items = await Shop.findAndCountAll({
+            where: { guildId: interaction.guildId },
+          });
+          if (!items.count)
+            return await interaction.editReply({
+              content: 'No items avaliable.',
+              ephemeral: true,
+            });
 
           let index = 0;
 
           const forwardButton = new ButtonBuilder()
             .setCustomId('shop-edit-forward')
-            .setLabel("Next →")
+            .setLabel('Next →')
             .setDisabled(index + 1 >= items.count)
             .setStyle(ButtonStyle.Primary);
 
           const backButton = new ButtonBuilder()
             .setCustomId('shop-edit-back')
-            .setLabel("← Back")
+            .setLabel('← Back')
             .setDisabled(index <= 0)
             .setStyle(ButtonStyle.Primary);
 
           const editButton = new ButtonBuilder()
             .setCustomId('shop-edit')
-            .setLabel("Edit")
+            .setLabel('Edit')
             .setStyle(ButtonStyle.Secondary);
 
           const deleteButton = new ButtonBuilder()
             .setCustomId('shop-delete')
-            .setLabel("Delete")
+            .setLabel('Delete')
             .setStyle(ButtonStyle.Danger);
 
-          const row = new ActionRowBuilder()
-            .addComponents(backButton, editButton, deleteButton, forwardButton);
+          const row = new ActionRowBuilder().addComponents(
+            backButton,
+            editButton,
+            deleteButton,
+            forwardButton
+          );
 
           const shopEmbed = new EmbedBuilder()
             .setColor(Colors.Blue)
             .setThumbnail(interaction.guild.iconURL({ size: 512 }))
-            .setAuthor({ name: shopTypes[items.rows[index].type], iconURL: interaction.guild.iconURL() })
+            .setAuthor({
+              name: shopTypes[items.rows[index].type],
+              iconURL: interaction.guild.iconURL(),
+            })
             .setTitle(`${index + 1} - ` + items.rows[index].name)
             .addFields(
               { name: 'Robux', value: `${items.rows[index].priceRobux}` },
-              { name: 'Dollars', value: "$" + items.rows[index].priceDollars.toFixed(2) }
+              {
+                name: 'Dollars',
+                value: '$' + items.rows[index].priceDollars.toFixed(2),
+              }
             )
             .setImage(items.rows[index].attachment)
-            .setFooter({ text: `${interaction.user.username}'s Menu | Page ${index + 1}/${items.count}` });
+            .setFooter({
+              text: `${interaction.user.username}'s Menu | Page ${index + 1}/${
+                items.count
+              }`,
+            });
 
           if (items.rows[index].dataSize) {
-            shopEmbed.addFields(
-              { name: 'Data Size', value: `${items.rows[index].dataSize}` }
-            )
+            shopEmbed.addFields({
+              name: 'Data Size',
+              value: `${items.rows[index].dataSize}`,
+            });
           }
 
-          return await interaction.editReply({ embeds: [shopEmbed], components: [row], ephemeral: true });
+          return await interaction.editReply({
+            embeds: [shopEmbed],
+            components: [row],
+            ephemeral: true,
+          });
           break;
       }
     }
 
-    const items = await Shop.findAndCountAll({ where: { guildId: interaction.guildId, type: shopTypes.indexOf(interaction.options.getSubcommand()) } }, { raw: true });
-    if (!items.count) return await interaction.editReply({ content: "No items avaliable.", ephemeral: true });
+    const items = await Shop.findAndCountAll(
+      {
+        where: {
+          guildId: interaction.guildId,
+          type: shopTypes.indexOf(interaction.options.getSubcommand()),
+        },
+      },
+      { raw: true }
+    );
+    if (!items.count)
+      return await interaction.editReply({
+        content: 'No items avaliable.',
+        ephemeral: true,
+      });
 
     let index = 0;
 
     const forwardButton = new ButtonBuilder()
       .setCustomId('shop-forward')
-      .setLabel("Next →")
+      .setLabel('Next →')
       .setDisabled(index + 1 >= items.count)
       .setStyle(ButtonStyle.Primary);
 
     const backButton = new ButtonBuilder()
       .setCustomId('shop-back')
-      .setLabel("← Back")
+      .setLabel('← Back')
       .setDisabled(index <= 0)
       .setStyle(ButtonStyle.Primary);
 
     const buyButton = new ButtonBuilder()
       .setCustomId('shop-buy')
-      .setLabel("Buy Now")
+      .setLabel('Buy Now')
       .setStyle(ButtonStyle.Success);
 
-    const row = new ActionRowBuilder()
-      .addComponents(backButton, buyButton, forwardButton);
+    const row = new ActionRowBuilder().addComponents(
+      backButton,
+      buyButton,
+      forwardButton
+    );
 
     const shopEmbed = new EmbedBuilder()
       .setColor(Colors.Purple)
       .setThumbnail(interaction.guild.iconURL({ size: 512 }))
-      .setAuthor({ name: interaction.options.getSubcommand(), iconURL: interaction.guild.iconURL() })
+      .setAuthor({
+        name: interaction.options.getSubcommand(),
+        iconURL: interaction.guild.iconURL(),
+      })
       .setTitle(`${index + 1} - ` + items.rows[index].name)
       .addFields(
         { name: 'Robux', value: `${items.rows[index].priceRobux}` },
-        { name: 'Dollars', value: "$" + items.rows[index].priceDollars.toFixed(2) }
+        {
+          name: 'Dollars',
+          value: '$' + items.rows[index].priceDollars.toFixed(2),
+        }
       )
       .setImage(items.rows[index].attachment)
-      .setFooter({ text: `${interaction.user.username}'s Menu | Page ${index + 1}/${items.count}` });
+      .setFooter({
+        text: `${interaction.user.username}'s Menu | Page ${index + 1}/${
+          items.count
+        }`,
+      });
 
     if (items.rows[index].dataSize) {
-      shopEmbed.addFields(
-        { name: 'Data Size', value: `${items.rows[index].dataSize}` }
-      )
+      shopEmbed.addFields({
+        name: 'Data Size',
+        value: `${items.rows[index].dataSize}`,
+      });
     }
 
-    return await interaction.editReply({ embeds: [shopEmbed], components: [row], ephemeral: true });
+    return await interaction.editReply({
+      embeds: [shopEmbed],
+      components: [row],
+      ephemeral: true,
+    });
   },
 };

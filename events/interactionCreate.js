@@ -1,22 +1,36 @@
-const { Events, ButtonStyle, ButtonBuilder, ActionRowBuilder, AttachmentBuilder } = require('discord.js');
+const {
+  Events,
+  ButtonStyle,
+  ButtonBuilder,
+  ActionRowBuilder,
+  AttachmentBuilder,
+} = require('discord.js');
 const Canvas = require('canvas');
 const verifiedGuilds = require('../guilds.json');
 
 module.exports = {
   name: Events.InteractionCreate,
   async execute(interaction) {
-    if(!interaction.inGuild()) return interaction.reply("This bot cannot be used outside of servers.");
-    if(!Object.keys(verifiedGuilds).includes(interaction.guild.id)) return interaction.reply({ content: "This server has not been paid for or set up. If you are an Administrator, please contact <@589877702543147058>. Otherwise, contact the owner of this server.", ephemeral: true });
+    if (!interaction.inGuild())
+      return interaction.reply('This bot cannot be used outside of servers.');
+    if (!Object.keys(verifiedGuilds).includes(interaction.guild.id))
+      return interaction.reply({
+        content:
+          'This server has not been paid for or set up. If you are an Administrator, please contact <@589877702543147058>. Otherwise, contact the owner of this server.',
+        ephemeral: true,
+      });
 
     // Commands //
     if (interaction.isChatInputCommand()) {
       const command = interaction.client.commands.get(interaction.commandName);
-  
+
       if (!command) {
-        console.error(`No command matching ${interaction.commandName} was found.`);
+        console.error(
+          `No command matching ${interaction.commandName} was found.`
+        );
         return;
       }
-  
+
       try {
         await command.execute(interaction);
       } catch (error) {
@@ -26,14 +40,14 @@ module.exports = {
     }
 
     // Buttons //
-    if(interaction.isButton()) {
+    if (interaction.isButton()) {
       const button = interaction.client.buttons.get(interaction.customId);
-      
+
       if (!button) {
         console.error(`No button matching ${interaction.customId} was found.`);
         return;
       }
-  
+
       try {
         await button.execute(interaction);
       } catch (error) {
@@ -43,14 +57,14 @@ module.exports = {
     }
 
     // Modals //
-    if(interaction.isModalSubmit()) {
+    if (interaction.isModalSubmit()) {
       const modal = interaction.client.modals.get(interaction.customId);
-      
+
       if (!modal) {
         console.error(`No modal matching ${interaction.customId} was found.`);
         return;
       }
-  
+
       try {
         await modal.execute(interaction);
       } catch (error) {
