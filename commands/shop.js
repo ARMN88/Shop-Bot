@@ -249,11 +249,12 @@ module.exports = {
             externalBuyButton
           );
 
-          return await shopChannel.send({
+          const newItemResponse = await shopChannel.send({
             embeds: [shopNewEmbed],
             components: [externalRow],
           });
-          break;
+
+          return await Shop.update({ messageId: newItemResponse.id }, { where: { id: newItem.id } });
         case 'edit':
           const item = await Shop.findOne({
             where: { id: interaction.options.getInteger('index') },
@@ -356,10 +357,12 @@ module.exports = {
           });
         }
 
-        await interaction.channel.send({
+        const response = await interaction.channel.send({
           embeds: [shopNewEmbed],
           components: [externalRow],
         });
+
+        await Shop.update({ messageId: response.id }, { where: { id: item.id } });
       });
 
       return await interaction.editReply({
