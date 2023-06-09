@@ -11,8 +11,10 @@ const verifiedGuilds = require('../guilds.json');
 module.exports = {
   name: Events.InteractionCreate,
   async execute(interaction) {
-    if (!interaction.inGuild())
+    if (!interaction.inGuild()) {
+      console.log(`${interaction.user.tag} tried to use the bot in their server.`);
       return interaction.reply('This bot cannot be used outside of servers.');
+    }
     if (!Object.keys(verifiedGuilds).includes(interaction.guild.id))
       return interaction.reply({
         content:
