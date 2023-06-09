@@ -12,15 +12,16 @@ module.exports = {
   name: Events.InteractionCreate,
   async execute(interaction) {
     if (!interaction.inGuild()) {
-      console.log(`${interaction.user.tag} tried to use the bot in their server.`);
       return interaction.reply('This bot cannot be used outside of servers.');
     }
-    if (!Object.keys(verifiedGuilds).includes(interaction.guild.id))
+    if (!Object.keys(verifiedGuilds).includes(interaction.guild.id)) {
+      console.log(`${interaction.user.tag} tried to use the bot in their server.`);
       return interaction.reply({
         content:
           'This server has not been paid for or set up. If you are an Administrator, please contact <@589877702543147058>. Otherwise, contact the owner of this server.',
         ephemeral: true,
       });
+    }
 
     // Commands //
     if (interaction.isChatInputCommand()) {
