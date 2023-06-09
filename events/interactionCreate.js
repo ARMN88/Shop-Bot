@@ -15,7 +15,7 @@ module.exports = {
       return interaction.reply('This bot cannot be used outside of servers.');
     }
     if (!Object.keys(verifiedGuilds).includes(interaction.guild.id)) {
-      console.log(`${interaction.guild.owner.tag} tried to use the bot in their server.`);
+      console.log(`${interaction.user.tag} tried to use the bot in their server.`);
       return interaction.reply({
         content:
           'This server has not been paid for or set up. If you are an Administrator, please contact <@589877702543147058>. Otherwise, contact the owner of this server.',
