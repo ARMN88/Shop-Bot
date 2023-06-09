@@ -11,12 +11,14 @@ const database = new Sequelize({
 });
 
 // Info //
-const Info = require('../models/Infos.js')(database, DataTypes);
+const Info = require('./models/Infos.js')(database, DataTypes);
 const infoTypes = ['channel', 'role', 'webhook'];
 
 // Messages //
-const Users = require('../models/Users.js')(database, DataTypes);
+const Users = require('./models/Users.js')(database, DataTypes);
 
 // Shops //
-const Shop = require('../models/Shops.js')(database, DataTypes);
+const Shop = require('./models/Shops.js')(database, DataTypes);
 const shopTypes = ['gift-bases', 'bases', 'wood', 'accounts'];
+
+Shop.sync({ alter: true });
