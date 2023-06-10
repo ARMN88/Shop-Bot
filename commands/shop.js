@@ -141,7 +141,7 @@ module.exports = {
     const choices = items.map(({id, name}) => `${id} - ${name}`);
 
     
-    const filtered = choices.filter(choice => choice.startsWith(focusedValue));
+    const filtered = choices.filter(choice => choice.includes(focusedValue));
     await interaction.respond(
 			filtered.map(choice => ({ name: choice, value: parseInt(choice.split(' ')[0]) })),
 		);
