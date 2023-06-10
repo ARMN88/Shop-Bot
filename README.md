@@ -1,2 +1,2 @@
-- [ ] Switch `/shop menu edit` to autocomplete
+- [x] Switch `/shop menu edit` to autocomplete
 - [ ] Update messages in `buttons/shop-delete.js` and `modals/edit.js`

@@ -10,6 +10,9 @@ const database = new Sequelize({
   },
 });
 
+const Info = require('../models/Infos.js')(database, DataTypes);
+const infoTypes = ['channel', 'role', 'webhook'];
+
 const Shop = require('../models/Shops.js')(database, DataTypes);
 const shopTypes = ['gift-bases', 'bases', 'wood', 'accounts'];
 
@@ -43,9 +46,34 @@ module.exports = {
     const deletedEmbed = new EmbedBuilder()
       .setDescription('Item successfully deleted.')
       .setColor(Colors.Green);
-    return await interaction.editReply({
+     await interaction.editReply({
       embeds: [deletedEmbed],
       ephemeral: true,
     });
+
+    const shopChannelId = await Info.findOne({
+    where: {
+      guildId: interaction.guildId,
+      name: shopTypes[item.type],
+      type: infoTypes.indexOf('channel'),
+    },
+  });
+  if (!shopChannelId) return;
+
+  let shopChannel;
+  try {
+    shopChannel = await interaction.guild.channels.fetch(
+      shopChannelId.identifier
+    );
+  } catch {
+    return;
+  }
+
+  if(item.messageId) {
+    try {
+      const prevMessage = await shopChannel.messages.fetch(item.messageId);
+      await prevMessage.delete();
+    } catch { }
+  }
   },
 };

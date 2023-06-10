@@ -138,9 +138,9 @@ module.exports = {
   async autocomplete(interaction) {
     const focusedValue = interaction.options.getFocused();
     const items = await Shop.findAll({ where: { guildId: interaction.guildId }});
-    const choices = items.map(({id, name}) => `${id} - ${name}`).sort((a, b) => parseInt(a.split(' ')[0]) - parseInt(b.split(' ')[0])).slice(0, 25);
+    const choices = items.map(({id, name}) => `${id} - ${name}`);
     
-    const filtered = choices.filter(choice => choice.includes(focusedValue));
+    const filtered = choices.filter(choice => choice.includes(focusedValue)).sort((a, b) => parseInt(a.split(' ')[0]) - parseInt(b.split(' ')[0])).slice(0, 25);
     await interaction.respond(
 			filtered.map(choice => ({ name: choice, value: parseInt(choice.split(' ')[0]) })),
 		);
