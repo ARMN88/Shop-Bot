@@ -42,6 +42,22 @@ module.exports = {
       }
     }
 
+    // Autocomplete //
+    if (interaction.isAutocomplete()) {
+      const command = interaction.client.commands.get(interaction.commandName);
+
+      if (!command) {
+        console.error(`No autocomplete command matching ${interaction.commandName} was found.`);
+        return;
+      }
+
+      try {
+        await command.autocomplete(interaction);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
     // Buttons //
     if (interaction.isButton()) {
       const button = interaction.client.buttons.get(interaction.customId);

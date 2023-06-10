@@ -6,8 +6,6 @@ const {
   ActionRowBuilder,
   Colors,
   PermissionsBitField,
-  StringSelectMenuBuilder,
-  StringSelectMenuOptionBuilder,
 } = require('discord.js');
 const { Sequelize, DataTypes } = require('sequelize');
 
@@ -130,13 +128,24 @@ module.exports = {
             .setDescription('Delete or edit an item in the shop.')
             .addIntegerOption((option) =>
               option
-                .setName('index')
-                .setDescription('The number of this item.')
+                .setName('name')
+                .setDescription('The name of this item.')
                 .setRequired(true)
+                .setAutocomplete(true)
             )
         )
     ),
+  async autocomplete(interaction) {
+    const focusedValue = interaction.options.getFocused();
+    const items = await Shop.findAll({ where: { guildId: interaction.guildId }});
+    const choices = items.map(({id, name}) => `${id} - ${name}`);
 
+    
+    const filtered = choices.filter(choice => choice.startsWith(focusedValue));
+    await interaction.respond(
+			filtered.map(choice => ({ name: choice, value: parseInt(choice.split(' ')[0]) })),
+		);
+  },
   async execute(interaction) {
     await interaction.deferReply({ ephemeral: true });
     if (interaction.options.getSubcommandGroup() === 'menu') {
@@ -257,7 +266,7 @@ module.exports = {
           return await Shop.update({ messageId: newItemResponse.id }, { where: { id: newItem.id } });
         case 'edit':
           const item = await Shop.findOne({
-            where: { id: interaction.options.getInteger('index') },
+            where: { id: interaction.options.getInteger('name') },
           });
           if(!item || item.guildId !== interaction.guildId) return await interaction.editReply({ embeds: [new EmbedBuilder().setDescription('Item does not exist.').setColor(Colors.Red)], ephemeral: true });
 
