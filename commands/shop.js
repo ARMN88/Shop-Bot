@@ -138,8 +138,7 @@ module.exports = {
   async autocomplete(interaction) {
     const focusedValue = interaction.options.getFocused();
     const items = await Shop.findAll({ where: { guildId: interaction.guildId }});
-    const choices = items.map(({id, name}) => `${id} - ${name}`);
-
+    const choices = items.map(({id, name}) => `${id} - ${name}`).sort().slice(0, 25);
     
     const filtered = choices.filter(choice => choice.includes(focusedValue));
     await interaction.respond(
