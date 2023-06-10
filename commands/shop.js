@@ -140,7 +140,7 @@ module.exports = {
     const items = await Shop.findAll({ where: { guildId: interaction.guildId }});
     const choices = items.map(({id, name}) => `${id} - ${name}`);
     
-    const filtered = choices.filter(choice => choice.includes(focusedValue)).sort((a, b) => parseInt(a.split(' ')[0]) - parseInt(b.split(' ')[0])).slice(0, 25);
+    const filtered = choices.filter(choice => choice.toLowerCase().includes(focusedValue.toLowerCase())).slice(0, 25);
     await interaction.respond(
 			filtered.map(choice => ({ name: choice, value: parseInt(choice.split(' ')[0]) })),
 		);
@@ -341,7 +341,7 @@ module.exports = {
         externalBuyButton
       );
 
-      items.forEach(async (item) => {
+      await items.forEach(async (item) => {
         const shopNewEmbed = new EmbedBuilder()
           .setColor(Colors.Blue)
           .setThumbnail(interaction.guild.iconURL({ size: 512 }))
