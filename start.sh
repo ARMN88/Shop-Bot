@@ -1,1 +1,0 @@
-pm2 delete all; node db.js; node deploy-commands.js; pm2 start pm2-process.json
