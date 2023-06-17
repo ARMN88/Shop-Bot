@@ -1,4 +1,3 @@
-# Shop Bot
 A bot used to moderate discord servers that manage shops. 🙋
 
 ## Features
