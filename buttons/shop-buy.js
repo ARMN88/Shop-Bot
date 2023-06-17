@@ -86,7 +86,9 @@ module.exports = {
       )
       .setImage(shopItem.attachment)
       .setThumbnail(interaction.guild.iconURL({ size: 512 }))
-      .setTimestamp();
+      .setTimestamp()
+      .setFooter({ text: `Created By ${shopItem.creator}` });
+
 
     if (shopItem.dataSize) {
       buyEmbed.addFields({ name: 'Data Size', value: `${shopItem.dataSize}` });

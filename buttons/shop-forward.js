@@ -89,6 +89,13 @@ module.exports = {
       });
     }
 
+    if (items.rows[index].creator !== 'Unknown') {
+      shopEmbed.addFields({
+        name: 'Created By',
+        value: items.rows[index].creator,
+      });
+    }
+
     return await interaction.update({
       embeds: [shopEmbed],
       components: [row],

@@ -36,16 +36,24 @@ module.exports = {
       .setStyle(TextInputStyle.Short)
       .setRequired(false);
 
+    const creatorInput = new TextInputBuilder()
+      .setCustomId('creatorInput')
+      .setLabel('New Creator')
+      .setStyle(TextInputStyle.Short)
+      .setRequired(false);
+
     const firstActionRow = new ActionRowBuilder().addComponents(nameInput);
     const secondActionRow = new ActionRowBuilder().addComponents(priceRInput);
     const thirdActionRow = new ActionRowBuilder().addComponents(priceDInput);
     const fourthActionRow = new ActionRowBuilder().addComponents(dataSizeInput);
+    const fifthActionRow = new ActionRowBuilder().addComponents(creatorInput);
 
     editModal.addComponents(
       firstActionRow,
       secondActionRow,
       thirdActionRow,
-      fourthActionRow
+      fourthActionRow,
+      fifthActionRow
     );
 
     return await interaction.showModal(editModal);

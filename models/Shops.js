@@ -23,6 +23,10 @@ module.exports = (sequelize, DataTypes) => {
       dataSize: {
         type: DataTypes.INTEGER,
       },
+      creator: {
+        type: DataTypes.TEXT,
+        defaultValue: 'Unknown'
+      },
       messageId: {
         type: DataTypes.TEXT,
         defaultValue: ''

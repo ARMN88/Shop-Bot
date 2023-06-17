@@ -33,6 +33,7 @@ module.exports = {
     const dataSizeInput =
       parseInt(interaction.fields.getTextInputValue('dataSizeInput')) ||
       item.dataSize;
+    const creatorInput = interaction.fields.getTextInputValue('creatorInput') || item.creator;
 
     await interaction.update({
       embeds: [
@@ -48,7 +49,8 @@ module.exports = {
       ...item,
       priceRobux: priceRInput,
       priceDollars: priceDInput,
-      dataSize: dataSizeInput
+      dataSize: dataSizeInput,
+      creator: creatorInput
     });
 
     try {
@@ -57,7 +59,8 @@ module.exports = {
           name: nameInput,
           priceRobux: priceRInput,
           priceDollars: priceDInput,
-          dataSize: dataSizeInput
+          dataSize: dataSizeInput,
+          creator: creatorInput
         },
         { where: { id: item.id } }
       );
@@ -127,7 +130,8 @@ async function sendItemEmbed(interaction, item) {
           '$' + item.priceDollars.toFixed(2),
       }
     )
-    .setImage(item.attachment);
+    .setImage(item.attachment)
+    .setFooter({ text: `Created By ${item.creator}` });
 
   if (item.dataSize) {
     shopNewEmbed.addFields({

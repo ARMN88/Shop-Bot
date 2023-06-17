@@ -121,6 +121,12 @@ module.exports = {
                 .setDescription('Set the data size of this item.')
                 .setRequired(false)
             )
+            .addStringOption((option) =>
+              option
+                .setName('creator')
+                .setDescription('Set the author of this build')
+                .setRequired(false)
+            )
         )
         .addSubcommand((subcommand) =>
           subcommand
@@ -137,13 +143,13 @@ module.exports = {
     ),
   async autocomplete(interaction) {
     const focusedValue = interaction.options.getFocused();
-    const items = await Shop.findAll({ where: { guildId: interaction.guildId }});
-    const choices = items.map(({id, name}) => `${id} - ${name}`);
-    
+    const items = await Shop.findAll({ where: { guildId: interaction.guildId } });
+    const choices = items.map(({ id, name }) => `${id} - ${name}`);
+
     const filtered = choices.filter(choice => choice.toLowerCase().includes(focusedValue.toLowerCase())).slice(0, 25);
     await interaction.respond(
-			filtered.map(choice => ({ name: choice, value: parseInt(choice.split(' ')[0]) })),
-		);
+      filtered.map(choice => ({ name: choice, value: parseInt(choice.split(' ')[0]) })),
+    );
   },
   async execute(interaction) {
     await interaction.deferReply({ ephemeral: true });
@@ -172,6 +178,7 @@ module.exports = {
             priceRobux: interaction.options.getInteger('price-robux'),
             attachment: interaction.options.getAttachment('image').attachment,
             dataSize: interaction.options.getInteger('data-size') || 0,
+            creator: interaction.options.getString('creator') || 'Unknown'
           });
 
           menuEmbed
@@ -188,7 +195,9 @@ module.exports = {
                   )} RBX`,
               }
             )
-            .setImage(interaction.options.getAttachment('image').attachment);
+            .setImage(interaction.options.getAttachment('image').attachment)
+            .setFooter({ text: `Created By ${interaction.options.getString('creator') || 'Unknown'}` });
+        
 
           if (interaction.options.getInteger('data-size')) {
             menuEmbed.addFields({
@@ -196,6 +205,7 @@ module.exports = {
               value: `${interaction.options.getInteger('data-size')}`,
             });
           }
+
           await interaction.editReply({
             embeds: [menuEmbed],
             ephemeral: true,
@@ -239,7 +249,8 @@ module.exports = {
                   interaction.options.getNumber('price-dollars').toFixed(2),
               }
             )
-            .setImage(interaction.options.getAttachment('image').attachment);
+            .setImage(interaction.options.getAttachment('image').attachment)
+            .setFooter({text: `Created By ${interaction.options.getString('creator') || 'Unknown'}` });
 
           if (interaction.options.getInteger('data-size')) {
             shopNewEmbed.addFields({
@@ -267,7 +278,7 @@ module.exports = {
           const item = await Shop.findOne({
             where: { id: interaction.options.getInteger('name') },
           });
-          if(!item || item.guildId !== interaction.guildId) return await interaction.editReply({ embeds: [new EmbedBuilder().setDescription('Item does not exist.').setColor(Colors.Red)], ephemeral: true });
+          if (!item || item.guildId !== interaction.guildId) return await interaction.editReply({ embeds: [new EmbedBuilder().setDescription('Item does not exist.').setColor(Colors.Red)], ephemeral: true });
 
           const editButton = new ButtonBuilder()
             .setCustomId('shop-edit')
@@ -291,7 +302,7 @@ module.exports = {
               name: shopTypes[item.type],
               iconURL: interaction.guild.iconURL(),
             })
-            .setTitle(`${item.id} - ` +item.name)
+            .setTitle(`${item.id} - ` + item.name)
             .addFields(
               { name: 'Robux', value: `${item.priceRobux}` },
               {
@@ -299,7 +310,8 @@ module.exports = {
                 value: '$' + item.priceDollars.toFixed(2),
               }
             )
-            .setImage(item.attachment);
+            .setImage(item.attachment)
+            .setFooter({ text: `Created By ${item.creator}` });
 
           if (item.dataSize) {
             shopEditEmbed.addFields({
@@ -356,7 +368,8 @@ module.exports = {
               value: '$' + item.priceDollars.toFixed(2),
             }
           )
-          .setImage(item.attachment);
+          .setImage(item.attachment)
+          .setFooter({text: `Created By ${item.creator}`});
 
         if (item.dataSize) {
           shopNewEmbed.addFields({
@@ -448,6 +461,13 @@ module.exports = {
       shopEmbed.addFields({
         name: 'Data Size',
         value: `${items.rows[index].dataSize}`,
+      });
+    }
+
+    if (items.rows[index].creator !== 'Unknown') {
+      shopEmbed.addFields({
+        name: 'Created By',
+        value: items.rows[index].creator,
       });
     }
 
