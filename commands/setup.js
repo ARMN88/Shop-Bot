@@ -61,7 +61,10 @@ module.exports = {
                 .setRequired(true)
                 .setName('role-type')
                 .setDescription('The type of role you want to set.')
-                .addChoices({ name: 'Verified', value: 'verified' })
+                .addChoices(
+                  { name: 'Verified', value: 'verified' },
+                  { name: 'Buyer', value: 'buyer' }
+                )
             )
             .addRoleOption((option) =>
               option
@@ -104,7 +107,10 @@ module.exports = {
                 .setRequired(true)
                 .setName('role-type')
                 .setDescription('The type of role you want to set.')
-                .addChoices({ name: 'Verified', value: 'verified' })
+                .addChoices(
+                  { name: 'Verified', value: 'verified' },
+                  { name: 'Buyer', value: 'buyer' }
+                )
             )
         )
     )
