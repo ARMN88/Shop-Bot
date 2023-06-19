@@ -43,7 +43,7 @@ module.exports = {
     );
 
     if (message.createdTimestamp - user.messageTimestamp < 10000) {
-      if (user.spamCount >= 4) {
+      if (user.spamCount >= 9) {
         await Users.update({ spamCount: 0 }, { where: { id: user.id } });
         try {
           let warnEmbed = new EmbedBuilder().setColor(Colors.Red);
