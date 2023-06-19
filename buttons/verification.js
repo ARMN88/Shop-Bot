@@ -25,6 +25,7 @@ module.exports = {
   customId: 'verification',
   async execute(interaction) {
     await interaction.deferReply({ ephemeral: true });
+    
     const verificationRoleId = await Info.findOne({
       where: {
         guildId: interaction.guildId,

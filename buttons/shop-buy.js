@@ -134,9 +134,28 @@ module.exports = {
       .setDescription(`Transaction created in ${buyThread}`)
       .setColor(Colors.Green);
 
-    return interaction.editReply({
+    await interaction.editReply({
       embeds: [newTransactionEmbed],
       ephemeral: true,
     });
+
+    const buyerRoleId = await Info.findOne({
+      where: {
+        guildId: interaction.guildId,
+        name: 'buyer',
+        type: infoTypes.indexOf('role'),
+      },
+      attributes: ['identifier'],
+    });
+    
+    if(!buyerRoleId) return;
+    
+    let buyerRole;
+      
+    try {
+      buyerRole = await interaction.guild.roles.fetch(buyerRoleId.identifier);
+    } catch { return; }
+
+    return await interaction.member.roles.add(buyerRole.id);
   },
 };
