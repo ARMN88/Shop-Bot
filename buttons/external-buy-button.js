@@ -75,7 +75,7 @@ module.exports = {
         { name: 'Robux', value: `${shopItem.priceRobux}` },
         { name: 'Dollars', value: `\$${shopItem.priceDollars.toFixed(2)}` }
       )
-      .setImage(`attachment://${shopItem.id}.png`)
+      // .setImage(`attachment://${shopItem.id}.png`)
       .setThumbnail(interaction.guild.iconURL({ size: 512 }))
       .setTimestamp()
       .setFooter({ text: `Created By ${shopItem.creator}` });
@@ -102,7 +102,7 @@ module.exports = {
       response = await buyThread.send({
         content: `<@${interaction.user.id}>`,
         embeds: [buyEmbed],
-        files: [new AttachmentBuilder(`./images/${interaction.guildId}/${shopItem.id}.png`)],
+        // files: [new AttachmentBuilder(`./images/${interaction.guildId}/${shopItem.id}.png`)],
         components: [row],
       });
     } else {
