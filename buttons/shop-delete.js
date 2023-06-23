@@ -1,5 +1,6 @@
 const { EmbedBuilder, Colors } = require('discord.js');
 const { Sequelize, DataTypes } = require('sequelize');
+const fs = require('fs');
 
 const database = new Sequelize({
   dialect: 'sqlite',
@@ -43,10 +44,14 @@ module.exports = {
         ephemeral: true,
       });
     }
+
+    fs.rmSync(`./images/${interaction.guildId}/${item.id}.png`);
+    
     const deletedEmbed = new EmbedBuilder()
       .setDescription('Item successfully deleted.')
       .setColor(Colors.Green);
      await interaction.editReply({
+       files: [],
       embeds: [deletedEmbed],
       ephemeral: true,
     });

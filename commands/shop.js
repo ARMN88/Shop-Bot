@@ -6,6 +6,7 @@ const {
   ActionRowBuilder,
   Colors,
   PermissionsBitField,
+  AttachmentBuilder
 } = require('discord.js');
 const fs = require('fs');
 const { Sequelize, DataTypes } = require('sequelize');
@@ -177,7 +178,6 @@ module.exports = {
             name: interaction.options.getString('name'),
             priceDollars: interaction.options.getNumber('price-dollars'),
             priceRobux: interaction.options.getInteger('price-robux'),
-            attachment: interaction.options.getAttachment('image').attachment,
             dataSize: interaction.options.getInteger('data-size') || 0,
             creator: interaction.options.getString('creator') || 'Unknown'
           });
@@ -189,7 +189,7 @@ module.exports = {
           const imagePath = `./images/${interaction.guildId}/`;
 
           fs.mkdirSync(imagePath, { recursive: true });
-          fs.writeFileSync(`${imagePath}${newItem.dataValues.id}.${new URL(imageURL).pathname.split('.').slice(-1)}`, Buffer.from(imageArrayBuffer));
+          fs.writeFileSync(`${imagePath}${newItem.dataValues.id}.png`, Buffer.from(imageArrayBuffer));
 
           menuEmbed
             .setDescription('Successfully added item!')
@@ -205,7 +205,7 @@ module.exports = {
                   )} RBX`,
               }
             )
-            .setImage(interaction.options.getAttachment('image').attachment)
+            .setImage(`attachment://${newItem.dataValues.id}.png`)
             .setFooter({ text: `Created By ${interaction.options.getString('creator') || 'Unknown'}` });
 
 
@@ -218,6 +218,7 @@ module.exports = {
 
           await interaction.editReply({
             embeds: [menuEmbed],
+            files: [new AttachmentBuilder(`./images/${interaction.guildId}/${newItem.dataValues.id}.png`)],
             ephemeral: true,
           });
 
@@ -259,7 +260,7 @@ module.exports = {
                   interaction.options.getNumber('price-dollars').toFixed(2),
               }
             )
-            .setImage(interaction.options.getAttachment('image').attachment)
+            .setImage(`attachment://${newItem.dataValues.id}.png`)
             .setFooter({ text: `Created By ${interaction.options.getString('creator') || 'Unknown'}` });
 
           if (interaction.options.getInteger('data-size')) {
@@ -280,7 +281,8 @@ module.exports = {
 
           const newItemResponse = await shopChannel.send({
             embeds: [shopNewEmbed],
-            components: [externalRow],
+            files: [new AttachmentBuilder(`./images/${interaction.guildId}/${newItem.dataValues.id}.png`)],
+            components: [externalRow]
           });
 
           return await Shop.update({ messageId: newItemResponse.id }, { where: { id: newItem.id } });
@@ -320,7 +322,7 @@ module.exports = {
                 value: '$' + item.priceDollars.toFixed(2),
               }
             )
-            .setImage(item.attachment)
+            .setImage(`attachment://${item.id}.png`)
             .setFooter({ text: `Created By ${item.creator}` });
 
           if (item.dataSize) {
@@ -333,6 +335,7 @@ module.exports = {
           return await interaction.editReply({
             embeds: [shopEditEmbed],
             components: [row],
+            files: [new AttachmentBuilder(`./images/${interaction.guildId}/${item.id}.png`)],
             ephemeral: true,
           });
           break;
@@ -378,7 +381,7 @@ module.exports = {
               value: '$' + item.priceDollars.toFixed(2),
             }
           )
-          .setImage(item.attachment)
+          .setImage(`attachment://${item.id}.png`)
           .setFooter({ text: `Created By ${item.creator}` });
 
         if (item.dataSize) {
@@ -390,6 +393,7 @@ module.exports = {
 
         const response = await interaction.channel.send({
           embeds: [shopNewEmbed],
+          files: [new AttachmentBuilder(`./images/${interaction.guildId}/${item.id}.png`)],
           components: [externalRow],
         });
 
@@ -461,7 +465,7 @@ module.exports = {
           value: '$' + items.rows[index].priceDollars.toFixed(2),
         }
       )
-      .setImage(items.rows[index].attachment)
+      .setImage(`attachment://${items.rows[index].id}.png`)
       .setFooter({
         text: `${interaction.user.username}'s Menu | Page ${index + 1}/${items.count
           }`,
@@ -483,6 +487,7 @@ module.exports = {
 
     return await interaction.editReply({
       embeds: [shopEmbed],
+      files: [new AttachmentBuilder(`./images/${interaction.guildId}/${items.rows[index].id}.png`)],
       components: [row],
       ephemeral: true,
     });

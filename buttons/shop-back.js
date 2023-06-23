@@ -3,6 +3,7 @@ const {
   ButtonStyle,
   ActionRowBuilder,
   EmbedBuilder,
+  AttachmentBuilder,
   Colors,
 } = require('discord.js');
 const { Sequelize, DataTypes } = require('sequelize');
@@ -75,7 +76,7 @@ module.exports = {
           value: '$' + items.rows[index].priceDollars.toFixed(2),
         }
       )
-      .setImage(items.rows[index].attachment)
+      .setImage(`attachment://${items.rows[index].id}.png`)
       .setFooter({
         text: `${interaction.user.username}'s Menu | Page ${index + 1}/${
           items.count
@@ -99,6 +100,7 @@ module.exports = {
     return await interaction.update({
       embeds: [shopEmbed],
       components: [row],
+      files: [new AttachmentBuilder(`./images/${interaction.guildId}/${items.rows[index].id}.png`)],
       ephemeral: true,
     });
   },

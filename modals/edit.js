@@ -1,4 +1,4 @@
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors } = require('discord.js');
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, Colors, AttachmentBuilder } = require('discord.js');
 const { Sequelize, DataTypes } = require('sequelize');
 
 const database = new Sequelize({
@@ -42,6 +42,7 @@ module.exports = {
           .setColor(Colors.Orange),
       ],
       components: [],
+      files: [],
       ephemeral: true,
     });
 
@@ -72,6 +73,7 @@ module.exports = {
             .setColor(Colors.Red),
         ],
         components: [],
+        files: [],
         ephemeral: true,
       });
     }
@@ -82,6 +84,7 @@ module.exports = {
           .setColor(Colors.Green),
       ],
       components: [],
+        files: [],
       ephemeral: true,
     });
   },
@@ -130,7 +133,7 @@ async function sendItemEmbed(interaction, item) {
           '$' + item.priceDollars.toFixed(2),
       }
     )
-    .setImage(item.attachment)
+    .setImage(`attachment://${item.id}.png`)
     .setFooter({ text: `Created By ${item.creator}` });
 
   if (item.dataSize) {
@@ -151,6 +154,7 @@ async function sendItemEmbed(interaction, item) {
 
   const newItemResponse = await shopChannel.send({
     embeds: [shopNewEmbed],
+    files: [new AttachmentBuilder(`./images/${interaction.guildId}/${item.id}.png`)],
     components: [externalRow],
   });
 

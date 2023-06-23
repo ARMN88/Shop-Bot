@@ -4,6 +4,7 @@ const {
   ButtonStyle,
   ActionRowBuilder,
   ChannelType,
+  AttachmentBuilder,
   Colors,
 } = require('discord.js');
 const { Sequelize, DataTypes } = require('sequelize');
@@ -84,7 +85,7 @@ module.exports = {
         { name: 'Robux', value: `${shopItem.priceRobux}` },
         { name: 'Dollars', value: `\$${shopItem.priceDollars.toFixed(2)}` }
       )
-      .setImage(shopItem.attachment)
+      .setImage(`attachment://${shopItem.id}.png`)
       .setThumbnail(interaction.guild.iconURL({ size: 512 }))
       .setTimestamp()
       .setFooter({ text: `Created By ${shopItem.creator}` });
@@ -112,6 +113,7 @@ module.exports = {
       response = await buyThread.send({
         content: `<@${interaction.user.id}>`,
         embeds: [buyEmbed],
+        files: [new AttachmentBuilder(`./images/${interaction.guildId}/${shopItem.id}.png`)],
         components: [row],
       });
     } else {
