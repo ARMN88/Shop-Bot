@@ -7,6 +7,7 @@ const {
   Colors,
   PermissionsBitField,
 } = require('discord.js');
+const fs = require('fs');
 const { Sequelize, DataTypes } = require('sequelize');
 
 const database = new Sequelize({
@@ -181,6 +182,15 @@ module.exports = {
             creator: interaction.options.getString('creator') || 'Unknown'
           });
 
+          const imageURL = interaction.options.getAttachment('image').attachment;
+          const imageResponse = await fetch(imageURL);
+          const imageArrayBuffer = await imageResponse.arrayBuffer();
+
+          const imagePath = `./images/${interaction.guildId}/`;
+
+          fs.mkdirSync(imagePath, { recursive: true });
+          fs.writeFileSync(`${imagePath}${newItem.dataValues.id}.${new URL(imageURL).pathname.split('.').slice(-1)}`, Buffer.from(imageArrayBuffer));
+
           menuEmbed
             .setDescription('Successfully added item!')
             .addFields(
@@ -197,7 +207,7 @@ module.exports = {
             )
             .setImage(interaction.options.getAttachment('image').attachment)
             .setFooter({ text: `Created By ${interaction.options.getString('creator') || 'Unknown'}` });
-        
+
 
           if (interaction.options.getInteger('data-size')) {
             menuEmbed.addFields({
@@ -250,7 +260,7 @@ module.exports = {
               }
             )
             .setImage(interaction.options.getAttachment('image').attachment)
-            .setFooter({text: `Created By ${interaction.options.getString('creator') || 'Unknown'}` });
+            .setFooter({ text: `Created By ${interaction.options.getString('creator') || 'Unknown'}` });
 
           if (interaction.options.getInteger('data-size')) {
             shopNewEmbed.addFields({
@@ -369,7 +379,7 @@ module.exports = {
             }
           )
           .setImage(item.attachment)
-          .setFooter({text: `Created By ${item.creator}`});
+          .setFooter({ text: `Created By ${item.creator}` });
 
         if (item.dataSize) {
           shopNewEmbed.addFields({

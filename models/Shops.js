@@ -17,9 +17,6 @@ module.exports = (sequelize, DataTypes) => {
       priceDollars: {
         type: DataTypes.REAL,
       },
-      attachment: {
-        type: DataTypes.TEXT,
-      },
       dataSize: {
         type: DataTypes.INTEGER,
       },
